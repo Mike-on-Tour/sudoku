@@ -1,0 +1,320 @@
+{% include 'overall_header.html' %}
+{% INCLUDECSS '@mot_sudoku/mot_sudoku_acp.css' %}
+{% INCLUDEJS '@mot_sudoku/mot_sudoku_acp.js' %}
+{% set switch_type = TOGGLECTRL_TYPE ?? 'toggle' %}
+
+<h1>{{ lang('ACP_MOT_SUDOKU_CONFIGURATION') }}</h1>
+
+{% if ACP_MOT_SUDOKU_VERSION_CHECKER %}
+	<h2>{{ lang('ACP_MOT_SUDOKU_VERSION_CHECK') }}</h2>
+	<p>{{ lang('ACP_MOT_SUDOKU_VERSION_CHECK_EXPL') }}</p>
+
+	{% if S_MOT_SUDOKU_VERSIONCHECK %}
+		{% if S_ACP_MOT_SUDOKU_VERSION_UP_TO_DATE %}
+			<div class="successbox">
+				<p>{{ lang('ACP_MOT_SUDOKU_VERSION_UP_TO_DATE') }}</p>
+			</div>
+		{% else %}
+			<div class="errorbox">
+				<p>{{ lang('ACP_MOT_SUDOKU_VERSION_OUTDATED') }}</p>
+			</div>
+
+			<fieldset>
+				<dl>
+					<dt><label>{{ lang('ACP_MOT_SUDOKU_CURRENT_VERSION') }}</label></dt>
+					<dd><strong>{{ ACP_MOT_SUDOKU_CURRENT_VERSION }}</strong></dd>
+				</dl>
+				<dl>
+					<dt><label>{{ lang('ACP_MOT_SUDOKU_LATEST_VERSION') }}</label></dt>
+					<dd><strong>{{ ACP_MOT_SUDOKU_LATEST_VERSION }}</strong></dd>
+				</dl>
+			</fieldset>
+		{% endif %}
+	{% else %}
+		<div class="errorbox notice">
+			<p>{{ lang('VERSIONCHECK_FAIL') }}</p>
+		</div>
+	{% endif %}
+{% endif %}
+
+<h2>{{ lang('ACP_MOT_SUDOKU_GENERAL') }}</h2>
+<p>{{ lang('ACP_MOT_SUDOKU_GENERAL_EXPL') }}</p>
+
+<form id="acp_mot_sudoku_settings" method="post" enctype="application/x-www-form-urlencoded" action="{{ U_ACTION }}">
+	<fieldset>
+		<dl>
+			<dt><label for="mot_sudoku_version_checker">{{ lang('ACP_MOT_SUDOKU_VERSION_CHECKER_ON') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_VERSION_CHECKER_EXPL') }}</p></dt>
+			<dd>{{ _self.switch('mot_sudoku_version_checker', ACP_MOT_SUDOKU_VERSION_CHECKER, switch_type) }}</dd>
+		</dl>
+	</fieldset>
+
+	<fieldset>
+		<dl>
+			<dt><label for="mot_sudoku_enable">{{ lang('ACP_MOT_SUDOKU_ENABLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_ENABLE_EXPL') }}</p></dt>
+			<dd>{{ _self.switch('mot_sudoku_enable', ACP_MOT_SUDOKU_ENABLE, switch_type) }}</dd>
+		</dl>
+	</fieldset>
+
+	<fieldset>
+		<dl>
+			<dt><label for="mot_sudoku_cache_enable">{{ lang('ACP_MOT_SUDOKU_CACHE_ENABLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_CACHE_ENABLE_EXPL') }}</p></dt>
+			<dd>{{ _self.switch('mot_sudoku_cache_enable', ACP_MOT_SUDOKU_CACHE_ENABLE, switch_type) }}</dd>
+		</dl>
+		<dl>
+			<dt></dt>
+			<dd>
+				<input class="dt-button button1" type="submit" id="mot_sudoku_cache_purge" name="mot_sudoku_cache_purge" formaction="{{ U_ACTION_CACHE_PURGE }}" value="{{ lang('ACP_MOT_SUDOKU_PURGE_CACHE') }}">
+			</dd>
+		</dl>
+	</fieldset>
+
+	<fieldset>
+		<dl>
+			<dt><label for="mot_sudoku_title_enable">{{ lang('ACP_MOT_SUDOKU_PUZZLE_TITLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_PUZZLE_TITLE_EXPL') }}</p></dt>
+			<dd>{{ _self.switch('mot_sudoku_title_enable', ACP_MOT_SUDOKU_TITLE_ENABLE, switch_type) }}</dd>
+		</dl>
+	</fieldset>
+
+	<fieldset>
+		<dl>
+			<dt><label for="mot_sudoku_helper_enable">{{ lang('ACP_MOT_SUDOKU_HELPER_ENABLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_HELPER_ENABLE_EXPL') }}</p></dt>
+			<dd>{{ _self.switch('mot_sudoku_helper_enable', ACP_MOT_SUDOKU_HELPER_ENABLE, switch_type) }}</dd>
+		</dl>
+		<dl>
+			<dt><label for="mot_sudoku_helper_cost">{{ lang('ACP_MOT_SUDOKU_HELPER_COST') ~ lang('COLON') }}</label></dt>
+			<dd>
+				<input type="number" min="0" max="100" id="mot_sudoku_helper_cost" name="mot_sudoku_helper_cost" value="{{ ACP_MOT_SUDOKU_HELPER_COST }}">
+				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+			</dd>
+		</dl>
+
+		<hr>
+
+		<dl>
+			<dt><label for="mot_sudoku_helper_samurai_enable">{{ lang('ACP_MOT_SUDOKU_HELPER_SAMURAI_ENABLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_HELPER_ENABLE_EXPL') }}</p></dt>
+			<dd>{{ _self.switch('mot_sudoku_helper_samurai_enable', ACP_MOT_SUDOKU_HELPER_SAMURAI_ENABLE, switch_type) }}</dd>
+		</dl>
+		<dl>
+			<dt><label for="mot_sudoku_helper_samurai_cost">{{ lang('ACP_MOT_SUDOKU_HELPER_SAMURAI_COST') ~ lang('COLON') }}</label></dt>
+			<dd>
+				<input type="number" min="100" max="1500" id="mot_sudoku_helper_samurai_cost" name="mot_sudoku_helper_samurai_cost" value="{{ ACP_MOT_SUDOKU_HELPER_SAMURAI_COST }}">
+				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+			</dd>
+		</dl>
+
+		<hr>
+
+		<dl>
+			<dt><label for="mot_sudoku_helper_ninja_enable">{{ lang('ACP_MOT_SUDOKU_HELPER_NINJA_ENABLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_HELPER_ENABLE_EXPL') }}</p></dt>
+			<dd>{{ _self.switch('mot_sudoku_helper_ninja_enable', ACP_MOT_SUDOKU_HELPER_NINJA_ENABLE, switch_type) }}</dd>
+		</dl>
+		<dl>
+			<dt><label for="mot_sudoku_helper_ninja_cost">{{ lang('ACP_MOT_SUDOKU_HELPER_NINJA_COST') ~ lang('COLON') }}</label></dt>
+			<dd>
+				<input type="number" min="500" max="2500" id="mot_sudoku_helper_ninja_cost" name="mot_sudoku_helper_ninja_cost" value="{{ ACP_MOT_SUDOKU_HELPER_NINJA_COST }}">
+				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+			</dd>
+		</dl>
+	</fieldset>
+
+	<fieldset>
+		<dl>
+			<dt><label for="mot_sudoku_level_cost">{{ lang('ACP_MOT_SUDOKU_LEVEL_COST') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_LEVEL_COST_EXPL') }}</p></dt>
+			<dd>
+				<input type="number" min="0" max="50" id="mot_sudoku_level_cost" name="mot_sudoku_level_cost" value="{{ ACP_MOT_SUDOKU_LEVEL_COST }}">
+				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+			</dd>
+		</dl>
+	</fieldset>
+
+	{% if ACP_MOT_SUDOKU_UP_ENABLED %}
+		<fieldset>
+			<dl>
+				<dt><label for="mot_sudoku_points_enable">{{ lang('ACP_MOT_SUDOKU_POINTS_ENABLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_POINTS_ENABLE_EXPL') }}</p></dt>
+				<dd>{{ _self.switch('mot_sudoku_points_enable', ACP_MOT_SUDOKU_POINTS_ENABLE, switch_type) }}</dd>
+			</dl>
+			<div id="mot_sudoku_show_point_ratio" hidden="true">
+				<hr>
+				<dl>
+					<dt><label for="mot_sudoku_points_ratio">{{ lang('ACP_MOT_SUDOKU_POINTS_RATIO') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_POINTS_RATIO_EXPL') }}</p></dt>
+					<dd>
+						100 {{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }} =
+						<input type="number" min="1" max="250" id="mot_sudoku_points_ratio" name="mot_sudoku_points_ratio" value="{{ ACP_MOT_SUDOKU_POINTS_RATIO }}">
+						{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
+					</dd>
+				</dl>
+			</div>
+		</fieldset>
+
+		<div id="mot_sudoku_show_reward_enable" hidden="true">
+			<fieldset>
+				<dl>
+					<dt><label for="mot_sudoku_reward_enable">{{ lang('ACP_MOT_SUDOKU_REWARD_ON') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_REWARD_ON_EXPL') }}</p></dt>
+					<dd>{{ _self.switch('mot_sudoku_reward_enable', ACP_MOT_SUDOKU_REWARD_ENABLE, switch_type) }}</dd>
+				</dl>
+
+				<div id="mot_sudoku_show_reward_settings" hidden="true">
+					<hr>
+
+					<dl>
+						<dt><label for="mot_sudoku_cron_time">{{ lang('ACP_MOT_SUDOKU_REWARD_GC') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_REWARD_GC_EXPL') }}</p></dt>
+						<dd>
+							<input type="number" min="3600" max="86400" id="mot_sudoku_reward_gc" name="mot_sudoku_reward_gc" value="{{ ACP_MOT_SUDOKU_REWARD_GC }}">&nbsp;{{ lang('SECONDS') }}
+						</dd>
+					</dl>
+
+					<dl>
+						<dt><label>{{ lang('ACP_MOT_SUDOKU_REWARD_LAST_GC') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_REWARD_LAST_GC_EXPL') }}</p></dt>
+						<dd>{{ ACP_MOT_SUDOKU_REWARD_LAST_GC }}</dd>
+					</dl>
+
+					<dl>
+						<dt><label>{{ lang('ACP_MOT_SUDOKU_REWARD_NEXT_GC') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_REWARD_NEXT_GC_EXPL') }}</p></dt>
+						<dd>{{ ACP_MOT_SUDOKU_REWARD_NEXT_GC }}</dd>
+					</dl>
+
+					<hr>
+
+					<dl>
+						<dt>
+							<label for="mot_sudoku_rank1_price">{{ lang('ACP_MOT_SUDOKU_RANK1') ~ lang('COLON') }}</label>
+							<p>{{ lang('ACP_MOT_SUDOKU_RANK1_EXPL') }}</p>
+						</dt>
+						<dd>
+							<input type="number" min="500" max="2000" id="mot_sudoku_rank1_price" name="mot_sudoku_rank1_price" value="{{ ACP_MOT_SUDOKU_RANK1_PRICE }}">
+							{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
+						</dd>
+					</dl>
+
+					<dl>
+						<dt>
+							<label for="mot_sudoku_rank2_price">{{ lang('ACP_MOT_SUDOKU_RANK2') ~ lang('COLON') }}</label>
+							<p>{{ lang('ACP_MOT_SUDOKU_RANK2_EXPL') }}</p>
+						</dt>
+						<dd>
+							<input type="number" min="200" max="1500" id="mot_sudoku_rank2_price" name="mot_sudoku_rank2_price" value="{{ ACP_MOT_SUDOKU_RANK2_PRICE }}">
+							{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
+						</dd>
+					</dl>
+
+					<dl>
+						<dt>
+							<label for="mot_sudoku_rank3_price">{{ lang('ACP_MOT_SUDOKU_RANK3') ~ lang('COLON') }}</label>
+							<p>{{ lang('ACP_MOT_SUDOKU_RANK3_EXPL') }}</p>
+						</dt>
+						<dd>
+							<input type="number" min="50" max="1000" id="mot_sudoku_rank3_price" name="mot_sudoku_rank3_price" value="{{ ACP_MOT_SUDOKU_RANK3_PRICE }}">
+							{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
+						</dd>
+					</dl>
+
+					<dl>
+						<dt>
+							<label for="mot_sudoku_high_average">{{ lang('ACP_MOT_SUDOKU_HIGH_AVERAGE') ~ lang('COLON') }}</label>
+							<p>{{ lang('ACP_MOT_SUDOKU_HIGH_AVERAGE_EXPL') }}</p>
+						</dt>
+						<dd>
+							<input type="number" min="100" max="3000" id="mot_sudoku_high_average" name="mot_sudoku_high_average" value="{{ ACP_MOT_SUDOKU_HIGH_AVERAGE }}">
+							{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
+						</dd>
+					</dl>
+
+					<dl>
+						<dt>
+							<label for="mot_sudoku_most_games">{{ lang('ACP_MOT_SUDOKU_MOST_GAMES') ~ lang('COLON') }}</label>
+							<p>{{ lang('ACP_MOT_SUDOKU_MOST_GAMES_EXPL') }}</p>
+						</dt>
+						<dd>
+							<input type="number" min="50" max="1500" id="mot_sudoku_most_games" name="mot_sudoku_most_games" value="{{ ACP_MOT_SUDOKU_MOST_GAMES }}">
+							{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
+						</dd>
+					</dl>
+
+					<dl>
+						<dt>
+							<label for="mot_sudoku_samurai_price">{{ lang('ACP_MOT_SUDOKU_SAMURAI_PRICE') ~ lang('COLON') }}</label>
+							<p>{{ lang('ACP_MOT_SUDOKU_SAMURAI_PRICE_EXPL') }}</p>
+						</dt>
+						<dd>
+							<input type="number" min="1500" max="5000" id="mot_sudoku_samurai_price" name="mot_sudoku_samurai_price" value="{{ ACP_MOT_SUDOKU_SAMURAI_PRICE }}">
+							{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
+						</dd>
+					</dl>
+
+					<dl>
+						<dt>
+							<label for="mot_sudoku_ninja_price">{{ lang('ACP_MOT_SUDOKU_NINJA_PRICE') ~ lang('COLON') }}</label>
+							<p>{{ lang('ACP_MOT_SUDOKU_NINJA_PRICE_EXPL') }}</p>
+						</dt>
+						<dd>
+							<input type="number" min="3500" max="10000" id="mot_sudoku_ninja_price" name="mot_sudoku_ninja_price" value="{{ ACP_MOT_SUDOKU_NINJA_PRICE }}">
+							{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
+						</dd>
+					</dl>
+
+					<dl>
+						<dt>
+							<label for="mot_sudoku_pm_enable">{{ lang('ACP_MOT_SUDOKU_PM_ENABLE') ~ lang('COLON') }}</label>
+							<p>{{ lang('ACP_MOT_SUDOKU_PM_ENABLE_EXPL') }}</p>
+						</dt>
+						<dd>{{ _self.switch('mot_sudoku_pm_enable', ACP_MOT_SUDOKU_PM_ENABLE, switch_type) }}</dd>
+					</dl>
+
+					<dl>
+						<dt>
+							<label for="">{{ lang('ACP_MOT_SUDOKU_ADMIN_LIST') ~ lang('COLON') }}</label>
+							<p>{{ lang('ACP_MOT_SUDOKU_ADMIN_LIST_EXPL') }}</p>
+						</dt>
+						<dd><select id="mot_sudoku_admin_id" name="mot_sudoku_admin_id">{{ ACP_MOT_SUDOKU_ADMIN_LIST }}</select></dd>
+					</dl>
+				</div>
+			</fieldset>
+		</div>
+	{% endif %}
+
+	<fieldset>
+		<p class="submit-buttons">
+			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}">&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}">
+		</p>
+	</fieldset>
+
+	<hr>
+
+	<fieldset>
+		<dl>
+			<dt><label for="mot_sudoku_reset_game">{{ lang('ACP_MOT_SUDOKU_RESET_GAME') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_RESET_GAME_EXPL') }}</p></dt>
+			<dd>
+				<input class="dt-button button1" type="submit" id="mot_sudoku_reset_game" name="mot_sudoku_reset_game" formaction="{{ U_ACTION_RESET_GAME }}" value="{{ lang('DELETE') }}">
+				{{ S_HIDDEN_FIELDS }}
+			</dd>
+		</dl>
+	</fieldset>
+	{{ S_FORM_TOKEN }}
+</form>
+
+<fieldset>
+	<dl>
+		<dt><label>{{ lang('SUPPORT_MOT_SUDOKU') }}</label></dt>
+		<dd>
+			<form action="https://www.paypal.com/donate" method="post" target="_top">
+				<input type="hidden" name="hosted_button_id" value="JQQ5R6VM2XHW4">
+				<input type="image" src="https://www.paypalobjects.com/en_US/DK/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button">
+				<img alt="" border="0" src="https://www.paypal.com/en_DE/i/scr/pixel.gif" width="1" height="1">
+			</form>
+		</dd>
+	</dl>
+</fieldset>
+
+<p class="centered_text">{{ ACP_MOT_SUDOKU_VERSION_STRING }}</p>
+
+{% include 'overall_footer.html' %}
+
+{% macro switch(name, checked = false, type = 'toggle') -%}
+	{% if type == 'toggle' || type == 'checkbox' -%}
+		<input type="checkbox" class="{{ type }}" name="{{ name }}" value="1"{{ checked ? ' checked' }}>
+	{%- elseif type == 'radio' -%}
+		<label><input type="radio" class="radio" name="{{ name }}" value="1"{{ checked ? ' checked' }}> {{ lang('YES') }}</label>
+		<label><input type="radio" class="radio" name="{{ name }}" value="0"{{ !checked ? ' checked' }}> {{ lang('NO') }}</label>
+	{%- endif %}
+{%- endmacro %}

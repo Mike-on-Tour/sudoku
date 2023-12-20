@@ -1,0 +1,23 @@
+services:
+    mot.sudoku.controller.mot_sudoku_acp:
+        class: mot\sudoku\controller\mot_sudoku_acp
+        arguments:
+            - '@config'
+            - '@dbal.conn'
+            - '@dbal.tools'
+            - '@language'
+            - '@log'
+            - '@ext.manager'
+            - '@request'
+            - '@template'
+            - '@user'
+            - '%core.root_path%'
+
+    mot.sudoku.listener:
+        class: mot\sudoku\event\mot_sudoku_listener
+        arguments:
+            - '@auth'
+            - '@controller.helper'
+            - '@template'
+        tags:
+            - { name: event.listener }
