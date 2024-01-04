@@ -4,6 +4,26 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.2.0] - 2024-01-19
+
+### Added
+-	A frontend language file to all languages (`language/XX/mot_sudoku_common.php`)
+-	A main controller for the frontend (`controller/mot_sudoku_main.php`)
+-	A main template file `styles/prosilver/template/mot_sudoku_main.html`
+-	`routing.yml` and `tables.yml` files
+-	An event template file to display the copyright in the footer when Sudoku is played
+-	Tabs to display the three Sudoku types (`styles/all/template/mot_sudoku_main.js`, `styles/template/mot_sudoku_classic.html`, `styles/template/mot_sudoku_samurai.html`,
+	`styles/template/mot_sudoku_ninja.html` and `styles/prosilver/theme/mot_sudoku_main.css`)
+-	A function to the ACP settings module to import xml files containing puzzles
+
+### Changed
+-	The `event/mot_sudoku_listener.php` file in order to load the language file into phpBB and set the variables for the navbar link
+
+### Fixed
+
+### Removed
+  
+  
 ## [0.1.0] - 2023-12-19
 
 ### Added

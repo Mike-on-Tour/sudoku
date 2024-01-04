@@ -1,0 +1,2 @@
+parameters:
+    mot.sudoku.tables.mot_sudoku_classic: '%core.table_prefix%mot_sudoku_classic'

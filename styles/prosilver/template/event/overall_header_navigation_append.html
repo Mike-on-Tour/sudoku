@@ -1,0 +1,10 @@
+{% if U_MOT_SUDOKU %}
+	{# Check for user permissions to show this link to authorized users only #}
+	{% if U_MOT_SUDOKU_PLAY %}
+		<li data-last-responsive="true">
+			<a href="{{ U_MOT_SUDOKU }}" role="menuitem">
+				<i class="icon fa-th fa-fw" aria-hidden="true"></i><span>{{ lang('MOT_SUDOKU_TITLE') }}</span>
+			</a>
+		</li>
+	{% endif %}
+{% endif %}

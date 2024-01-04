@@ -1,8 +1,8 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.1.0
-* @copyright (c) 2023 Mike-on-Tour
+* @package MoT Sudoku v0.2.0
+* @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -23,7 +23,7 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU'						=> 'Sudoku',
 	'ACP_MOT_SUDOKU_SETTINGS'				=> 'Settings',
 
-	'ACP_MOT_SUDOKU_VERSION'				=> '<img src="https://img.shields.io/badge/Version-%1$s-green.svg?style=plastic" /><br>&copy; 2023 - %2$d by Mike-on-Tour',
+	'ACP_MOT_SUDOKU_VERSION'				=> '<img src="https://img.shields.io/badge/Version-%1$s-green.svg?style=plastic"><br>&copy; 2023 - %2$d by Mike-on-Tour',
 	'SUPPORT_MOT_SUDOKU'					=> 'If you want to donate to Sudoku´s development please use this link:<br>',
 
 	'ACP_MOT_SUDOKU_CONFIGURATION'			=> 'Sudoku Administration',
@@ -75,13 +75,6 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_REWARD_ON'				=> 'Enable Sudoku rewards',
 	'ACP_MOT_SUDOKU_REWARD_ON_EXPL'			=> 'Periodic calculation of the game score and reward payments',
 
-	'ACP_MOT_SUDOKU_RESET_GAME'				=> 'Delete all game data',
-	'ACP_MOT_SUDOKU_RESET_GAME_EXPL'		=> '<font color=red>After clicking the `Delete` button <strong>ALL</strong> statistics, results and intermediate results will be
-												deleted and reset to their original state.</font>',
-	'ACP_MOT_SUDOKU_RESET_GAME_CONFIRM_MSG'	=> 'Do you really want to delete the data of all Sudoku players?',
-	'ACP_MOT_SUDOKU_RESET_SUCCESS'			=> 'All game data of Sudoku successfully deleted',
-	'ACP_MOT_SUDOKU_LOG_RESET_GAME'			=> '<strong>Deleted Sudoku game data</strong>',
-
 	'ACP_MOT_SUDOKU_REWARD_GC'				=> 'Time interval between two reward calculations (in seconds)',
 	'ACP_MOT_SUDOKU_REWARD_GC_EXPL' 		=> 'The period between two cron jobs calculating the reward points in seconds.',
 	'ACP_MOT_SUDOKU_REWARD_LAST_GC' 		=> 'Time of the last cron job run',
@@ -108,6 +101,37 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_PM_ENABLE_EXPL'			=> 'If enabled bonus winners will be notified by PM.',
 	'ACP_MOT_SUDOKU_ADMIN_LIST' 			=> 'Sudoku reward system administrator',
 	'ACP_MOT_SUDOKU_ADMIN_LIST_EXPL' 		=> 'A board administrator or moderator who will receive the report of periodic results and who will be the sender of PMs to the winners.',
+
+	'ACP_MOT_SUDOKU_UPLOAD_XML'				=> 'Import a locally stored Sudoku pack (xml file)',
+	'ACP_MOT_SUDOKU_UPLOAD_XML_EXP'			=> 'Here you can import into the database a Sudoku pack which is stored locally on your PC in order to provide your players with
+												new puzzles.<br>Please note that you can import only such packs which adhere to the file schema defined on mike-on-tour.com!<br>
+												To prevent puzzles already in the database from being imported a second time the import function checks the numbers of the game
+												pack and the games against those already in the database.',
+	'ACP_MOT_SUDOKU_UPLOAD'					=> 'Import Sudoku pack',
+	'ACP_MOT_SUDOKU_INVALID_FILE_EXT'		=> 'Invalid file extension.',
+	'ACP_MOT_SUDOKU_INVALID_FILE_CONTENT'	=> 'File is corrupted, import aborted.',
+	'ACP_MOT_SUDOKU_CLASSIC_IMPORTED'		=> [
+		0	=> 'No Classic Sudoku puzzles imported.',
+		1	=> '%1$d Classic Sudoku puzzle imported.',
+		2	=> '%1$d Classic Sudoku puzzles imported.',
+	],
+	'ACP_MOT_SUDOKU_SAMURAI_IMPORTED'		=> [
+		0	=> 'No Samurai Sudoku puzzles imported.',
+		1	=> '%1$d Samurai Sudoku puzzle imported.',
+		2	=> '%1$d Samurai Sudoku puzzles imported.',
+	],
+	'ACP_MOT_SUDOKU_NINJA_IMPORTED'		=> [
+		0	=> 'No Ninja Sudoku puzzles imported.',
+		1	=> '%1$d Ninja Sudoku puzzle imported.',
+		2	=> '%1$d Ninja Sudoku puzzles imported.',
+	],
+
+	'ACP_MOT_SUDOKU_RESET_GAME'				=> 'Delete all game data',
+	'ACP_MOT_SUDOKU_RESET_GAME_EXPL'		=> '<font color=red>After clicking the `Delete` button <strong>ALL</strong> statistics, results and intermediate results will be
+												deleted and reset to their original state.</font>',
+	'ACP_MOT_SUDOKU_RESET_GAME_CONFIRM_MSG'	=> 'Do you really want to delete the data of all Sudoku players?',
+	'ACP_MOT_SUDOKU_RESET_SUCCESS'			=> 'All game data of Sudoku successfully deleted',
+	'ACP_MOT_SUDOKU_LOG_RESET_GAME'			=> '<strong>Deleted Sudoku game data</strong>',
 
 	'ACP_MOT_SUDOKU_SETTING_SAVED'			=> 'Settings for the Sudoku game successfully saved.',
 	'ACP_MOT_SUDOKU_LOG_SETTING_SAVED'		=> '<strong>Changed Sudoku settings</strong>',

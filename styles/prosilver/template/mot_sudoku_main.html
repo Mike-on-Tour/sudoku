@@ -1,0 +1,61 @@
+{% include 'overall_header.html' %}
+{% include 'mot_sudoku_modal.html' %}
+{% INCLUDECSS '@mot_sudoku/mot_sudoku_main.css' %}
+{% INCLUDEJS '@mot_sudoku/mot_sudoku_main.js' %}
+
+<script>
+	var motSudoku = {};
+	motSudoku.tab = "{{ MOT_SUDOKU_SELECTED_TAB|e('js') }}";
+</script>
+
+{% if not S_IS_BOT and S_USER_LOGGED_IN %}
+	<div id="page-body" class="page-body">
+		<div class="forabg">
+			<div class="inner">
+				<ul class="topiclist">
+					<li class="header">
+						<dl class="row-item">
+							<dt>
+								<div class="list-inner">
+									{{ lang('MOT_SUDOKU_TITLE') }}
+								</div>
+							</dt>
+						</dl>
+					</li>
+				</ul>
+			</div>
+
+			<div class="panel bg1">
+				<div id="tabs" class="tabs">
+					<ul>
+						<li id="mot_sudoku_tab_classic" class="tab"><a href="{{ MOT_SUDOKU_CLASSIC_TAB }}">{{ lang('MOT_SUDOKU_TAB_CLASSIC') }}</a></li>
+
+						<li id="mot_sudoku_tab_samurai" class="tab"><a href="{{ MOT_SUDOKU_SAMURAI_TAB }}">{{ lang('MOT_SUDOKU_TAB_SAMURAI') }}</a></li>
+
+						<li id="mot_sudoku_tab_ninja" class="tab"><a href="{{ MOT_SUDOKU_NINJA_TAB }}">{{ lang('MOT_SUDOKU_TAB_NINJA') }}</a></li>
+					</ul>
+				</div>
+
+				<div class="panel bg3">
+					<div id="mot_sudoku_box_classic" class="inner" hidden="true">
+						{% include 'mot_sudoku_classic.html' %}
+					</div>
+
+					<div id="mot_sudoku_box_samurai" class="inner" hidden="true">
+						{% include 'mot_sudoku_samurai.html' %}
+					</div>
+
+					<div id="mot_sudoku_box_ninja" class="inner" hidden="true">
+						{% include 'mot_sudoku_ninja.html' %}
+					</div>
+				</div>
+
+				<div class="panel bg3">
+					Who is online
+				</div>
+			</div>
+		</div>
+	</div>
+{% endif %}
+
+{% include 'overall_footer.html' %}

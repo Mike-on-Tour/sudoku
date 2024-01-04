@@ -1,0 +1,3 @@
+mot_sudoku_main:
+    path: /sudoku
+    defaults: { _controller: mot.sudoku.mot_sudoku_main:handle }

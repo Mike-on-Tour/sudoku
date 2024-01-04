@@ -1,8 +1,8 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.1.0
-* @copyright (c) 2023 Mike-on-Tour
+* @package MoT Sudoku v0.2.0
+* @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -16,6 +16,8 @@ class mot_sudoku_listener implements EventSubscriberInterface
 	public static function getSubscribedEvents()
 	{
 		return array(
+			'core.user_setup'			=> 'load_language_on_setup',
+			'core.page_header'			=> 'add_page_header_link',
 			'core.permissions'			=> 'load_permissions'
 		);
 	}
@@ -34,6 +36,34 @@ class mot_sudoku_listener implements EventSubscriberInterface
 		$this->auth = $auth;
 		$this->helper = $helper;
 		$this->template = $template;
+	}
+
+	/**
+	 * Load language files
+	 *
+	 * @param \phpbb\event\data $event
+	 */
+	public function load_language_on_setup($event)
+	{
+		$lang_set_ext = $event['lang_set_ext'];
+		$lang_set_ext[] = [
+			'ext_name' => 'mot/sudoku',
+			'lang_set' => 'mot_sudoku_common',
+		];
+		$event['lang_set_ext'] = $lang_set_ext;
+	}
+
+	/**
+	 * Add a page header nav bar link
+	 *
+	 * @param \phpbb\event\data $event The event object
+	 */
+	public function add_page_header_link()
+	{
+		$this->template->assign_vars([
+			'U_MOT_SUDOKU' 			=> $this->helper->route('mot_sudoku_main'),
+			'U_MOT_SUDOKU_PLAY'		=> $this->auth->acl_get('u_play_mot_sudoku'),
+		]);
 	}
 
 	/**

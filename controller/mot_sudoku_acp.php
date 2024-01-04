@@ -1,8 +1,8 @@
 <?php
 /*
 *
-* @package MoT Sudoku v0.1.0
-* @copyright (c) 2023 Mike-on-Tour
+* @package MoT Sudoku v0.2.0
+* @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -19,9 +19,6 @@ class mot_sudoku_acp
 
 	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
-
-	/** @var \phpbb\db\tools\tools_interface */
-	protected $db_tools;
 
 	/** @var \phpbb\language\language $language Language object */
 	protected $language;
@@ -44,16 +41,18 @@ class mot_sudoku_acp
 	/** @var string phpBB root path */
 	protected $root_path;
 
+	/** @var string mot.sudoku.tables.mot_sudoku_classic */
+	protected $mot_sudoku_classic_table;
+
 	/**
 	 * {@inheritdoc
 	 */
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\db\tools\tools_interface $db_tools,
-								\phpbb\language\language $language, \phpbb\log\log $log, \phpbb\extension\manager $phpbb_extension_manager,
-								\phpbb\request\request_interface $request, \phpbb\template\template $template, \phpbb\user $user, $root_path)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\language\language $language,
+								\phpbb\log\log $log, \phpbb\extension\manager $phpbb_extension_manager, \phpbb\request\request_interface $request,
+								\phpbb\template\template $template, \phpbb\user $user, $root_path, $mot_sudoku_classic_table)
 	{
 		$this->config = $config;
 		$this->db = $db;
-		$this->db_tools = $db_tools;
 		$this->language = $language;
 		$this->log = $log;
 		$this->phpbb_extension_manager = $phpbb_extension_manager;
@@ -61,6 +60,8 @@ class mot_sudoku_acp
 		$this->template = $template;
 		$this->user = $user;
 		$this->root_path = $root_path;
+
+		$this->classic_sudoku_table = $mot_sudoku_classic_table;
 
 		$this->md_manager = $this->phpbb_extension_manager->create_extension_metadata_manager('mot/sudoku');
 		$this->mot_sudoku_version = $this->md_manager->get_metadata('version');
@@ -109,6 +110,7 @@ class mot_sudoku_acp
 
 				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'ACP_MOT_SUDOKU_LOG_SETTING_SAVED', false);
 				trigger_error($this->language->lang('ACP_MOT_SUDOKU_SETTING_SAVED') . adm_back_link($this->u_action));
+
 				break;
 
 			case 'purge_cache':
@@ -120,6 +122,77 @@ class mot_sudoku_acp
 				$this->purge_cache();
 				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'ACP_MOT_SUDOKU_PURGE_CACHE_LOG', false);
 				trigger_error($this->language->lang('ACP_MOT_SUDOKU_PURGE_CACHE_MSG')  . adm_back_link($this->u_action));
+
+				break;
+
+			case 'import_gamepack':
+				$file_info = $this->request->file('acp_mot_sudoku_file');
+				$filename = $file_info['name'];
+				$temp_file = $file_info['tmp_name'];
+
+				// Check for valid file extension
+				$path_parts = pathinfo($filename);
+				if (strtolower($path_parts['extension']) != 'xml' || !isset($path_parts['extension']))
+				{
+					trigger_error($this->language->lang('ACP_MOT_SUDOKU_INVALID_FILE_EXT') . adm_back_link($this->u_action), E_USER_WARNING);
+				}
+
+				// load temp file (no need to store the file somewhere else since we only want the search terms and - if they exist - the category
+				$xml = @simplexml_load_file($temp_file);
+				if ($xml === false || $xml->getName() != 'mot_sudoku_pack')
+				{
+					trigger_error($this->language->lang('ACP_MOT_SUDOKU_INVALID_FILE_CONTENT') . adm_back_link($this->u_action), E_USER_WARNING);
+				}
+				else
+				{
+					// Get all currently existing items by their game pack and game number from the Classic Sudoku table
+					$sql = 'SELECT game_pack, game_number FROM ' . $this->classic_sudoku_table;
+					$result = $this->db->sql_query($sql);
+					$classic_existing = $this->db->sql_fetchrowset($result);
+					$this->db->sql_freeresult($result);
+
+					$classic_sudoku = $samurai_sudoku = $ninja_sudoku = [];
+
+					foreach ($xml->children() as $row)
+					{
+						switch ($row->getName())
+						{
+							case 'classic_sudoku':
+								if (!in_array(['game_pack' => $row->game_pack, 'game_number' => $row->game_number], $classic_existing))
+								{
+									$classic_sudoku[] = [
+										'game_pack'			=> (int) $row->game_pack,
+										'game_number'		=> (int) $row->game_number,
+										'game_level'		=> (int) $row->game_level,
+										'game_name'			=> (string) $row->game_name,
+										'creator_name'		=> (string) $row->creator_name,
+										'puzzle_line'		=> (string) $row->puzzle_line,
+										'solution_line'		=> (string) $row->solution_line,
+									];
+								}
+
+								break;
+
+							case 'samurai_sudoku':
+
+								break;
+
+							case 'ninja_sudoku':
+
+								break;
+						}
+					}
+
+					$message = [];
+					if (!empty($classic_sudoku))
+					{
+						$this->db->sql_multi_insert($this->classic_sudoku_table, $classic_sudoku);
+					}
+					$message[] = $this->language->lang('ACP_MOT_SUDOKU_CLASSIC_IMPORTED', count($classic_sudoku));
+
+					trigger_error(implode('<br>', $message) . adm_back_link($this->u_action));
+				}
+
 				break;
 
 			case 'reset_game':
@@ -175,8 +248,8 @@ class mot_sudoku_acp
 		$admin_list = '';
 		foreach ($admins as $row)
 		{
-			$selected  = ( $row['user_id'] == $this->config['mot_sudoku_admin_id'] ) ? 'selected="selected"' : '';
-			$admin_list .= '<option value = "' . $row['user_id'] . '" ' .  $selected  . '>' . $row['username'] . '</option>';
+			$selected  = ( $row['user_id'] == $this->config['mot_sudoku_admin_id'] ) ? ' selected' : '';
+			$admin_list .= '<option value = "' . $row['user_id'] . '"' .  $selected  . '>' . $row['username'] . '</option>';
 		}
 
 		$this->template->assign_vars([
@@ -206,13 +279,14 @@ class mot_sudoku_acp
 			'ACP_MOT_SUDOKU_RANK2_PRICE'				=> $this->config['mot_sudoku_rank2_price'],
 			'ACP_MOT_SUDOKU_RANK3_PRICE'				=> $this->config['mot_sudoku_rank3_price'],
 			'ACP_MOT_SUDOKU_HIGH_AVERAGE'				=> $this->config['mot_sudoku_high_average'],
-			'ACP_MOT_SUDOKU_MOST_GAMES'				=> $this->config['mot_sudoku_most_games'],
+			'ACP_MOT_SUDOKU_MOST_GAMES'					=> $this->config['mot_sudoku_most_games'],
 			'ACP_MOT_SUDOKU_SAMURAI_PRICE'				=> $this->config['mot_sudoku_samurai_price'],
 			'ACP_MOT_SUDOKU_NINJA_PRICE'				=> $this->config['mot_sudoku_ninja_price'],
 			'ACP_MOT_SUDOKU_PM_ENABLE'					=> $this->config['mot_sudoku_pm_enable'],
 			'ACP_MOT_SUDOKU_ADMIN_LIST'					=> $admin_list,
 			'U_ACTION'									=> $this->u_action . '&amp;action=submit',
 			'U_ACTION_CACHE_PURGE'						=> $this->u_action . '&amp;action=purge_cache',
+			'U_ACTION_IMPORT_GAME_PACK'					=> $this->u_action . '&amp;action=import_gamepack',
 			'U_ACTION_RESET_GAME'						=> $this->u_action . '&amp;action=reset_game',
 
 			'ACP_MOT_SUDOKU_VERSION_STRING'				=> $this->language->lang('ACP_MOT_SUDOKU_VERSION', $this->mot_sudoku_version, date('Y')),

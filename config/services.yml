@@ -1,10 +1,12 @@
+imports:
+    - { resource: tables.yml }
+
 services:
     mot.sudoku.controller.mot_sudoku_acp:
         class: mot\sudoku\controller\mot_sudoku_acp
         arguments:
             - '@config'
             - '@dbal.conn'
-            - '@dbal.tools'
             - '@language'
             - '@log'
             - '@ext.manager'
@@ -12,6 +14,22 @@ services:
             - '@template'
             - '@user'
             - '%core.root_path%'
+            - '%mot.sudoku.tables.mot_sudoku_classic%'
+
+    mot.sudoku.mot_sudoku_main:
+        class: mot\sudoku\controller\mot_sudoku_main
+        arguments:
+            - '@auth'
+            - '@config'
+            - '@dbal.conn'
+            - '@controller.helper'
+            - '@language'
+            - '@ext.manager'
+            - '@request'
+            - '@template'
+            - '@user'
+            - '%core.root_path%'
+            - '%mot.sudoku.tables.mot_sudoku_classic%'
 
     mot.sudoku.listener:
         class: mot\sudoku\event\mot_sudoku_listener

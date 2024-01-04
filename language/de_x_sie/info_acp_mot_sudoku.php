@@ -1,8 +1,8 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.1.0
-* @copyright (c) 2023 Mike-on-Tour
+* @package MoT Sudoku v0.2.0
+* @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -23,7 +23,7 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU'						=> 'Sudoku',
 	'ACP_MOT_SUDOKU_SETTINGS'				=> 'Einstellungen',
 
-	'ACP_MOT_SUDOKU_VERSION'				=> '<img src="https://img.shields.io/badge/Version-%1$s-green.svg?style=plastic" /><br>&copy; 2023 - %2$d by Mike-on-Tour',
+	'ACP_MOT_SUDOKU_VERSION'				=> '<img src="https://img.shields.io/badge/Version-%1$s-green.svg?style=plastic"><br>&copy; 2023 - %2$d by Mike-on-Tour',
 	'SUPPORT_MOT_SUDOKU'					=> 'Wenn Sie die Entwicklung des Sudoku-Spiels unterstützen möchten, können Sie das hier tun:<br>',
 
 	'ACP_MOT_SUDOKU_CONFIGURATION'			=> 'Sudoku Administration',
@@ -75,13 +75,6 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_REWARD_ON'				=> 'Sudoku Bonussystem aktivieren',
 	'ACP_MOT_SUDOKU_REWARD_ON_EXPL'			=> 'Periodische Kalkulation der Spielergebnisse und die Bonuszahlungen.',
 
-	'ACP_MOT_SUDOKU_RESET_GAME'				=> 'Alle Spieledaten löschen',
-	'ACP_MOT_SUDOKU_RESET_GAME_EXPL'		=> '<font color=red>Nach Anklicken des `Löschen`-Buttons werden <strong>ALLE</strong> Statistiken, Ergebnisse und Zwischenergebnisse
-												gelöscht und auf den Anfangszustand zurückgesetzt.</font>',
-	'ACP_MOT_SUDOKU_RESET_GAME_CONFIRM_MSG'	=> 'Wollen Sie wirklich alle Spieledaten löschen?',
-	'ACP_MOT_SUDOKU_RESET_SUCCESS'			=> 'Es wurden sämtliche Daten gelöscht',
-	'ACP_MOT_SUDOKU_LOG_RESET_GAME'			=> '<strong>Sudoku Spieledaten gelöscht</strong>',
-
 	'ACP_MOT_SUDOKU_REWARD_GC'				=> 'Zeitintervall zwischen zwei Bonusberechnungen (in Sekunden)',
 	'ACP_MOT_SUDOKU_REWARD_GC_EXPL'			=> 'Der Abstand zwischen zwei Cronjobs zum Ermitteln der Gewinner für die Bonuszahlung in Sekunden.',
 	'ACP_MOT_SUDOKU_REWARD_LAST_GC'			=> 'Zeitpunkt der letzten Berechnung',
@@ -108,6 +101,38 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_PM_ENABLE_EXPL'			=> 'Die Gewinner werden per PN über ihren Gewinn informiert.',
 	'ACP_MOT_SUDOKU_ADMIN_LIST'				=> 'Administrator für das Sudoko Bonussystem',
 	'ACP_MOT_SUDOKU_ADMIN_LIST_EXPL'		=> 'Ein Board Administrator oder Moderator, der die regelmäßigen Reports erhält und dessen Name als Absender in der PN für die Gewinner erscheint',
+
+	'ACP_MOT_SUDOKU_UPLOAD_XML'				=> 'Lokales Sudoku-Pack (xml-Datei) importieren',
+	'ACP_MOT_SUDOKU_UPLOAD_XML_EXP'			=> 'Hier können Sie ein auf Ihrem PC gespeichertes Sudoku-Pack in die Datenbank importieren und neue Sudoku-Rätsel zum Spielen bereit
+												stellen.<br>Bitte beachten Sie^, dass nur Spiele-Packs importiert werden können, die dem auf mike-on-tour.com definierten Schema
+												entsprechen!<br>
+												Um doppelte Spiele zu vermeiden, werden die Nummern des Spiele-Packs und der darin enthaltenen Spiele vor dem Import mit der
+												Datenbank abgeglichen.',
+	'ACP_MOT_SUDOKU_UPLOAD'					=> 'Sudoku-Pack importieren',
+	'ACP_MOT_SUDOKU_INVALID_FILE_EXT'		=> 'Ungültige Datei-Erweiterung.',
+	'ACP_MOT_SUDOKU_INVALID_FILE_CONTENT'	=> 'Datei ist fehlerhaft, Laden abgebrochen.',
+	'ACP_MOT_SUDOKU_CLASSIC_IMPORTED'		=> [
+		0	=> 'Es wurden keine Classic-Sudoku-Rätsel importiert.',
+		1	=> 'Es wurde %1$d Classic-Sudoku-Rätsel importiert.',
+		2	=> 'Es wurden %1$d Classic-Sudoku-Rätsel importiert.',
+	],
+	'ACP_MOT_SUDOKU_SAMURAI_IMPORTED'		=> [
+		0	=> 'Es wurden keine Samurai-Sudoku-Rätsel importiert.',
+		1	=> 'Es wurde %1$d Samurai-Sudoku-Rätsel importiert.',
+		2	=> 'Es wurden %1$d Samurai-Sudoku-Rätsel importiert.',
+	],
+	'ACP_MOT_SUDOKU_NINJA_IMPORTED'		=> [
+		0	=> 'Es wurden keine Ninja-Sudoku-Rätsel importiert.',
+		1	=> 'Es wurde %1$d Ninja-Sudoku-Rätsel importiert.',
+		2	=> 'Es wurden %1$d Ninja-Sudoku-Rätsel importiert.',
+	],
+
+	'ACP_MOT_SUDOKU_RESET_GAME'				=> 'Alle Spieledaten löschen',
+	'ACP_MOT_SUDOKU_RESET_GAME_EXPL'		=> '<font color=red>Nach Anklicken des `Löschen`-Buttons werden <strong>ALLE</strong> Statistiken, Ergebnisse und Zwischenergebnisse
+												gelöscht und auf den Anfangszustand zurückgesetzt.</font>',
+	'ACP_MOT_SUDOKU_RESET_GAME_CONFIRM_MSG'	=> 'Wollen Sie wirklich alle Spieledaten löschen?',
+	'ACP_MOT_SUDOKU_RESET_SUCCESS'			=> 'Es wurden sämtliche Daten gelöscht',
+	'ACP_MOT_SUDOKU_LOG_RESET_GAME'			=> '<strong>Sudoku Spieledaten gelöscht</strong>',
 
 	'ACP_MOT_SUDOKU_SETTING_SAVED'			=> 'Die Einstellungen für das Sudoku-Spiel wurden erfolgreich gesichert.',
 	'ACP_MOT_SUDOKU_LOG_SETTING_SAVED'		=> '<strong>Einstellungen für das Sudoku-Spiel geändert</strong>',

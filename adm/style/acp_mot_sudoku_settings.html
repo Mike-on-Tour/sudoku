@@ -278,20 +278,42 @@
 			<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}">
 		</p>
 	</fieldset>
+	{{ S_FORM_TOKEN }}
+</form>
+
+	<br>
 
 	<hr>
 
 	<fieldset>
-		<dl>
-			<dt><label for="mot_sudoku_reset_game">{{ lang('ACP_MOT_SUDOKU_RESET_GAME') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_RESET_GAME_EXPL') }}</p></dt>
-			<dd>
-				<input class="dt-button button1" type="submit" id="mot_sudoku_reset_game" name="mot_sudoku_reset_game" formaction="{{ U_ACTION_RESET_GAME }}" value="{{ lang('DELETE') }}">
-				{{ S_HIDDEN_FIELDS }}
-			</dd>
-		</dl>
+		<form id="acp_mot_sudoku_file_upload" method="post" action="{{ U_ACTION_IMPORT_GAME_PACK }}" enctype="multipart/form-data">
+			<dl>
+				<dt><label for="acp_mot_sudoku_file">{{ lang('ACP_MOT_SUDOKU_UPLOAD_XML') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_UPLOAD_XML_EXP') }}</p></dt>
+				<dd>
+					<input type="file" id="acp_mot_sudoku_file" name="acp_mot_sudoku_file" class="inputbox autowidth" accept=".xml">&nbsp;
+					<input class="dt-button button1" type="submit" id="mot_sudoku_upload_file" name="mot_sudoku_upload_file" value="{{ lang('ACP_MOT_SUDOKU_UPLOAD') }}">
+				</dd>
+			</dl>
+			{{ S_FORM_TOKEN }}
+		</form>
 	</fieldset>
-	{{ S_FORM_TOKEN }}
-</form>
+
+	<hr>
+
+	<fieldset>
+		<form id="acp_mot_sudoku_game_reset" method="post" action="{{ U_ACTION_RESET_GAME }}" enctype="application/x-www-form-urlencoded">
+			<dl>
+				<dt><label for="mot_sudoku_reset_game">{{ lang('ACP_MOT_SUDOKU_RESET_GAME') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_RESET_GAME_EXPL') }}</p></dt>
+				<dd>
+					<input class="dt-button button1" type="submit" id="mot_sudoku_reset_game" name="mot_sudoku_reset_game" formaction="{{ U_ACTION_RESET_GAME }}" value="{{ lang('DELETE') }}">
+					{{ S_HIDDEN_FIELDS }}
+				</dd>
+			</dl>
+			{{ S_FORM_TOKEN }}
+		</form>
+	</fieldset>
+
+<hr>
 
 <fieldset>
 	<dl>
