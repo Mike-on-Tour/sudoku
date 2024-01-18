@@ -42,21 +42,18 @@
 
 <form id="acp_mot_sudoku_settings" method="post" enctype="application/x-www-form-urlencoded" action="{{ U_ACTION }}">
 	<fieldset>
+		<legend>{{ lang('ACP_MOT_SUDOKU_GENERAL_SETTINGS') }}</legend>
 		<dl>
 			<dt><label for="mot_sudoku_version_checker">{{ lang('ACP_MOT_SUDOKU_VERSION_CHECKER_ON') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_VERSION_CHECKER_EXPL') }}</p></dt>
 			<dd>{{ _self.switch('mot_sudoku_version_checker', ACP_MOT_SUDOKU_VERSION_CHECKER, switch_type) }}</dd>
 		</dl>
-	</fieldset>
 
-	<fieldset>
 		<dl>
 			<dt><label for="mot_sudoku_enable">{{ lang('ACP_MOT_SUDOKU_ENABLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_ENABLE_EXPL') }}</p></dt>
 			<dd>{{ _self.switch('mot_sudoku_enable', ACP_MOT_SUDOKU_ENABLE, switch_type) }}</dd>
 		</dl>
-	</fieldset>
 
-	<fieldset>
-		<dl>
+{#		<dl>
 			<dt><label for="mot_sudoku_cache_enable">{{ lang('ACP_MOT_SUDOKU_CACHE_ENABLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_CACHE_ENABLE_EXPL') }}</p></dt>
 			<dd>{{ _self.switch('mot_sudoku_cache_enable', ACP_MOT_SUDOKU_CACHE_ENABLE, switch_type) }}</dd>
 		</dl>
@@ -66,9 +63,7 @@
 				<input class="dt-button button1" type="submit" id="mot_sudoku_cache_purge" name="mot_sudoku_cache_purge" formaction="{{ U_ACTION_CACHE_PURGE }}" value="{{ lang('ACP_MOT_SUDOKU_PURGE_CACHE') }}">
 			</dd>
 		</dl>
-	</fieldset>
-
-	<fieldset>
+#}
 		<dl>
 			<dt><label for="mot_sudoku_title_enable">{{ lang('ACP_MOT_SUDOKU_PUZZLE_TITLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_PUZZLE_TITLE_EXPL') }}</p></dt>
 			<dd>{{ _self.switch('mot_sudoku_title_enable', ACP_MOT_SUDOKU_TITLE_ENABLE, switch_type) }}</dd>
@@ -76,10 +71,55 @@
 	</fieldset>
 
 	<fieldset>
+		<legend>{{ lang('ACP_MOT_SUDOKU_POINTS_SETTINGS') }}</legend>
+		<dl>
+			<dt><label for="mot_sudoku_cell_points">{{ lang('ACP_MOT_SUDOKU_CELL_POINTS') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_CELL_POINTS_EXPL') }}</p></dt>
+			<dd>
+				<input type="number" min="5" max="50" id="mot_sudoku_cell_points" name="mot_sudoku_cell_points" value="{{ ACP_MOT_SUDOKU_CELL_POINTS }}">
+				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+			</dd>
+		</dl>
+
+		<dl>
+			<dt><label for="mot_sudoku_cell_cost">{{ lang('ACP_MOT_SUDOKU_CELL_COST') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_CELL_COST_EXPL') }}</p></dt>
+			<dd>
+				<input type="number" min="10" max="75" id="mot_sudoku_cell_cost" name="mot_sudoku_cell_cost" value="{{ ACP_MOT_SUDOKU_CELL_COST }}">
+				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+			</dd>
+		</dl>
+
+		<dl>
+			<dt><label for="mot_sudoku_number_cost">{{ lang('ACP_MOT_SUDOKU_NUMBER_COST') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_NUMBER_COST_EXPL') }}</p></dt>
+			<dd>
+				<input type="number" min="20" max="80" id="mot_sudoku_number_cost" name="mot_sudoku_number_cost" value="{{ ACP_MOT_SUDOKU_NUMBER_COST }}">
+				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+			</dd>
+		</dl>
+
+		<dl>
+			<dt><label for="mot_sudoku_reset_cost">{{ lang('ACP_MOT_SUDOKU_RESET_COST') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_RESET_COST_EXPL') }}</p></dt>
+			<dd>
+				<input type="number" min="200" max="500" id="mot_sudoku_reset_cost" name="mot_sudoku_reset_cost" value="{{ ACP_MOT_SUDOKU_RESET_COST }}">
+				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+			</dd>
+		</dl>
+
+		<dl>
+			<dt><label for="mot_sudoku_level_cost">{{ lang('ACP_MOT_SUDOKU_LEVEL_COST') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_LEVEL_COST_EXPL') }}</p></dt>
+			<dd>
+				<input type="number" min="0" max="50" id="mot_sudoku_level_cost" name="mot_sudoku_level_cost" value="{{ ACP_MOT_SUDOKU_LEVEL_COST }}">
+				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+			</dd>
+		</dl>
+	</fieldset>
+
+	<fieldset>
+		<legend>{{ lang('ACP_MOT_SUDOKU_HELPER_SETTINGS') }}</legend>
 		<dl>
 			<dt><label for="mot_sudoku_helper_enable">{{ lang('ACP_MOT_SUDOKU_HELPER_ENABLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_HELPER_ENABLE_EXPL') }}</p></dt>
 			<dd>{{ _self.switch('mot_sudoku_helper_enable', ACP_MOT_SUDOKU_HELPER_ENABLE, switch_type) }}</dd>
 		</dl>
+
 		<dl>
 			<dt><label for="mot_sudoku_helper_cost">{{ lang('ACP_MOT_SUDOKU_HELPER_COST') ~ lang('COLON') }}</label></dt>
 			<dd>
@@ -117,18 +157,9 @@
 		</dl>
 	</fieldset>
 
-	<fieldset>
-		<dl>
-			<dt><label for="mot_sudoku_level_cost">{{ lang('ACP_MOT_SUDOKU_LEVEL_COST') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_LEVEL_COST_EXPL') }}</p></dt>
-			<dd>
-				<input type="number" min="0" max="50" id="mot_sudoku_level_cost" name="mot_sudoku_level_cost" value="{{ ACP_MOT_SUDOKU_LEVEL_COST }}">
-				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
-			</dd>
-		</dl>
-	</fieldset>
-
 	{% if ACP_MOT_SUDOKU_UP_ENABLED %}
 		<fieldset>
+			<legend>{{ lang('ACP_MOT_SUDOKU_UP_SETTINGS') }}</legend>
 			<dl>
 				<dt><label for="mot_sudoku_points_enable">{{ lang('ACP_MOT_SUDOKU_POINTS_ENABLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_POINTS_ENABLE_EXPL') }}</p></dt>
 				<dd>{{ _self.switch('mot_sudoku_points_enable', ACP_MOT_SUDOKU_POINTS_ENABLE, switch_type) }}</dd>
@@ -148,6 +179,7 @@
 
 		<div id="mot_sudoku_show_reward_enable" hidden="true">
 			<fieldset>
+				<legend>{{ lang('ACP_MOT_SUDOKU_REWARD_SETTINGS') }}</legend>
 				<dl>
 					<dt><label for="mot_sudoku_reward_enable">{{ lang('ACP_MOT_SUDOKU_REWARD_ON') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_REWARD_ON_EXPL') }}</p></dt>
 					<dd>{{ _self.switch('mot_sudoku_reward_enable', ACP_MOT_SUDOKU_REWARD_ENABLE, switch_type) }}</dd>

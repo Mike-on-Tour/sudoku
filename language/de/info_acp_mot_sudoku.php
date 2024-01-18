@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.2.0
+* @package MoT Sudoku v0.3.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -30,6 +30,7 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_GENERAL'				=> 'Allgemeine Einstellungen',
 	'ACP_MOT_SUDOKU_GENERAL_EXPL'			=> 'Hier werden die allgemeinen Einstellungen vorgenommen',
 
+	'ACP_MOT_SUDOKU_GENERAL_SETTINGS'		=> 'Allgemeine Einstellungen',
 	'ACP_MOT_SUDOKU_VERSION_CHECK'			=> 'Sudoku Versionsprüfung',
 	'ACP_MOT_SUDOKU_VERSION_CHECK_EXPL'		=> 'Überprüft, ob eine neuere Version von Sudoku verfügbar ist',
 	'ACP_MOT_SUDOKU_VERSION_UP_TO_DATE'		=> 'Deine Version von Sudoku ist auf dem neuesten Stand.',
@@ -39,19 +40,30 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_VERSION_CHECKER_ON'		=> 'Automatische Versionsüberprüfung',
 	'ACP_MOT_SUDOKU_VERSION_CHECKER_EXPL'	=> 'Bei Aktivierung dieser Option wird bei jedem Aufruf dieser Seite geprüft, ob eine neuere Version verfügbar ist; das Ergebnis wird
 												in einer farbigen Box oberhalb von `Allgemeine Einstellungen` angezeigt.',
-
 	'ACP_MOT_SUDOKU_ENABLE'					=> 'Sudoku aktivieren',
 	'ACP_MOT_SUDOKU_ENABLE_EXPL'			=> 'Sudoku für die berechtigten Mitglieder ein- bzw. ausschalten, zeigt je nach Einstellung den Link in der Navigationsleiste an.',
-
 	'ACP_MOT_SUDOKU_CACHE_ENABLE'			=> 'Cache aktivieren',
 	'ACP_MOT_SUDOKU_CACHE_ENABLE_EXPL'		=> 'Der Cache reduziert die Abfragen auf dem Datenbank-Server',
 	'ACP_MOT_SUDOKU_PURGE_CACHE'			=> 'Sudoku-Cache leeren',
 	'ACP_MOT_SUDOKU_PURGE_CACHE_MSG'		=> 'Sudoku-Cache wurde geleert',
 	'ACP_MOT_SUDOKU_PURGE_CACHE_LOG'		=> '<strong>Sudoku-Cache geleert</strong>',
-
 	'ACP_MOT_SUDOKU_PUZZLE_TITLE'			=> 'Zeige Puzzle Titel',
-	'ACP_MOT_SUDOKU_PUZZLE_TITLE_EXPL'		=> 'Zeigt den Titel des aktuellen Spiels an.',
+	'ACP_MOT_SUDOKU_PUZZLE_TITLE_EXPL'		=> 'Zeigt den Namen des aktuellen Spiels an.',
 
+	'ACP_MOT_SUDOKU_POINTS_SETTINGS'		=> 'Einstellungen für Punktevergabe',
+	'ACP_MOT_SUDOKU_CELL_POINTS'			=> 'Punkte für Eingabe',
+	'ACP_MOT_SUDOKU_CELL_POINTS_EXPL'		=> 'Die Anzahl der Punkte, die einem Spieler bei der Eingabe einer Ziffer in eine Zelle des Rätsels gutgeschrieben werden.',
+	'ACP_MOT_SUDOKU_CELL_COST'				=> 'Punktabzug für Löschen',
+	'ACP_MOT_SUDOKU_CELL_COST_EXPL'			=> 'Anzahl der Punkte, die einem Spieler abgezogen werden, wenn er eine bereits existierende Ziffer in einer Zelle entweder löscht
+												oder mit einer anderen Ziffer überschreibt.',
+	'ACP_MOT_SUDOKU_NUMBER_COST'			=> 'Punktabzug für Kauf einer Ziffer',
+	'ACP_MOT_SUDOKU_NUMBER_COST_EXPL'		=> 'Anzahl der Punkte, die einem Spieler für den Kauf einer Ziffer abgezogen werden.',
+	'ACP_MOT_SUDOKU_RESET_COST'				=> 'Punktabzug für Neustart des Spiels',
+	'ACP_MOT_SUDOKU_RESET_COST_EXPL'		=> 'Anzahl der Punkte, die einem Spieler abgezogen werden, wenn er das aktuelle Spiel neu startet.',
+	'ACP_MOT_SUDOKU_LEVEL_COST'				=> 'Punktabzug für niedrigeren Schwierigkeitsgrad',
+	'ACP_MOT_SUDOKU_LEVEL_COST_EXPL'		=> 'Anzahl der Punkte, die pro gewähltem niedrigerem Schwierigkeitsgrad abgezogen werden.',
+
+	'ACP_MOT_SUDOKU_HELPER_SETTINGS'		=> 'Hilfe-Einstellungen',
 	'ACP_MOT_SUDOKU_HELPER_ENABLE'			=> 'Sudoku Helfer aktivieren',
 	'ACP_MOT_SUDOKU_HELPER_ENABLE_EXPL'		=> 'Erlaubt es den Spielern, ein Hilfefenster mit Lösungsvorschlägen für die einzelnen Felder zu benutzen',
 	'ACP_MOT_SUDOKU_HELPER_COST'			=> 'Punkte, die für das Aktivieren des Helfers abgezogen werden',
@@ -61,20 +73,17 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_HELPER_NINJA_ENABLE'	=> 'Ninja Helfer aktivieren',
 	'ACP_MOT_SUDOKU_HELPER_NINJA_COST'		=> 'Punkte, die für das Aktivieren des Ninja Helfers abgezogen werden',
 
-	'ACP_MOT_SUDOKU_LEVEL_COST'				=> 'Punktabzug für Schwierigkeitsgrad',
-	'ACP_MOT_SUDOKU_LEVEL_COST_EXPL'		=> 'Anzahl der Punkte, die pro gewähltem Schwierigkeitsgrad abgezogen werden.',
-
+	'ACP_MOT_SUDOKU_UP_SETTINGS'			=> 'Einstellungen Punkte-System',
 	'ACP_MOT_SUDOKU_POINTS_ENABLE'			=> 'Aktivere das Punkte-System',
 	'ACP_MOT_SUDOKU_POINTS_ENABLE_EXPL'		=> 'Wenn ein Punkte-System (z.B. ´Ultimate Points´) auf deinem Board installiert ist, werden die Punkte vom Sudoku dem Spielekonto
 												hinzugefügt bzw. von dort auch abgezogen.<br>
 												Nach Aktivierung werden dafür weitere Einstellmöglichkeiten angezeigt.',
-
 	'ACP_MOT_SUDOKU_POINTS_RATIO' 			=> 'Verhältnis Punkte Sudoku zu Punkte-System',
 	'ACP_MOT_SUDOKU_POINTS_RATIO_EXPL' 		=> 'Lege fest, wieviele Punkte dem Benutzerkonto pro 100 Sudoku Punkte gutgeschrieben werden sollen.',
 
+	'ACP_MOT_SUDOKU_REWARD_SETTINGS'		=> 'Einstellungen für Bonussystem',
 	'ACP_MOT_SUDOKU_REWARD_ON'				=> 'Sudoku Bonussystem aktivieren',
 	'ACP_MOT_SUDOKU_REWARD_ON_EXPL'			=> 'Periodische Kalkulation der Spielergebnisse und die Bonuszahlungen.',
-
 	'ACP_MOT_SUDOKU_REWARD_GC'				=> 'Zeitintervall zwischen zwei Bonusberechnungen (in Sekunden)',
 	'ACP_MOT_SUDOKU_REWARD_GC_EXPL'			=> 'Der Abstand zwischen zwei Cronjobs zum Ermitteln der Gewinner für die Bonuszahlung in Sekunden.',
 	'ACP_MOT_SUDOKU_REWARD_LAST_GC'			=> 'Zeitpunkt der letzten Berechnung',

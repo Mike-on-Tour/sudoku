@@ -1,0 +1,38 @@
+{% set switch_type = TOGGLECTRL_TYPE ?? 'toggle' %}
+
+<h3>{{ lang('MOT_SUDOKU_OPTIONS_TITLE') }}</h3>
+
+
+<div id="mot_sudoku_helper_note_{{ MOT_SUDOKU_GAME_TYPE }}" class="centered-text-div" hidden="true">
+	<p>{{ lang('MOT_SUDOKU_HELPER_NOTE') }}</p>
+
+	<hr>
+</div>
+
+
+<div class="centered-text-div">
+	<button class="button options-button" id="game_reset_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ MOT_SUDOKU_GAME_RESET_TITLE }}">{{ lang('MOT_SUDOKU_GAME_RESET') }}</button>
+	<button class="button options-button" id="buy_digit_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ MOT_SUDOKU_BUY_NUMBER_TITLE }}">{{ lang('MOT_SUDOKU_BUY_NUMBER') }}</button>
+	<div class="centered-buttons">
+		<button class="button options-button" id="enable_helper_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ MOT_SUDOKU_HELPER_TITLE }}">{{ lang('MOT_SUDOKU_ENABLE_HELPER') }}</button>
+		<br>
+		<button class="button options-button" id="mask_helper_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ lang('MOT_SUDOKU_MASK_TITLE') }}">{{ lang('MOT_SUDOKU_MASK_HELPER') }}</button>
+	</div>
+</div>
+
+<div class="centered-text-div">
+	<form>
+		<fieldset>
+			{{ lang('MOT_SUDOKU_MODAL_ABOVE') }}&nbsp;{{ _self.switch('mot_sudoku_modal_switch', MOT_SUDOKU_MODAL_SWITCH, switch_type) }}&nbsp;{{ lang('MOT_SUDOKU_MODAL_OVER') }}
+		</fieldset>
+	</form>
+</div>
+
+{% macro switch(name, checked = false, type = 'toggle') -%}
+	{% if type == 'toggle' -%}
+		<input type="checkbox" class="{{ type }}" name="{{ name }}" value="1"{{ checked ? ' checked' }}>
+	{%- elseif type == 'radio' -%}
+		<input type="radio" class="radio" name="{{ name }}" value="0"{{ !checked ? ' checked' }}>
+		<input type="radio" class="radio" name="{{ name }}" value="1"{{ checked ? ' checked' }}>
+	{%- endif %}
+{%- endmacro %}

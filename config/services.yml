@@ -30,12 +30,16 @@ services:
             - '@user'
             - '%core.root_path%'
             - '%mot.sudoku.tables.mot_sudoku_classic%'
+            - '%mot.sudoku.tables.mot_sudoku_games%'
+            - '%mot.sudoku.tables.mot_sudoku_stats%'
 
     mot.sudoku.listener:
         class: mot\sudoku\event\mot_sudoku_listener
         arguments:
             - '@auth'
+            - '@dbal.conn'
             - '@controller.helper'
+            - '@language'
             - '@template'
         tags:
             - { name: event.listener }

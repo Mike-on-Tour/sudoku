@@ -87,13 +87,18 @@ class mot_sudoku_acp
 				$this->config->set('mot_sudoku_version_checker', $this->request->variable('mot_sudoku_version_checker', 0));
 				$this->config->set('mot_sudoku_cache_enable', $this->request->variable('mot_sudoku_cache_enable', 0));
 				$this->config->set('mot_sudoku_title_enable', $this->request->variable('mot_sudoku_title_enable', 0));
+				$this->config->set('mot_sudoku_cell_points', $this->request->variable('mot_sudoku_cell_points', 5));
+				$this->config->set('mot_sudoku_cell_cost', $this->request->variable('mot_sudoku_cell_cost', 15));
+				$this->config->set('mot_sudoku_number_cost', $this->request->variable('mot_sudoku_number_cost', 40));
+				$this->config->set('mot_sudoku_reset_cost', $this->request->variable('mot_sudoku_reset_cost', 200));
+				$this->config->set('mot_sudoku_level_cost', $this->request->variable('mot_sudoku_level_cost', 10));
 				$this->config->set('mot_sudoku_helper_enable', $this->request->variable('mot_sudoku_helper_enable', 0));
 				$this->config->set('mot_sudoku_helper_cost', $this->request->variable('mot_sudoku_helper_cost', 0));
 				$this->config->set('mot_sudoku_helper_samurai_enable', $this->request->variable('mot_sudoku_helper_samurai_enable', 0));
 				$this->config->set('mot_sudoku_helper_samurai_cost', $this->request->variable('mot_sudoku_helper_samurai_cost', 0));
 				$this->config->set('mot_sudoku_helper_ninja_enable', $this->request->variable('mot_sudoku_helper_ninja_enable', 0));
 				$this->config->set('mot_sudoku_helper_ninja_cost', $this->request->variable('mot_sudoku_helper_ninja_cost', 0));
-				$this->config->set('mot_sudoku_level_cost', $this->request->variable('mot_sudoku_level_cost', 0));
+				// The folowing settings handle Ultimate Points and bonuses
 				$this->config->set('mot_sudoku_points_enable', $this->request->variable('mot_sudoku_points_enable', 0));
 				$this->config->set('mot_sudoku_points_ratio', $this->request->variable('mot_sudoku_points_ratio', 1));
 				$this->config->set('mot_sudoku_reward_enable', $this->request->variable('mot_sudoku_reward_enable', 0));
@@ -260,13 +265,17 @@ class mot_sudoku_acp
 			'ACP_MOT_SUDOKU_ENABLE'						=> $this->config['mot_sudoku_enable'],
 			'ACP_MOT_SUDOKU_CACHE_ENABLE'				=> $this->config['mot_sudoku_cache_enable'],
 			'ACP_MOT_SUDOKU_TITLE_ENABLE'				=> $this->config['mot_sudoku_title_enable'],
+			'ACP_MOT_SUDOKU_CELL_POINTS'				=> $this->config['mot_sudoku_cell_points'],
+			'ACP_MOT_SUDOKU_CELL_COST'					=> $this->config['mot_sudoku_cell_cost'],
+			'ACP_MOT_SUDOKU_NUMBER_COST'				=> $this->config['mot_sudoku_number_cost'],
+			'ACP_MOT_SUDOKU_RESET_COST'					=> $this->config['mot_sudoku_reset_cost'],
+			'ACP_MOT_SUDOKU_LEVEL_COST'					=> $this->config['mot_sudoku_level_cost'],
 			'ACP_MOT_SUDOKU_HELPER_ENABLE'				=> $this->config['mot_sudoku_helper_enable'],
 			'ACP_MOT_SUDOKU_HELPER_COST'				=> $this->config['mot_sudoku_helper_cost'],
 			'ACP_MOT_SUDOKU_HELPER_SAMURAI_ENABLE'		=> $this->config['mot_sudoku_helper_samurai_enable'],
 			'ACP_MOT_SUDOKU_HELPER_SAMURAI_COST'		=> $this->config['mot_sudoku_helper_samurai_cost'],
 			'ACP_MOT_SUDOKU_HELPER_NINJA_ENABLE'		=> $this->config['mot_sudoku_helper_ninja_enable'],
 			'ACP_MOT_SUDOKU_HELPER_NINJA_COST'			=> $this->config['mot_sudoku_helper_ninja_cost'],
-			'ACP_MOT_SUDOKU_LEVEL_COST'					=> $this->config['mot_sudoku_level_cost'],
 			'ACP_MOT_SUDOKU_UP_ENABLED'					=> $up_enabled,
 			'ACP_MOT_SUDOKU_POINTS_ENABLE'				=> $this->config['mot_sudoku_points_enable'],
 			'ACP_MOT_SUDOKU_POINTS_RATIO'				=> $this->config['mot_sudoku_points_ratio'],

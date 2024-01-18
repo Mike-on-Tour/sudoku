@@ -1,21 +1,985 @@
+{% set MOT_SUDOKU_GAME_TYPE = 's' %}
+
+<script>
+//	motSudoku.preSelectedCells = {{ MOT_SUDOKU_PRE_CELLS_ARR }};
+	motSudoku.puzzleId = {{ MOT_SUDOKU_SAMURAI_ID }};
+//	motSudoku.puzzleLine = {{ MOT_SUDOKU_PUZZLE_LINE }};
+//	motSudoku.playerLine = {{ MOT_SUDOKU_PLAYER_LINE }};
+</script>
+
 <div class="samurai-container">
 	<div class="samurai-game-container panel bg3">
+		<div class="panel bg2 centered-text-div">
+			{{ MOT_SUDOKU_GAME_INFO }}
+		</div>
+
+		<div class="panel bg2 centered-div">
+			<form>
+				<table class="samurai-table">
+					<tbody>
+						<tr>
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_14">{{ MOT_SUDOKU_CELL_14 }}</td>
+										<td id="mot_sudoku_s_cell_id_15">{{ MOT_SUDOKU_CELL_15 }}</td>
+										<td id="mot_sudoku_s_cell_id_16">{{ MOT_SUDOKU_CELL_16 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_24">{{ MOT_SUDOKU_CELL_24 }}</td>
+										<td id="mot_sudoku_s_cell_id_25">{{ MOT_SUDOKU_CELL_25 }}</td>
+										<td id="mot_sudoku_s_cell_id_26">{{ MOT_SUDOKU_CELL_26 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_34">{{ MOT_SUDOKU_CELL_34 }}</td>
+										<td id="mot_sudoku_s_cell_id_35">{{ MOT_SUDOKU_CELL_35 }}</td>
+										<td id="mot_sudoku_s_cell_id_36">{{ MOT_SUDOKU_CELL_36 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_17">{{ MOT_SUDOKU_CELL_17 }}</td>
+										<td id="mot_sudoku_s_cell_id_18">{{ MOT_SUDOKU_CELL_18 }}</td>
+										<td id="mot_sudoku_s_cell_id_19">{{ MOT_SUDOKU_CELL_19 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_27">{{ MOT_SUDOKU_CELL_27 }}</td>
+										<td id="mot_sudoku_s_cell_id_28">{{ MOT_SUDOKU_CELL_28 }}</td>
+										<td id="mot_sudoku_s_cell_id_29">{{ MOT_SUDOKU_CELL_29 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_37">{{ MOT_SUDOKU_CELL_37 }}</td>
+										<td id="mot_sudoku_s_cell_id_38">{{ MOT_SUDOKU_CELL_38 }}</td>
+										<td id="mot_sudoku_s_cell_id_39">{{ MOT_SUDOKU_CELL_39 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="samurai-empty-td"></td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_14">{{ MOT_SUDOKU_CELL_14 }}</td>
+										<td id="mot_sudoku_s_cell_id_15">{{ MOT_SUDOKU_CELL_15 }}</td>
+										<td id="mot_sudoku_s_cell_id_16">{{ MOT_SUDOKU_CELL_16 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_24">{{ MOT_SUDOKU_CELL_24 }}</td>
+										<td id="mot_sudoku_s_cell_id_25">{{ MOT_SUDOKU_CELL_25 }}</td>
+										<td id="mot_sudoku_s_cell_id_26">{{ MOT_SUDOKU_CELL_26 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_34">{{ MOT_SUDOKU_CELL_34 }}</td>
+										<td id="mot_sudoku_s_cell_id_35">{{ MOT_SUDOKU_CELL_35 }}</td>
+										<td id="mot_sudoku_s_cell_id_36">{{ MOT_SUDOKU_CELL_36 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_17">{{ MOT_SUDOKU_CELL_17 }}</td>
+										<td id="mot_sudoku_s_cell_id_18">{{ MOT_SUDOKU_CELL_18 }}</td>
+										<td id="mot_sudoku_s_cell_id_19">{{ MOT_SUDOKU_CELL_19 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_27">{{ MOT_SUDOKU_CELL_27 }}</td>
+										<td id="mot_sudoku_s_cell_id_28">{{ MOT_SUDOKU_CELL_28 }}</td>
+										<td id="mot_sudoku_s_cell_id_29">{{ MOT_SUDOKU_CELL_29 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_37">{{ MOT_SUDOKU_CELL_37 }}</td>
+										<td id="mot_sudoku_s_cell_id_38">{{ MOT_SUDOKU_CELL_38 }}</td>
+										<td id="mot_sudoku_s_cell_id_39">{{ MOT_SUDOKU_CELL_39 }}</td>
+									</tr>
+								</table>
+							</td>
+
+						</tr>
+
+						<tr>
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_14">{{ MOT_SUDOKU_CELL_14 }}</td>
+										<td id="mot_sudoku_s_cell_id_15">{{ MOT_SUDOKU_CELL_15 }}</td>
+										<td id="mot_sudoku_s_cell_id_16">{{ MOT_SUDOKU_CELL_16 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_24">{{ MOT_SUDOKU_CELL_24 }}</td>
+										<td id="mot_sudoku_s_cell_id_25">{{ MOT_SUDOKU_CELL_25 }}</td>
+										<td id="mot_sudoku_s_cell_id_26">{{ MOT_SUDOKU_CELL_26 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_34">{{ MOT_SUDOKU_CELL_34 }}</td>
+										<td id="mot_sudoku_s_cell_id_35">{{ MOT_SUDOKU_CELL_35 }}</td>
+										<td id="mot_sudoku_s_cell_id_36">{{ MOT_SUDOKU_CELL_36 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_17">{{ MOT_SUDOKU_CELL_17 }}</td>
+										<td id="mot_sudoku_s_cell_id_18">{{ MOT_SUDOKU_CELL_18 }}</td>
+										<td id="mot_sudoku_s_cell_id_19">{{ MOT_SUDOKU_CELL_19 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_27">{{ MOT_SUDOKU_CELL_27 }}</td>
+										<td id="mot_sudoku_s_cell_id_28">{{ MOT_SUDOKU_CELL_28 }}</td>
+										<td id="mot_sudoku_s_cell_id_29">{{ MOT_SUDOKU_CELL_29 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_37">{{ MOT_SUDOKU_CELL_37 }}</td>
+										<td id="mot_sudoku_s_cell_id_38">{{ MOT_SUDOKU_CELL_38 }}</td>
+										<td id="mot_sudoku_s_cell_id_39">{{ MOT_SUDOKU_CELL_39 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="samurai-empty-td"></td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_14">{{ MOT_SUDOKU_CELL_14 }}</td>
+										<td id="mot_sudoku_s_cell_id_15">{{ MOT_SUDOKU_CELL_15 }}</td>
+										<td id="mot_sudoku_s_cell_id_16">{{ MOT_SUDOKU_CELL_16 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_24">{{ MOT_SUDOKU_CELL_24 }}</td>
+										<td id="mot_sudoku_s_cell_id_25">{{ MOT_SUDOKU_CELL_25 }}</td>
+										<td id="mot_sudoku_s_cell_id_26">{{ MOT_SUDOKU_CELL_26 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_34">{{ MOT_SUDOKU_CELL_34 }}</td>
+										<td id="mot_sudoku_s_cell_id_35">{{ MOT_SUDOKU_CELL_35 }}</td>
+										<td id="mot_sudoku_s_cell_id_36">{{ MOT_SUDOKU_CELL_36 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_17">{{ MOT_SUDOKU_CELL_17 }}</td>
+										<td id="mot_sudoku_s_cell_id_18">{{ MOT_SUDOKU_CELL_18 }}</td>
+										<td id="mot_sudoku_s_cell_id_19">{{ MOT_SUDOKU_CELL_19 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_27">{{ MOT_SUDOKU_CELL_27 }}</td>
+										<td id="mot_sudoku_s_cell_id_28">{{ MOT_SUDOKU_CELL_28 }}</td>
+										<td id="mot_sudoku_s_cell_id_29">{{ MOT_SUDOKU_CELL_29 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_37">{{ MOT_SUDOKU_CELL_37 }}</td>
+										<td id="mot_sudoku_s_cell_id_38">{{ MOT_SUDOKU_CELL_38 }}</td>
+										<td id="mot_sudoku_s_cell_id_39">{{ MOT_SUDOKU_CELL_39 }}</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_14">{{ MOT_SUDOKU_CELL_14 }}</td>
+										<td id="mot_sudoku_s_cell_id_15">{{ MOT_SUDOKU_CELL_15 }}</td>
+										<td id="mot_sudoku_s_cell_id_16">{{ MOT_SUDOKU_CELL_16 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_24">{{ MOT_SUDOKU_CELL_24 }}</td>
+										<td id="mot_sudoku_s_cell_id_25">{{ MOT_SUDOKU_CELL_25 }}</td>
+										<td id="mot_sudoku_s_cell_id_26">{{ MOT_SUDOKU_CELL_26 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_34">{{ MOT_SUDOKU_CELL_34 }}</td>
+										<td id="mot_sudoku_s_cell_id_35">{{ MOT_SUDOKU_CELL_35 }}</td>
+										<td id="mot_sudoku_s_cell_id_36">{{ MOT_SUDOKU_CELL_36 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_17">{{ MOT_SUDOKU_CELL_17 }}</td>
+										<td id="mot_sudoku_s_cell_id_18">{{ MOT_SUDOKU_CELL_18 }}</td>
+										<td id="mot_sudoku_s_cell_id_19">{{ MOT_SUDOKU_CELL_19 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_27">{{ MOT_SUDOKU_CELL_27 }}</td>
+										<td id="mot_sudoku_s_cell_id_28">{{ MOT_SUDOKU_CELL_28 }}</td>
+										<td id="mot_sudoku_s_cell_id_29">{{ MOT_SUDOKU_CELL_29 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_37">{{ MOT_SUDOKU_CELL_37 }}</td>
+										<td id="mot_sudoku_s_cell_id_38">{{ MOT_SUDOKU_CELL_38 }}</td>
+										<td id="mot_sudoku_s_cell_id_39">{{ MOT_SUDOKU_CELL_39 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_14">{{ MOT_SUDOKU_CELL_14 }}</td>
+										<td id="mot_sudoku_s_cell_id_15">{{ MOT_SUDOKU_CELL_15 }}</td>
+										<td id="mot_sudoku_s_cell_id_16">{{ MOT_SUDOKU_CELL_16 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_24">{{ MOT_SUDOKU_CELL_24 }}</td>
+										<td id="mot_sudoku_s_cell_id_25">{{ MOT_SUDOKU_CELL_25 }}</td>
+										<td id="mot_sudoku_s_cell_id_26">{{ MOT_SUDOKU_CELL_26 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_34">{{ MOT_SUDOKU_CELL_34 }}</td>
+										<td id="mot_sudoku_s_cell_id_35">{{ MOT_SUDOKU_CELL_35 }}</td>
+										<td id="mot_sudoku_s_cell_id_36">{{ MOT_SUDOKU_CELL_36 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_17">{{ MOT_SUDOKU_CELL_17 }}</td>
+										<td id="mot_sudoku_s_cell_id_18">{{ MOT_SUDOKU_CELL_18 }}</td>
+										<td id="mot_sudoku_s_cell_id_19">{{ MOT_SUDOKU_CELL_19 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_27">{{ MOT_SUDOKU_CELL_27 }}</td>
+										<td id="mot_sudoku_s_cell_id_28">{{ MOT_SUDOKU_CELL_28 }}</td>
+										<td id="mot_sudoku_s_cell_id_29">{{ MOT_SUDOKU_CELL_29 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_37">{{ MOT_SUDOKU_CELL_37 }}</td>
+										<td id="mot_sudoku_s_cell_id_38">{{ MOT_SUDOKU_CELL_38 }}</td>
+										<td id="mot_sudoku_s_cell_id_39">{{ MOT_SUDOKU_CELL_39 }}</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="samurai-empty-td"></td>
+
+							<td class="samurai-empty-td"></td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_17">{{ MOT_SUDOKU_CELL_17 }}</td>
+										<td id="mot_sudoku_s_cell_id_18">{{ MOT_SUDOKU_CELL_18 }}</td>
+										<td id="mot_sudoku_s_cell_id_19">{{ MOT_SUDOKU_CELL_19 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_27">{{ MOT_SUDOKU_CELL_27 }}</td>
+										<td id="mot_sudoku_s_cell_id_28">{{ MOT_SUDOKU_CELL_28 }}</td>
+										<td id="mot_sudoku_s_cell_id_29">{{ MOT_SUDOKU_CELL_29 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_37">{{ MOT_SUDOKU_CELL_37 }}</td>
+										<td id="mot_sudoku_s_cell_id_38">{{ MOT_SUDOKU_CELL_38 }}</td>
+										<td id="mot_sudoku_s_cell_id_39">{{ MOT_SUDOKU_CELL_39 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="samurai-empty-td"></td>
+
+							<td class="samurai-empty-td"></td>
+						</tr>
+
+						<tr>
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_14">{{ MOT_SUDOKU_CELL_14 }}</td>
+										<td id="mot_sudoku_s_cell_id_15">{{ MOT_SUDOKU_CELL_15 }}</td>
+										<td id="mot_sudoku_s_cell_id_16">{{ MOT_SUDOKU_CELL_16 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_24">{{ MOT_SUDOKU_CELL_24 }}</td>
+										<td id="mot_sudoku_s_cell_id_25">{{ MOT_SUDOKU_CELL_25 }}</td>
+										<td id="mot_sudoku_s_cell_id_26">{{ MOT_SUDOKU_CELL_26 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_34">{{ MOT_SUDOKU_CELL_34 }}</td>
+										<td id="mot_sudoku_s_cell_id_35">{{ MOT_SUDOKU_CELL_35 }}</td>
+										<td id="mot_sudoku_s_cell_id_36">{{ MOT_SUDOKU_CELL_36 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_17">{{ MOT_SUDOKU_CELL_17 }}</td>
+										<td id="mot_sudoku_s_cell_id_18">{{ MOT_SUDOKU_CELL_18 }}</td>
+										<td id="mot_sudoku_s_cell_id_19">{{ MOT_SUDOKU_CELL_19 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_27">{{ MOT_SUDOKU_CELL_27 }}</td>
+										<td id="mot_sudoku_s_cell_id_28">{{ MOT_SUDOKU_CELL_28 }}</td>
+										<td id="mot_sudoku_s_cell_id_29">{{ MOT_SUDOKU_CELL_29 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_37">{{ MOT_SUDOKU_CELL_37 }}</td>
+										<td id="mot_sudoku_s_cell_id_38">{{ MOT_SUDOKU_CELL_38 }}</td>
+										<td id="mot_sudoku_s_cell_id_39">{{ MOT_SUDOKU_CELL_39 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_14">{{ MOT_SUDOKU_CELL_14 }}</td>
+										<td id="mot_sudoku_s_cell_id_15">{{ MOT_SUDOKU_CELL_15 }}</td>
+										<td id="mot_sudoku_s_cell_id_16">{{ MOT_SUDOKU_CELL_16 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_24">{{ MOT_SUDOKU_CELL_24 }}</td>
+										<td id="mot_sudoku_s_cell_id_25">{{ MOT_SUDOKU_CELL_25 }}</td>
+										<td id="mot_sudoku_s_cell_id_26">{{ MOT_SUDOKU_CELL_26 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_34">{{ MOT_SUDOKU_CELL_34 }}</td>
+										<td id="mot_sudoku_s_cell_id_35">{{ MOT_SUDOKU_CELL_35 }}</td>
+										<td id="mot_sudoku_s_cell_id_36">{{ MOT_SUDOKU_CELL_36 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_17">{{ MOT_SUDOKU_CELL_17 }}</td>
+										<td id="mot_sudoku_s_cell_id_18">{{ MOT_SUDOKU_CELL_18 }}</td>
+										<td id="mot_sudoku_s_cell_id_19">{{ MOT_SUDOKU_CELL_19 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_27">{{ MOT_SUDOKU_CELL_27 }}</td>
+										<td id="mot_sudoku_s_cell_id_28">{{ MOT_SUDOKU_CELL_28 }}</td>
+										<td id="mot_sudoku_s_cell_id_29">{{ MOT_SUDOKU_CELL_29 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_37">{{ MOT_SUDOKU_CELL_37 }}</td>
+										<td id="mot_sudoku_s_cell_id_38">{{ MOT_SUDOKU_CELL_38 }}</td>
+										<td id="mot_sudoku_s_cell_id_39">{{ MOT_SUDOKU_CELL_39 }}</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_14">{{ MOT_SUDOKU_CELL_14 }}</td>
+										<td id="mot_sudoku_s_cell_id_15">{{ MOT_SUDOKU_CELL_15 }}</td>
+										<td id="mot_sudoku_s_cell_id_16">{{ MOT_SUDOKU_CELL_16 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_24">{{ MOT_SUDOKU_CELL_24 }}</td>
+										<td id="mot_sudoku_s_cell_id_25">{{ MOT_SUDOKU_CELL_25 }}</td>
+										<td id="mot_sudoku_s_cell_id_26">{{ MOT_SUDOKU_CELL_26 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_34">{{ MOT_SUDOKU_CELL_34 }}</td>
+										<td id="mot_sudoku_s_cell_id_35">{{ MOT_SUDOKU_CELL_35 }}</td>
+										<td id="mot_sudoku_s_cell_id_36">{{ MOT_SUDOKU_CELL_36 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_17">{{ MOT_SUDOKU_CELL_17 }}</td>
+										<td id="mot_sudoku_s_cell_id_18">{{ MOT_SUDOKU_CELL_18 }}</td>
+										<td id="mot_sudoku_s_cell_id_19">{{ MOT_SUDOKU_CELL_19 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_27">{{ MOT_SUDOKU_CELL_27 }}</td>
+										<td id="mot_sudoku_s_cell_id_28">{{ MOT_SUDOKU_CELL_28 }}</td>
+										<td id="mot_sudoku_s_cell_id_29">{{ MOT_SUDOKU_CELL_29 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_37">{{ MOT_SUDOKU_CELL_37 }}</td>
+										<td id="mot_sudoku_s_cell_id_38">{{ MOT_SUDOKU_CELL_38 }}</td>
+										<td id="mot_sudoku_s_cell_id_39">{{ MOT_SUDOKU_CELL_39 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="samurai-empty-td"></td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_14">{{ MOT_SUDOKU_CELL_14 }}</td>
+										<td id="mot_sudoku_s_cell_id_15">{{ MOT_SUDOKU_CELL_15 }}</td>
+										<td id="mot_sudoku_s_cell_id_16">{{ MOT_SUDOKU_CELL_16 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_24">{{ MOT_SUDOKU_CELL_24 }}</td>
+										<td id="mot_sudoku_s_cell_id_25">{{ MOT_SUDOKU_CELL_25 }}</td>
+										<td id="mot_sudoku_s_cell_id_26">{{ MOT_SUDOKU_CELL_26 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_34">{{ MOT_SUDOKU_CELL_34 }}</td>
+										<td id="mot_sudoku_s_cell_id_35">{{ MOT_SUDOKU_CELL_35 }}</td>
+										<td id="mot_sudoku_s_cell_id_36">{{ MOT_SUDOKU_CELL_36 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_17">{{ MOT_SUDOKU_CELL_17 }}</td>
+										<td id="mot_sudoku_s_cell_id_18">{{ MOT_SUDOKU_CELL_18 }}</td>
+										<td id="mot_sudoku_s_cell_id_19">{{ MOT_SUDOKU_CELL_19 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_27">{{ MOT_SUDOKU_CELL_27 }}</td>
+										<td id="mot_sudoku_s_cell_id_28">{{ MOT_SUDOKU_CELL_28 }}</td>
+										<td id="mot_sudoku_s_cell_id_29">{{ MOT_SUDOKU_CELL_29 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_37">{{ MOT_SUDOKU_CELL_37 }}</td>
+										<td id="mot_sudoku_s_cell_id_38">{{ MOT_SUDOKU_CELL_38 }}</td>
+										<td id="mot_sudoku_s_cell_id_39">{{ MOT_SUDOKU_CELL_39 }}</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_14">{{ MOT_SUDOKU_CELL_14 }}</td>
+										<td id="mot_sudoku_s_cell_id_15">{{ MOT_SUDOKU_CELL_15 }}</td>
+										<td id="mot_sudoku_s_cell_id_16">{{ MOT_SUDOKU_CELL_16 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_24">{{ MOT_SUDOKU_CELL_24 }}</td>
+										<td id="mot_sudoku_s_cell_id_25">{{ MOT_SUDOKU_CELL_25 }}</td>
+										<td id="mot_sudoku_s_cell_id_26">{{ MOT_SUDOKU_CELL_26 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_34">{{ MOT_SUDOKU_CELL_34 }}</td>
+										<td id="mot_sudoku_s_cell_id_35">{{ MOT_SUDOKU_CELL_35 }}</td>
+										<td id="mot_sudoku_s_cell_id_36">{{ MOT_SUDOKU_CELL_36 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_17">{{ MOT_SUDOKU_CELL_17 }}</td>
+										<td id="mot_sudoku_s_cell_id_18">{{ MOT_SUDOKU_CELL_18 }}</td>
+										<td id="mot_sudoku_s_cell_id_19">{{ MOT_SUDOKU_CELL_19 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_27">{{ MOT_SUDOKU_CELL_27 }}</td>
+										<td id="mot_sudoku_s_cell_id_28">{{ MOT_SUDOKU_CELL_28 }}</td>
+										<td id="mot_sudoku_s_cell_id_29">{{ MOT_SUDOKU_CELL_29 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_37">{{ MOT_SUDOKU_CELL_37 }}</td>
+										<td id="mot_sudoku_s_cell_id_38">{{ MOT_SUDOKU_CELL_38 }}</td>
+										<td id="mot_sudoku_s_cell_id_39">{{ MOT_SUDOKU_CELL_39 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="samurai-empty-td"></td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_11">{{ MOT_SUDOKU_CELL_11 }}</td>
+										<td id="mot_sudoku_s_cell_id_12">{{ MOT_SUDOKU_CELL_12 }}</td>
+										<td id="mot_sudoku_s_cell_id_13">{{ MOT_SUDOKU_CELL_13 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_21">{{ MOT_SUDOKU_CELL_21 }}</td>
+										<td id="mot_sudoku_s_cell_id_22">{{ MOT_SUDOKU_CELL_22 }}</td>
+										<td id="mot_sudoku_s_cell_id_23">{{ MOT_SUDOKU_CELL_23 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_31">{{ MOT_SUDOKU_CELL_31 }}</td>
+										<td id="mot_sudoku_s_cell_id_32">{{ MOT_SUDOKU_CELL_32 }}</td>
+										<td id="mot_sudoku_s_cell_id_33">{{ MOT_SUDOKU_CELL_33 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg1">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_14">{{ MOT_SUDOKU_CELL_14 }}</td>
+										<td id="mot_sudoku_s_cell_id_15">{{ MOT_SUDOKU_CELL_15 }}</td>
+										<td id="mot_sudoku_s_cell_id_16">{{ MOT_SUDOKU_CELL_16 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_24">{{ MOT_SUDOKU_CELL_24 }}</td>
+										<td id="mot_sudoku_s_cell_id_25">{{ MOT_SUDOKU_CELL_25 }}</td>
+										<td id="mot_sudoku_s_cell_id_26">{{ MOT_SUDOKU_CELL_26 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_34">{{ MOT_SUDOKU_CELL_34 }}</td>
+										<td id="mot_sudoku_s_cell_id_35">{{ MOT_SUDOKU_CELL_35 }}</td>
+										<td id="mot_sudoku_s_cell_id_36">{{ MOT_SUDOKU_CELL_36 }}</td>
+									</tr>
+								</table>
+							</td>
+
+							<td class="bg3">
+								<table class="samurai-sub-table">
+									<tr>
+										<td id="mot_sudoku_s_cell_id_17">{{ MOT_SUDOKU_CELL_17 }}</td>
+										<td id="mot_sudoku_s_cell_id_18">{{ MOT_SUDOKU_CELL_18 }}</td>
+										<td id="mot_sudoku_s_cell_id_19">{{ MOT_SUDOKU_CELL_19 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_27">{{ MOT_SUDOKU_CELL_27 }}</td>
+										<td id="mot_sudoku_s_cell_id_28">{{ MOT_SUDOKU_CELL_28 }}</td>
+										<td id="mot_sudoku_s_cell_id_29">{{ MOT_SUDOKU_CELL_29 }}</td>
+									</tr>
+
+									<tr>
+										<td id="mot_sudoku_s_cell_id_37">{{ MOT_SUDOKU_CELL_37 }}</td>
+										<td id="mot_sudoku_s_cell_id_38">{{ MOT_SUDOKU_CELL_38 }}</td>
+										<td id="mot_sudoku_s_cell_id_39">{{ MOT_SUDOKU_CELL_39 }}</td>
+									</tr>
+								</table>
+							</td>
+
+						</tr>
+					</tbody>
+				</table>
+			</form>
+		</div>
+
 		<div class="panel bg2">
-			Samurai Sudoku
+			{% include '@mot_sudoku/mot_sudoku_options_box.html' %}
 		</div>
 	</div>
 
 	<div class="samurai-options-container panel bg3">
 		<div class="panel bg2">
-			Samurai description
+			<h3>{{ lang('MOT_SUDOKU_TAB_SAMURAI') }}</h3>
+
+			<p>{{ lang('MOT_SUDOKU_SAMURAI_TEXT') }}</p>
 		</div>
 
 		<div class="panel bg2">
-			Samurai options
+			<h3>{{ lang('MOT_SUDOKU_NOTE_TITLE') }}</h3>
+
+			<p>{{ MOT_SUDOKU_NOTE_TEXT }}</p>
 		</div>
 
 		<div class="panel bg2">
-			Samurai statistics
+			{% include '@mot_sudoku/mot_sudoku_level_box.html' %}
+		</div>
+
+		<div class="panel bg2">
+			{% include '@mot_sudoku/mot_sudoku_result_box.html' %}
 		</div>
 	</div>
+{# include '@mot_sudoku/sudoku_samurai.html' #}
 </div>

@@ -1,0 +1,35 @@
+<h3>{{ lang('MOT_SUDOKU_LEVEL_TITLE') }}</h3>
+
+<fieldset>
+	<dl>
+		<dt><label>{{ lang('MOT_SUDOKU_SELECT_LEVEL') ~ lang('COLON') }}</label></dt>
+		<dd>
+			<select name="mot_sudoku_select_level_{{ MOT_SUDOKU_GAME_TYPE }}">{{ MOT_SUDOKU_SELECT_LEVEL }}</select>&nbsp;
+			<button class="button sudoku-button" id="mot_sudoku_select_level_button_{{ MOT_SUDOKU_GAME_TYPE }}">{{ lang('SUBMIT') }}</button>
+		</dd>
+	</dl>
+</fieldset>
+
+<hr>
+
+<div class="centered-text">
+	<table class="sudoku-level-table">
+		<thead>
+			<tr>
+				<th style="text-align: left;">{{ lang('MOT_SUDOKU_LEVEL_NAME') }}</th>
+				<th>{{ lang('MOT_SUDOKU_LEVEL_DIGITS') }}</th>
+				<th>{{ lang('MOT_SUDOKU_LEVEL_DEDUCT') }}</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			{% for level in levels %}
+				<tr>
+					<td>{{ level.NAME }}</td>
+					<td style="text-align: center;">{{ level.DIGIT }}</td>
+					<td style="text-align: center;">{{ level.DEDUCT }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>

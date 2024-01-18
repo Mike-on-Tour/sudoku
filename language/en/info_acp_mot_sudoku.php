@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.2.0
+* @package MoT Sudoku v0.3.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -30,6 +30,7 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_GENERAL'				=> 'General settings',
 	'ACP_MOT_SUDOKU_GENERAL_EXPL'			=> 'Here you can edit Sudoku´s general settings',
 
+	'ACP_MOT_SUDOKU_GENERAL_SETTINGS'		=> 'General settings',
 	'ACP_MOT_SUDOKU_VERSION_CHECK'			=> 'Sudoku Version Check',
 	'ACP_MOT_SUDOKU_VERSION_CHECK_EXPL'		=> 'Checks if a new version of Sudoku is availavble',
 	'ACP_MOT_SUDOKU_VERSION_UP_TO_DATE'		=> 'Your version of Sudoku is up-to-date.',
@@ -39,19 +40,29 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_VERSION_CHECKER_ON'		=> 'Automatic version check',
 	'ACP_MOT_SUDOKU_VERSION_CHECKER_EXPL'	=> 'If enabled it will be checked every time you call this page whether a newer version is available; the result will be displayed in
 												in a coloured box above `General settings`.',
-
 	'ACP_MOT_SUDOKU_ENABLE'					=> 'Activate Sudoku',
 	'ACP_MOT_SUDOKU_ENABLE_EXPL'			=> 'Enable/disable for authorised members, displays the link in the navigation bar depending on status.',
-
 	'ACP_MOT_SUDOKU_CACHE_ENABLE'			=> 'Enable database query cache',
 	'ACP_MOT_SUDOKU_CACHE_ENABLE_EXPL'		=> 'Query cache decreases database server load.',
 	'ACP_MOT_SUDOKU_PURGE_CACHE'			=> 'Purge the Sudoku cache',
 	'ACP_MOT_SUDOKU_PURGE_CACHE_MSG'		=> 'Sudoku cache successfully purged',
 	'ACP_MOT_SUDOKU_PURGE_CACHE_LOG'		=> '<strong>Purged the Sudoku cache</strong>',
-
 	'ACP_MOT_SUDOKU_PUZZLE_TITLE'			=> 'Display puzzle title',
 	'ACP_MOT_SUDOKU_PUZZLE_TITLE_EXPL'		=> 'Enables display of the current game`s title.',
 
+	'ACP_MOT_SUDOKU_POINTS_SETTINGS'		=> 'Points settings',
+	'ACP_MOT_SUDOKU_CELL_POINTS'			=> 'Input points',
+	'ACP_MOT_SUDOKU_CELL_POINTS_EXPL'		=> 'Number of points earned for writing a number into a cell.',
+	'ACP_MOT_SUDOKU_CELL_COST'				=> 'Delete points',
+	'ACP_MOT_SUDOKU_CELL_COST_EXPL'			=> 'Number of points deducted for deleting or overwriting an existing number in a cell.',
+	'ACP_MOT_SUDOKU_NUMBER_COST'			=> 'Deduction for buying a number',
+	'ACP_MOT_SUDOKU_NUMBER_COST_EXPL'		=> 'Number of points deducted for buying a number to make the puzzle easier.',
+	'ACP_MOT_SUDOKU_RESET_COST'				=> 'Deduction for reset',
+	'ACP_MOT_SUDOKU_RESET_COST_EXPL'		=> 'Number of points deducted for resetting the current game.',
+	'ACP_MOT_SUDOKU_LEVEL_COST'				=> 'Deduction for selected lower level',
+	'ACP_MOT_SUDOKU_LEVEL_COST_EXPL'		=> 'Number of points deducted for each selected lower level of difficulty',
+
+	'ACP_MOT_SUDOKU_HELPER_SETTINGS'		=> 'Helper settings',
 	'ACP_MOT_SUDOKU_HELPER_ENABLE'			=> 'Enable Sudoku Helper',
 	'ACP_MOT_SUDOKU_HELPER_ENABLE_EXPL'		=> 'Allow players to use helper popup window with all available numbers for each empty cell.',
 	'ACP_MOT_SUDOKU_HELPER_COST'			=> 'Deduction for helper',
@@ -61,20 +72,17 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_HELPER_NINJA_ENABLE'	=> 'Enable Ninja Helper',
 	'ACP_MOT_SUDOKU_HELPER_NINJA_COST'		=> 'Deduction for Ninja helper',
 
-	'ACP_MOT_SUDOKU_LEVEL_COST'				=> 'Deduction for selected level',
-	'ACP_MOT_SUDOKU_LEVEL_COST_EXPL'		=> 'Number of points deducted for each selected level of difficulty',
-
+	'ACP_MOT_SUDOKU_UP_SETTINGS'			=> 'Points system settings',
 	'ACP_MOT_SUDOKU_POINTS_ENABLE'			=> 'Enable points system',
 	'ACP_MOT_SUDOKU_POINTS_ENABLE_EXPL'		=> 'If a points system (e.g. ´Ultimate Points´) is active on your board, Sudoku game points will be added to or subtracted from
 												this points account of a Sudoku player.<br>
 												After enabling this setting more settings related to it will be displayed.',
-
 	'ACP_MOT_SUDOKU_POINTS_RATIO' 			=> 'Ratio Sudoku points to points system points',
 	'ACP_MOT_SUDOKU_POINTS_RATIO_EXPL' 		=> 'Define the amount of points system points to be credited per 100 Sudoku points.',
 
+	'ACP_MOT_SUDOKU_REWARD_SETTINGS'		=> 'Rewards settings',
 	'ACP_MOT_SUDOKU_REWARD_ON'				=> 'Enable Sudoku rewards',
 	'ACP_MOT_SUDOKU_REWARD_ON_EXPL'			=> 'Periodic calculation of the game score and reward payments',
-
 	'ACP_MOT_SUDOKU_REWARD_GC'				=> 'Time interval between two reward calculations (in seconds)',
 	'ACP_MOT_SUDOKU_REWARD_GC_EXPL' 		=> 'The period between two cron jobs calculating the reward points in seconds.',
 	'ACP_MOT_SUDOKU_REWARD_LAST_GC' 		=> 'Time of the last cron job run',

@@ -1,7 +1,10 @@
-{% INCLUDEJS '@mot_sudoku/mot_sudoku_classic.js' %}
+{% set MOT_SUDOKU_GAME_TYPE = 'c' %}
 
 <script>
 	motSudoku.preSelectedCells = {{ MOT_SUDOKU_PRE_CELLS_ARR }};
+	motSudoku.puzzleId = {{ MOT_SUDOKU_CLASSIC_ID }};
+	motSudoku.puzzleLine = {{ MOT_SUDOKU_PUZZLE_LINE }};
+	motSudoku.playerLine = {{ MOT_SUDOKU_PLAYER_LINE }};
 </script>
 
 <div class="top-container">
@@ -241,24 +244,26 @@
 		</div>
 
 		<div class="panel bg2">
-			Optionen
+			{% include '@mot_sudoku/mot_sudoku_options_box.html' %}
 		</div>
 
 	</div>
 
 	<div class="title-panel bg3">
 		<div class="panel bg2">
-			Level-Info
+			<h3>{{ lang('MOT_SUDOKU_NOTE_TITLE') }}</h3>
+
+			<p>{{ MOT_SUDOKU_NOTE_TEXT }}</p>
 		</div>
 
 		<div class="panel bg2">
-			Statistik
+			{% include '@mot_sudoku/mot_sudoku_level_box.html' %}
 		</div>
 
 		<div class="panel bg2">
-			Deine Ergebnisse
+			{% include '@mot_sudoku/mot_sudoku_result_box.html' %}
 		</div>
 	</div>
 </div>
 
-{# include '@mot_sudoku/old_template.html' #}
+{% INCLUDEJS '@mot_sudoku/mot_sudoku_classic.js' %}

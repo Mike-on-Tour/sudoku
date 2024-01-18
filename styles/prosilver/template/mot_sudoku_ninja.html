@@ -1,21 +1,46 @@
+{% set MOT_SUDOKU_GAME_TYPE = 'n' %}
+
+<script>
+//	motSudoku.preSelectedCells = {{ MOT_SUDOKU_PRE_CELLS_ARR }};
+	motSudoku.puzzleId = {{ MOT_SUDOKU_NINJA_ID }};
+//	motSudoku.puzzleLine = {{ MOT_SUDOKU_PUZZLE_LINE }};
+//	motSudoku.playerLine = {{ MOT_SUDOKU_PLAYER_LINE }};
+</script>
+
 <div class="samurai-container">
 	<div class="samurai-game-container panel bg3">
+		<div class="panel bg2 centered-text-div">
+			{{ MOT_SUDOKU_GAME_INFO }}
+		</div>
+
 		<div class="panel bg2">
 			Ninja Sudoku
+		</div>
+
+		<div class="panel bg2">
+			{% include '@mot_sudoku/mot_sudoku_options_box.html' %}
 		</div>
 	</div>
 
 	<div class="samurai-options-container panel bg3">
 		<div class="panel bg2">
-			Ninja description
+			<h3>{{ lang('MOT_SUDOKU_TAB_NINJA') }}</h3>
+
+			<p>{{ lang('MOT_SUDOKU_NINJA_TEXT') }}</p>
 		</div>
 
 		<div class="panel bg2">
-			Ninja options
+			<h3>{{ lang('MOT_SUDOKU_NOTE_TITLE') }}</h3>
+
+			<p>{{ MOT_SUDOKU_NOTE_TEXT }}</p>
 		</div>
 
 		<div class="panel bg2">
-			Ninja statistics
+			{% include '@mot_sudoku/mot_sudoku_level_box.html' %}
+		</div>
+
+		<div class="panel bg2">
+			{% include '@mot_sudoku/mot_sudoku_result_box.html' %}
 		</div>
 	</div>
 </div>

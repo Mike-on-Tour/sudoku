@@ -1,3 +1,27 @@
 mot_sudoku_main:
     path: /sudoku
     defaults: { _controller: mot.sudoku.mot_sudoku_main:handle }
+
+mot_sudoku_ajax_number:
+    path: /mot_sudoku_ajax_number
+    defaults: { _controller: mot.sudoku.mot_sudoku_main:mot_sudoku_ajax_number }
+
+mot_sudoku_ajax_reset:
+    path: /mot_sudoku_ajax_reset
+    defaults: { _controller: mot.sudoku.mot_sudoku_main:mot_sudoku_ajax_reset }
+
+mot_sudoku_ajax_buy:
+    path: /mot_sudoku_ajax_buy
+    defaults: { _controller: mot.sudoku.mot_sudoku_main:mot_sudoku_ajax_buy }
+
+mot_sudoku_ajax_helper:
+    path: /mot_sudoku_ajax_helper
+    defaults: { _controller: mot.sudoku.mot_sudoku_main:mot_sudoku_ajax_helper }
+
+mot_sudoku_ajax_modal:
+    path: /mot_sudoku_ajax_modal
+    defaults: { _controller: mot.sudoku.mot_sudoku_main:mot_sudoku_ajax_modal }
+
+mot_sudoku_ajax_level:
+    path: /mot_sudoku_ajax_level
+    defaults: { _controller: mot.sudoku.mot_sudoku_main:mot_sudoku_ajax_level }

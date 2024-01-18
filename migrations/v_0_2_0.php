@@ -27,9 +27,9 @@ class v_0_2_0 extends \phpbb\db\migration\migration
 				$this->table_prefix . 'mot_sudoku_classic'	=> [
 					'COLUMNS'	=> [
 						'classic_id'		=> ['UINT:10', null, 'auto_increment'],
-						'game_pack'			=> ['UINT:8', 0],
-						'game_number'		=> ['TINT:3', 0],
-						'game_level'		=> ['TINT:2', 0],
+						'game_pack'			=> ['UINT:2', 0],
+						'game_number'		=> ['UINT:1', 0],
+						'game_level'		=> ['UINT:1', 0],
 						'game_name'			=> ['VCHAR:40', ''],
 						'creator_name'		=> ['VCHAR:40', ''],
 						'puzzle_line'		=> ['VCHAR:200', ''],

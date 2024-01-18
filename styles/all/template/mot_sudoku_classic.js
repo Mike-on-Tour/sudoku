@@ -1,6 +1,6 @@
 /**
 *
-* @package MoT Sudoku v0.2.0
+* @package MoT Sudoku v0.3.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -10,8 +10,25 @@
 
 'use strict';
 
-var motSudokuCellId = '';
+/*
+* Add the filled cells to the classic Sudoku puzzle at game start
+*
+*/
+if (motSudoku.playerLine != null) {
+	for (var i = 0; i < 9; i++) {
+		for (var j = 0; j < 9; j++) {
+			if (motSudoku.playerLine[i][j] > 0) {
+				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).css({"font-weight": "normal", "color": "blue", "box-shadow": "none", "transform": "none"});
+				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).html(motSudoku.playerLine[i][j]);
+			}
+		}
+	}
+}
 
+/*
+* Add the highlighting of the selected cell and opening of the modal window to the classic Sudoku game's cells
+*
+*/
 $(
 "#mot_sudoku_c_cell_id_11, #mot_sudoku_c_cell_id_12, #mot_sudoku_c_cell_id_13, #mot_sudoku_c_cell_id_14, #mot_sudoku_c_cell_id_15, #mot_sudoku_c_cell_id_16, #mot_sudoku_c_cell_id_17, #mot_sudoku_c_cell_id_18, #mot_sudoku_c_cell_id_19, " +
 "#mot_sudoku_c_cell_id_21, #mot_sudoku_c_cell_id_22, #mot_sudoku_c_cell_id_23, #mot_sudoku_c_cell_id_24, #mot_sudoku_c_cell_id_25, #mot_sudoku_c_cell_id_26, #mot_sudoku_c_cell_id_27, #mot_sudoku_c_cell_id_28, #mot_sudoku_c_cell_id_29, " +
@@ -25,31 +42,149 @@ $(
 ).on("click", function(e) {
 	if (motSudoku.preSelectedCells.indexOf($(this).attr('id')) == -1) {
 		let thisElementId = $(this).attr('id');
-		let rowNumber = thisElementId.substr(22, 1);
-		let offsetX = rowNumber * 32;
-		motSudokuCellId = thisElementId;
-		$("#mot_sudoku_modal_content").css({top: e.clientY - 50, left: e.clientX - offsetX, position: 'relative'});
+		let lineNumber = thisElementId.substr(21, 1);
+		let columnNumber = thisElementId.substr(22, 1);
+		let offsetX = 0;
+		let offsetY = 0;
+
+		if ($(window).width() >= 390) {
+			offsetX = (columnNumber * 40) - (10/columnNumber);
+			if (motSudoku.modalSwitch) {
+				offsetY = 65;
+			} else {
+				offsetY = (lineNumber * 40) + 50;
+			}
+		} else {
+			offsetX = columnNumber * 20;
+			if (motSudoku.modalSwitch) {
+				offsetY = 95;
+			} else {
+				offsetY = (lineNumber * 37) + 70;
+			}
+		}
+
+		motSudoku.CellId = thisElementId;
+		if (!motSudoku.modalSwitch) {
+			$(this).css({"box-shadow": "#aaa -2px 2px 3px 1px", "-webkit-box-shadow": "#aaa -2px 2px 3px 1px", "-o-box-shadow": "#aaa -2px 2px 3px 1px",
+						"transform": "translate3d(2px, -2px, 0)", "-webkit-transform": "translate3d(2px, -2px, 0)", "-o-transform": "translate3d(2px, -2px, 0)"});
+		}
+		$("#mot_sudoku_modal_content").css({top: e.clientY - offsetY, left: e.clientX - offsetX, position: 'relative'});
 		$("#mot_sudoku_modal").show();
 	}
 });
 
-$("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_modal_4, #mot_sudoku_modal_5, #mot_sudoku_modal_6, #mot_sudoku_modal_7, #mot_sudoku_modal_8, #mot_sudoku_modal_9").on("click", function() {
-	let thisElementId = $(this).attr('id');
-	let number = thisElementId.substr(17, 1);
-	$("#" + motSudokuCellId).css({"font-weight": "normal", "color": "blue"});
-	$("#" + motSudokuCellId).html(number);
-	$("#mot_sudoku_modal").hide();
-});
+/*
+* Reset the classic grid to the content of puzzle
+*
+* param	puzzle	array		a 9 * 9 array with the content to be written into the cells
+*/
+motSudoku.resetClassic = function(puzzle) {
+	for (var i = 0; i < 9; i++) {
+		for (var j = 0; j < 9; j++) {
+			if (puzzle[i][j]) {
+				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).html(puzzle[i][j]);
+				// Since we effectively just remove the digits entered by the user we do need to bother with the style
+			} else {
+				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).html('');
+			}
+			// since the 'motSudoku.preSelectedCells' array should still hold valid names we do not need to set it here, too
+		}
+	}
+}
 
-$("#mot_sudoku_modal_0").on("click", function() {
-	let thisElementId = $(this).attr('id');
-	let number = thisElementId.substr(17, 1);
-	$("#" + motSudokuCellId).html('');
-	$("#mot_sudoku_modal").hide();
-});
+/*
+* Classic Sudoku helper
+*
+*/
+motSudoku.classicHelper = function() {
+	let lines = new Array();
+	let columns = new Array();
+	let subGrids = new Array();
+	let content = '';
 
-$("#mot_sudoku_modal").on("click", function() {
-	$(this).hide();
-});
+	// Get the digits already filled in in the 9 lines
+	for (let i = 0; i <= 8; i++) {
+		lines[i] = new Array();
+		for (let j = 0; j <= 8; j++) {
+			content = this.puzzleLine[i][j] + this.playerLine[i][j];
+			if (content > 0) {
+				lines[i].push(Number(content));
+			}
+		}
+	}
+
+	// Get the digits already filled in in the 9 columns
+	for (let j = 0; j <= 8; j++) {
+		columns[j] = new Array();
+		for (let i = 0; i <= 8; i++) {
+			content = this.puzzleLine[i][j] + this.playerLine[i][j];
+			if (content > 0) {
+				columns[j].push(Number(content));
+			}
+		}
+	}
+
+	// Get the digits already filled in in the 9 sub grids
+	let line = 0;
+	let row = 0;
+	for (let l = 1; l <= 3; l++) {
+		for (let r = 1; r <= 3; r++) {
+			let grid = ((3 * (l - 1)) + r);
+			subGrids[grid] = new Array();
+			for (let i = 1; i <= 3; i++) {
+				for (let j = 1; j <= 3; j++) {
+					line = ((3 * (l - 1)) + i) - 1;
+					row = ((3 * (r - 1)) + j) - 1;
+					content = this.puzzleLine[line][row] + this.playerLine[line][row];
+					if (content > 0) {
+						subGrids[grid].push(Number(content));
+					}
+				}
+			}
+		}
+	}
+
+	// Go through every cell and if it is empty get the digits which are not excluded by line, row or subgrid
+	let allDigits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+	let cellDigits = new Array();
+	for (let l = 1; l <= 3; l++) {
+		for (let r = 1; r <= 3; r++) {
+			let grid = ((3 * (l - 1)) + r);
+			for (let i = 1; i <= 3; i++) {
+				for (let j = 1; j <= 3; j++) {
+					line = ((3 * (l - 1)) + i);
+					row = ((3 * (r - 1)) + j);
+					content = this.puzzleLine[line - 1][row - 1] + this.playerLine[line - 1][row - 1];
+					if (content == 0) {
+						cellDigits = allDigits.filter(function(value) {
+							return !lines[line - 1].includes(value);
+						});
+						cellDigits = cellDigits.filter( function(value) {
+							return !columns[row - 1].includes(value);
+						});
+						cellDigits = cellDigits.filter( function(value) {
+							return !subGrids[grid].includes(value);
+						});
+						// Set the style
+						$("#mot_sudoku_c_cell_id_" + line + row).css({"font-size": "1em", "font-weight": "normal", "color": "blue", "text-align": "left", "vertical-align": "top"});
+						$("#mot_sudoku_c_cell_id_" + line + row).html(cellDigits.join(', '));
+					}
+				}
+			}
+		}
+	}
+}
+
+motSudoku.classicHelperMask = function() {
+	let content = '';
+	for (let x = 0; x <= 8; x++) {
+		for (let y = 0; y <= 8; y++) {
+			content = this.puzzleLine[x][y] + this.playerLine[x][y];
+			if (content == 0) {
+				$("#mot_sudoku_c_cell_id_" + (x + 1) + (y + 1)).html('');
+			}
+		}
+	}
+}
 
 })(jQuery); // Avoid conflicts with other libraries
