@@ -269,7 +269,7 @@ $puzzle_id = 19;
 				$this->template->assign_vars([
 //					'MOT_SUDOKU_PRE_CELLS_ARR'		=> json_encode($pre_cells_arr),
 					'MOT_SUDOKU_SAMURAI_ID'			=> $puzzle_id,
-	'MOT_SUDOKU_GAME_INFO'			=> $game_info . $title,
+//	'MOT_SUDOKU_GAME_INFO'			=> $game_info . $title,
 //					'MOT_SUDOKU_PLAYER_LINE'		=> $player_line,
 				]);
 
@@ -310,7 +310,7 @@ $puzzle_id = 14;
 				$this->template->assign_vars([
 //					'MOT_SUDOKU_PRE_CELLS_ARR'		=> json_encode($pre_cells_arr),
 					'MOT_SUDOKU_NINJA_ID'			=> $puzzle_id,
-	'MOT_SUDOKU_GAME_INFO'			=> $game_info . $title,
+//	'MOT_SUDOKU_GAME_INFO'			=> $game_info . $title,
 //					'MOT_SUDOKU_PLAYER_LINE'		=> $player_line,
 				]);
 

@@ -15,6 +15,7 @@ services:
             - '@user'
             - '%core.root_path%'
             - '%mot.sudoku.tables.mot_sudoku_classic%'
+            - '%mot.sudoku.tables.mot_sudoku_stats%'
 
     mot.sudoku.mot_sudoku_main:
         class: mot\sudoku\controller\mot_sudoku_main

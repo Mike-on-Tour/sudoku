@@ -3,8 +3,8 @@
     "type": "phpbb-extension",
     "description": "This is a version of the popular number-placement puzzle for your phpBB board. For more information please refer to the README.md file which is part of this distribution.",
     "homepage": "https://www.mike-on-tour.com",
-    "version": "0.3.0",
-    "time": "2024-01-18",
+    "version": "0.3.1",
+    "time": "2024-01-21",
     "keywords": [
         "phpbb",
         "extension"

@@ -4,6 +4,20 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.1] - 2024-01-21
+
+### Added
+-	The functionality to clear the game stats within the ACP settings page
+
+### Changed
+
+### Fixed
+-	If no file was selected for the game pack import a PHP warning was issued, this case is now handled with an error message
+-	A forgotten css setting which caused the digits to still have the wrong style if a digit is bought after showing the helper (`styles/all/template/mot_sudoku_main.js`)
+
+### Removed
+  
+  
 ## [0.3.0] - 2024-01-18
 
 ### Added

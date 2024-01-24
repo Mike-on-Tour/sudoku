@@ -1,6 +1,6 @@
 /**
 *
-* @package MoT Sudoku v0.3.0
+* @package MoT Sudoku v0.3.1
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -17,7 +17,6 @@
 *
 * @return	none
 */
-
 motSudoku.selectTab = function(index) {
 	var elementId = "";
 
@@ -219,8 +218,8 @@ $("#buy_digit_button_c, #buy_digit_button_s, #buy_digit_button_n").on("click", f
 					switch (result['type']) {
 						case 'c':
 							$("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).html(result['digit']);
-							$("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css({"color": "black", "font-weight": "bold"});
-							motSudoku.preSelectedCells.push("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1));
+							$("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css({"color": "black", "font-weight": "bold", "font-size": "2.4em", "text-align": "center", "vertical-align": "middle"});
+							motSudoku.preSelectedCells.push("mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1));
 							motSudoku.puzzleLine = result['puzzle_line'];		// Update the stored puzzle
 							break;
 

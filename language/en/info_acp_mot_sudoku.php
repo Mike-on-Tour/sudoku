@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.3.0
+* @package MoT Sudoku v0.4.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -116,6 +116,7 @@ $lang = array_merge($lang, [
 												To prevent puzzles already in the database from being imported a second time the import function checks the numbers of the game
 												pack and the games against those already in the database.',
 	'ACP_MOT_SUDOKU_UPLOAD'					=> 'Import Sudoku pack',
+	'ACP_MOT_SUDOKU_NO_FILE'				=> 'No file selected.',
 	'ACP_MOT_SUDOKU_INVALID_FILE_EXT'		=> 'Invalid file extension.',
 	'ACP_MOT_SUDOKU_INVALID_FILE_CONTENT'	=> 'File is corrupted, import aborted.',
 	'ACP_MOT_SUDOKU_CLASSIC_IMPORTED'		=> [

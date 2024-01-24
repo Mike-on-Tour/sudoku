@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.3.0
+* @package MoT Sudoku v0.4.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -118,6 +118,7 @@ $lang = array_merge($lang, [
 												Um doppelte Spiele zu vermeiden, werden die Nummern des Spiele-Packs und der darin enthaltenen Spiele vor dem Import mit der
 												Datenbank abgeglichen.',
 	'ACP_MOT_SUDOKU_UPLOAD'					=> 'Sudoku-Pack importieren',
+	'ACP_MOT_SUDOKU_NO_FILE'				=> 'Keine Datei ausgewählt.',
 	'ACP_MOT_SUDOKU_INVALID_FILE_EXT'		=> 'Ungültige Datei-Erweiterung.',
 	'ACP_MOT_SUDOKU_INVALID_FILE_CONTENT'	=> 'Datei ist fehlerhaft, Laden abgebrochen.',
 	'ACP_MOT_SUDOKU_CLASSIC_IMPORTED'		=> [

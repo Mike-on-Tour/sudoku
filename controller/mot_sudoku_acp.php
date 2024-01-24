@@ -1,7 +1,7 @@
 <?php
 /*
 *
-* @package MoT Sudoku v0.2.0
+* @package MoT Sudoku v0.3.1
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -44,12 +44,15 @@ class mot_sudoku_acp
 	/** @var string mot.sudoku.tables.mot_sudoku_classic */
 	protected $mot_sudoku_classic_table;
 
+	/** @var string mot.sudoku.tables.mot_sudoku_stats */
+	protected $mot_sudoku_stats_table;
+
 	/**
 	 * {@inheritdoc
 	 */
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\language\language $language,
 								\phpbb\log\log $log, \phpbb\extension\manager $phpbb_extension_manager, \phpbb\request\request_interface $request,
-								\phpbb\template\template $template, \phpbb\user $user, $root_path, $mot_sudoku_classic_table)
+								\phpbb\template\template $template, \phpbb\user $user, $root_path, $mot_sudoku_classic_table, $mot_sudoku_stats_table)
 	{
 		$this->config = $config;
 		$this->db = $db;
@@ -62,6 +65,7 @@ class mot_sudoku_acp
 		$this->root_path = $root_path;
 
 		$this->classic_sudoku_table = $mot_sudoku_classic_table;
+		$this->sudoku_stats_table = $mot_sudoku_stats_table;
 
 		$this->md_manager = $this->phpbb_extension_manager->create_extension_metadata_manager('mot/sudoku');
 		$this->mot_sudoku_version = $this->md_manager->get_metadata('version');
@@ -137,6 +141,12 @@ class mot_sudoku_acp
 
 				// Check for valid file extension
 				$path_parts = pathinfo($filename);
+
+				if ($path_parts['basename'] == '')
+				{
+					trigger_error($this->language->lang('ACP_MOT_SUDOKU_NO_FILE') . adm_back_link($this->u_action), E_USER_WARNING);
+				}
+
 				if (strtolower($path_parts['extension']) != 'xml' || !isset($path_parts['extension']))
 				{
 					trigger_error($this->language->lang('ACP_MOT_SUDOKU_INVALID_FILE_EXT') . adm_back_link($this->u_action), E_USER_WARNING);
@@ -203,8 +213,8 @@ class mot_sudoku_acp
 			case 'reset_game':
 				if (confirm_box(true))
 				{
-//					$this->reset_game();
-//					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'ACP_MOT_SUDOKU_LOG_RESET_GAME', false);
+					$this->reset_game();
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'ACP_MOT_SUDOKU_LOG_RESET_GAME', false);
 					trigger_error($this->language->lang('ACP_MOT_SUDOKU_RESET_SUCCESS') . adm_back_link($this->u_action));
 				}
 				else
@@ -353,22 +363,22 @@ class mot_sudoku_acp
 	*/
 	private function reset_game()
 	{
-		$tables_ary = [SUDOKU_USERS, SUDOKU_STATS, SUDOKU_SESSIONS];
+		$sql_ary = [
+			'classic_played'	=> 0,
+			'classic_points'	=> 0,
+			'classic_ids'		=> '',
+			'samurai_played'	=> 0,
+			'samurai_points'	=> 0,
+			'samurai_ids'		=> '',
+			'ninja_played'	=> 0,
+			'ninja_points'	=> 0,
+			'ninja_ids'		=> '',
+		];
 
-		foreach ($tables_ary as $table)
-		{
-			// Correctly handle empty table
-			switch ($this->db->get_sql_layer())
-			{
-				case 'sqlite3':
-					$this->db->sql_query('DELETE FROM ' . $table);
-				break;
+		$sql = 'UPDATE ' . $this->sudoku_stats_table . '
+				SET ' . $this->db->sql_build_array('UPDATE', $sql_ary);
+		$this->db->sql_query($sql);
 
-				default:
-					$this->db->sql_query('TRUNCATE TABLE ' . $table);
-				break;
-			}
-		}
 		return;
 	}
 }
