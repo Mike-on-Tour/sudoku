@@ -15,10 +15,14 @@
 *
 */
 if (motSudoku.playerLine != null) {
+	// Get the css variables, we do this here once since it is the same for all cells and thus improves performance
+	let fontWeightNormal = $("#mot_sudoku_c_cell_id_11").css('--fontWeightNormal');
+	let textColorPlayer = $("#mot_sudoku_c_cell_id_11").css('--textColorPlayer');
+
 	for (var i = 0; i < 9; i++) {
 		for (var j = 0; j < 9; j++) {
 			if (motSudoku.playerLine[i][j] > 0) {
-				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).css({"font-weight": "normal", "color": "blue", "box-shadow": "none", "transform": "none"});
+				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).css({"font-weight": fontWeightNormal, "color": textColorPlayer});
 				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).html(motSudoku.playerLine[i][j]);
 			}
 		}
@@ -64,9 +68,9 @@ $(
 		}
 
 		motSudoku.CellId = thisElementId;
+		let borderColour = $(this).css('--borderColourSelect');
 		if (!motSudoku.modalSwitch) {
-			$(this).css({"box-shadow": "#aaa -2px 2px 3px 1px", "-webkit-box-shadow": "#aaa -2px 2px 3px 1px", "-o-box-shadow": "#aaa -2px 2px 3px 1px",
-						"transform": "translate3d(2px, -2px, 0)", "-webkit-transform": "translate3d(2px, -2px, 0)", "-o-transform": "translate3d(2px, -2px, 0)"});
+			$(this).css('border', borderColour);
 		}
 		$("#mot_sudoku_modal_content").css({top: e.clientY - offsetY, left: e.clientX - offsetX, position: 'relative'});
 		$("#mot_sudoku_modal").show();
@@ -79,11 +83,12 @@ $(
 * param	puzzle	array		a 9 * 9 array with the content to be written into the cells
 */
 motSudoku.resetClassic = function(puzzle) {
+	let systemColor = $(".panel").css('color');
 	for (var i = 0; i < 9; i++) {
 		for (var j = 0; j < 9; j++) {
 			if (puzzle[i][j]) {
 				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).html(puzzle[i][j]);
-				// Since we effectively just remove the digits entered by the user we do need to bother with the style
+				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).css('color', systemColor);
 			} else {
 				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).html('');
 			}
@@ -102,7 +107,7 @@ motSudoku.classicHelper = function() {
 	let subGrids = new Array();
 	let content = '';
 
-	// Get the digits already filled in in the 9 lines
+	// Get the digits already present in the 9 lines
 	for (let i = 0; i <= 8; i++) {
 		lines[i] = new Array();
 		for (let j = 0; j <= 8; j++) {
@@ -113,7 +118,7 @@ motSudoku.classicHelper = function() {
 		}
 	}
 
-	// Get the digits already filled in in the 9 columns
+	// Get the digits already present in the 9 columns
 	for (let j = 0; j <= 8; j++) {
 		columns[j] = new Array();
 		for (let i = 0; i <= 8; i++) {
@@ -124,7 +129,7 @@ motSudoku.classicHelper = function() {
 		}
 	}
 
-	// Get the digits already filled in in the 9 sub grids
+	// Get the digits already present in the 9 sub grids
 	let line = 0;
 	let row = 0;
 	for (let l = 1; l <= 3; l++) {
@@ -147,6 +152,7 @@ motSudoku.classicHelper = function() {
 	// Go through every cell and if it is empty get the digits which are not excluded by line, row or subgrid
 	let allDigits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 	let cellDigits = new Array();
+
 	for (let l = 1; l <= 3; l++) {
 		for (let r = 1; r <= 3; r++) {
 			let grid = ((3 * (l - 1)) + r);
@@ -165,8 +171,14 @@ motSudoku.classicHelper = function() {
 						cellDigits = cellDigits.filter( function(value) {
 							return !subGrids[grid].includes(value);
 						});
+						// Get the css variables
+						let fontSizeSmall = $("#mot_sudoku_c_cell_id_" + line + row).css('--fontSizeSmall');
+						let fontWeightNormal = $("#mot_sudoku_c_cell_id_" + line + row).css('--fontWeightNormal');
+						let textColorPlayer = $("#mot_sudoku_c_cell_id_" + line + row).css('--textColorPlayer');
+						let textAlignLeft = $("#mot_sudoku_c_cell_id_" + line + row).css('--textAlignLeft');
+						let verticalAlignTop = $("#mot_sudoku_c_cell_id_" + line + row).css('--verticalAlignTop');
 						// Set the style
-						$("#mot_sudoku_c_cell_id_" + line + row).css({"font-size": "1em", "font-weight": "normal", "color": "blue", "text-align": "left", "vertical-align": "top"});
+						$("#mot_sudoku_c_cell_id_" + line + row).css({"font-size": fontSizeSmall, "font-weight": fontWeightNormal, "color": textColorPlayer, "text-align": textAlignLeft, "vertical-align": verticalAlignTop});
 						$("#mot_sudoku_c_cell_id_" + line + row).html(cellDigits.join(', '));
 					}
 				}

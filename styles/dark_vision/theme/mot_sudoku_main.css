@@ -30,13 +30,6 @@
 	margin: 5px 3px;
 }
 
-.centered-text {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 10px 0;
-}
-
 /* -------------------------------------------------------------------------------------------------------------------------
 * Styles for the classic Sudoku
 *
@@ -82,16 +75,33 @@
 	border-collapse: collapse;
 }
 
-/*  Every change you make here you MUST do in 'mot_sudoku_main.js' event handler for the modal window digit buttons and event handler for the buy digit buttons AND in the 'mot_sudoku_classic.js' statement to add the filled cells from the player line to the grid and the helper function */
 .classic-sub-table td {
 	width: 40px;
 	height: 40px;
-	border: 1px solid grey;
-	text-align: center;
-	vertical-align: middle;
-	font-size: 2.4em;
-	font-weight: bold;
 	cursor: default;
+
+	--textAlignCenter: center;
+	--textAlignLeft: left;
+	text-align: var(--textAlignCenter);
+
+	--verticalAlignMiddle: middle;
+	--verticalAlignTop: top;
+	vertical-align: var(--verticalAlignMiddle);
+
+	--fontSizeBig: 2.4em;
+	--fontSizeSmall: 1em;
+	font-size: var(--fontSizeBig);
+
+	--fontWeightBold: bold;
+	--fontWeightNormal: normal;
+	font-weight: var(--fontWeightBold);
+
+	--borderColour: 1px solid grey;
+	--borderColourSelect: 1px solid blue;
+	border: var(--borderColour);
+
+	--textColorPlayer: blue;
+	--textColorBuy: grey;
 }
 
 /*

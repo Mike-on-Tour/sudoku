@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.3.0
+* @package MoT Sudoku v0.3.2
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -28,10 +28,14 @@ $lang = array_merge($lang, [
 	'MOT_SUDOKU_TAB_NINJA'			=> 'Ninja-Sudoku',
 
 	// General terms
+	'MOT_SUDOKU_EASY'				=> 'leicht',
+	'MOT_SUDOKU_MEDIUM'				=> 'mittel',
+	'MOT_SUDOKU_HARD'				=> 'schwer',
+	'MOT_SUDOKU_GAME_INFO'			=> 'Spielepaket:&nbsp;<strong>%1$s</strong>&nbsp;||&nbsp;Spiel:&nbsp;<strong>%2$s</strong>&nbsp;||&nbsp;Schwierigkeitsgrad:&nbsp;<strong>%3$s</strong>',
 	'MOT_SUDOKU_CONGRATULATIONS'	=> 'Gratulation',
 	'MOT_SUDOKU_PUZZLE_SOLVED'		=> '<strong>Du hast das Rätsel korrekt gelöst!</strong><br>
 										Deine erreichte Punktzahl in diesem Spiel beträgt: ',
-	'MOT_SUDOKU_BACK_TO_START'		=> '<br>Durch Anklicken eines der Tabs kannst du nun z.B. ein neues Spiel starten.',
+	'MOT_SUDOKU_BACK_TO_START'		=> '<br><br>Du wirst gleich zu einem neuen Spiel weitergeleitet.',
 	'MOT_SUDOKU_INCORRECT_END'		=> 'Deine Lösung war leider nicht ganz korrekt. Die falsch eingetragenen Ziffern wurden entfernt und die Minuspunkte dafür von deiner Punktzahl
 										abgezogen.<br>
 										Du hast jetzt Gelegenheit, die korrekten Ziffern einzutragen.',
@@ -52,7 +56,6 @@ $lang = array_merge($lang, [
 										Einige Startziffern wurden bereits gesetzt, um dir beim Einstieg zu helfen, sie werden <strong>fett</strong> angezeigt. Klicke einfach
 										in eine leere Zelle, um eine Ziffer einzufügen. Wenn Du einen Fehler gemacht hast, einfach nochmal auf das Feld klicken, um eine neue
 										Ziffer einzufügen.',
-	'MOT_SUDOKU_GAME_INFO'			=> 'Spielepaket:&nbsp;<strong>%1$s</strong>&nbsp;||&nbsp;Spiel:&nbsp;<strong>%2$s</strong>&nbsp;||&nbsp;Schwierigkeitsgrad:&nbsp;<strong>%3$s</strong>',
 
 	// Samurai Sudoku
 	'MOT_SUDOKU_SAMURAI_TEXT'		=> 'Wem die klassischen Sudoku-Rätsel zu einfach sind, kann sich an dem deutlich komplexeren Samurai-Sudoku versuchen. Hier überschneiden sich

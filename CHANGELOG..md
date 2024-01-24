@@ -4,6 +4,23 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.2] - 2024-01-24
+
+### Added
+
+### Changed
+-	Improved the code to retrieve a new puzzle while ignoring puzzles already solved by the user
+-	The difficulty level is now displayed with a term and no longer as a digit
+-	The selected cell is now "highlighted" with a blue border instead of box shadow since the latter didn't work properly with all browsers
+-	All CSS settings which will be used in one or more jQuery functions to variables to enable easy changing in other styles than prosilver
+-	Bought digits (this is valid for digits "bought" by changing the game level, too) are now displayed with a grey color until the game is loaded the next time
+-	After solving a puzzzle the player will be rerouted to a new game after 5 seconds
+
+### Fixed
+
+### Removed
+  
+  
 ## [0.3.1] - 2024-01-21
 
 ### Added

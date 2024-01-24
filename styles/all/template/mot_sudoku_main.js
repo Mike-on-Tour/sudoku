@@ -89,18 +89,27 @@ $("select[name^='mot_sudoku_select_level_']").on('change', function(e) {
 */
 $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_modal_4, #mot_sudoku_modal_5, #mot_sudoku_modal_6, #mot_sudoku_modal_7, #mot_sudoku_modal_8, #mot_sudoku_modal_9, #mot_sudoku_modal_0").on("click", function() {
 	if (motSudoku.puzzleInProgress) {
+		// Get the css settings
+		let fontSizeBig = $("#" + motSudoku.CellId).css('--fontSizeBig');
+		let fontWeightNormal = $("#" + motSudoku.CellId).css('--fontWeightNormal');
+		let textColorPlayer = $("#" + motSudoku.CellId).css('--textColorPlayer');
+		let textAlignCenter = $("#" + motSudoku.CellId).css('--textAlignCenter');
+		let verticalAlignMiddle = $("#" + motSudoku.CellId).css('--verticalAlignMiddle');
+		let borderColour = $("#" + motSudoku.CellId).css('--borderColour');
+
 		// Get this buttons ID
 		let thisElementId = $(this).attr('id');
 		// Extract the number from the ID
 		let number = thisElementId.substr(17, 1);
 
+		// Handle the type of button and
 		if (number > 0) {
 			// Set the style for the selected cell and write the number into it
-			$("#" + motSudoku.CellId).css({"font-size": "2.4em", "font-weight": "normal", "color": "blue", "box-shadow": "none", "transform": "none", "text-align": "center", "vertical-align": "middle"});
+			$("#" + motSudoku.CellId).css({"font-size": fontSizeBig, "font-weight": fontWeightNormal, "color": textColorPlayer, "text-align": textAlignCenter, "vertical-align": verticalAlignMiddle, 'border': borderColour});
 			$("#" + motSudoku.CellId).html(number);
 		} else {
 			// Number was removed, reset style and delete it from cell
-			$("#" + motSudoku.CellId).css({"box-shadow": "none", "transform": "none"});
+			$("#" + motSudoku.CellId).css('border', borderColour);
 			$("#" + motSudoku.CellId).html('');
 		}
 		$("#mot_sudoku_modal").hide();
@@ -129,6 +138,9 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 						motSudoku.puzzleInProgress = false;
 						// Show the end of game message
 						phpbb.alert(motSudoku.congratulation, motSudoku.puzzleSolved + result['points'] + motSudoku.startNew);
+						setTimeout(function() {
+							$("#mot_sudoku_classic").trigger( "submit" );
+						}, 4000);
 					} else {
 						// Puzzle wasn't solved correctly, remove the incorrect digits from the grid
 						result['wrong_digits'].forEach(function(item) {
@@ -142,7 +154,8 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 		);
 	} else {
 		// Puzzle is finished, do not do anything
-		$("#" + motSudoku.CellId).css({"box-shadow": "none", "transform": "none"});
+		let borderColour = $("#" + motSudoku.CellId).css('--borderColour');
+		$("#" + motSudoku.CellId).css('border', borderColour);
 		$("#mot_sudoku_modal").hide();
 	}
 });
@@ -152,7 +165,8 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 *
 */
 $("#mot_sudoku_modal").on("click", function() {
-	$("#" + motSudoku.CellId).css({"box-shadow": "none", "transform": "none"});
+	let borderColour = $("#" + motSudoku.CellId).css('--borderColour');
+	$("#" + motSudoku.CellId).css('border', borderColour);
 	$(this).hide();
 });
 
@@ -217,8 +231,15 @@ $("#buy_digit_button_c, #buy_digit_button_s, #buy_digit_button_n").on("click", f
 					// restore the puzzle line according to the game type
 					switch (result['type']) {
 						case 'c':
+							// Get the proper css variables
+							let textColorBuy = $("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css('--textColorBuy');
+							let fontWeightBold = $("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css('--fontWeightBold');
+							let fontSizeBig = $("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css('--fontSizeBig');
+							let textAlignCenter = $("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css('--textAlignCenter');
+							let verticalAlignMiddle = $("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css('--verticalAlignMiddle');
+							// Set the new values
 							$("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).html(result['digit']);
-							$("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css({"color": "black", "font-weight": "bold", "font-size": "2.4em", "text-align": "center", "vertical-align": "middle"});
+							$("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css({"color": textColorBuy, "font-weight": fontWeightBold, "font-size": fontSizeBig, "text-align": textAlignCenter, "vertical-align": verticalAlignMiddle});
 							motSudoku.preSelectedCells.push("mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1));
 							motSudoku.puzzleLine = result['puzzle_line'];		// Update the stored puzzle
 							break;
@@ -345,9 +366,11 @@ $("#mot_sudoku_select_level_button_c, #mot_sudoku_select_level_button_s, #mot_su
 
 				switch (result['type']) {
 					case 'c':
+						// Get the proper css variables first, and since these are equal for all cells we do it just once to improve performance
+						let textColorBuy = $("#mot_sudoku_c_cell_id_11").css('--textColorBuy');
 						result['new_digits'].forEach(function(item) {
 							$("#mot_sudoku_c_cell_id_" + (item.i + 1) + (item.j + 1)).html(item.digit);
-							$("#mot_sudoku_c_cell_id_" + (item.i + 1) + (item.j + 1)).css({"color": "black", "font-weight": "bold"});
+							$("#mot_sudoku_c_cell_id_" + (item.i + 1) + (item.j + 1)).css("color", textColorBuy);
 							motSudoku.preSelectedCells.push("#mot_sudoku_c_cell_id_" + (item.i + 1) + (item.j + 1));
 							motSudoku.puzzleLine = result['puzzle_line'];		// Update the stored puzzle
 						});

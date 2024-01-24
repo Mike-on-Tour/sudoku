@@ -100,9 +100,17 @@ class mot_sudoku_main
 			login_box('', $this->language->lang('NO_AUTH_OPERATION'));
 		}
 
+		// Check permission
+		if (!$this->auth->acl_get('u_play_mot_sudoku'))
+		{
+			trigger_error($this->language->lang('NO_AUTH_OPERATION'));
+		}
+
 		$this->classic_action = $this->helper->route('mot_sudoku_main', ['tab' => 'classic']);
 		$this->samurai_action = $this->helper->route('mot_sudoku_main', ['tab' => 'samurai']);
 		$this->ninja_action = $this->helper->route('mot_sudoku_main', ['tab' => 'ninja']);
+
+		$this->difficulty = ['', $this->language->lang('MOT_SUDOKU_EASY'), $this->language->lang('MOT_SUDOKU_MEDIUM'), $this->language->lang('MOT_SUDOKU_HARD')];
 
 		$tab = $this->request->variable('tab', '');
 
@@ -155,8 +163,9 @@ class mot_sudoku_main
 
 				if (empty($classic_puzzle))
 				{
-					// No unsolved puzzle so we can choose a new one
-					$sql = 'SELECT * FROM ' . $this->classic_sudoku_table;
+					// No unsolved puzzle so we can choose a new one which has not been played so far by this user
+					$in_set = !empty($classic_ids) ? ' WHERE ' . $this->db->sql_in_set('classic_id', $classic_ids, true) : '';
+					$sql = 'SELECT * FROM ' . $this->classic_sudoku_table . $in_set;
 					$result = $this->db->sql_query($sql);
 					$classic_puzzles = $this->db->sql_fetchrowset($result);
 					$this->db->sql_freeresult($result);
@@ -168,17 +177,10 @@ class mot_sudoku_main
 						trigger_error($this->language->lang('MOT_SUDOKU_NO_PUZZLES'));
 					}
 
-					// Make certain that we have an array even if there is nothing stored
-					$classic_ids = $classic_ids ?? [];
-					// make sure that we do not get a puzzle which this player already solved
-					do
-					{
-						$puzzle_number = rand(0, $classic_count - 1);
-						$in_array = in_array($classic_puzzles[$puzzle_number]['classic_id'], $classic_ids);
-					} while ($in_array);
+					$puzzle_number = rand(0, $classic_count - 1);
 
 					$classic_puzzle = $classic_puzzles[$puzzle_number];
-					$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $classic_puzzle['game_pack'], $classic_puzzle['game_number'], $classic_puzzle['game_level']);
+					$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $classic_puzzle['game_pack'], $classic_puzzle['game_number'], $this->difficulty[$classic_puzzle['game_level']]);
 					$title = ($this->config['mot_sudoku_title_enable'] && $classic_puzzle['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $classic_puzzle['game_name'] . '</strong>' : '';
 					$puzzle_id = $classic_puzzle['classic_id'];
 					$entry_id = 0;
@@ -200,7 +202,7 @@ class mot_sudoku_main
 					$result = $this->db->sql_query($sql);
 					$data_row = $this->db->sql_fetchrow($result);
 					$this->db->sql_freeresult($result);
-					$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $data_row['game_pack'], $data_row['game_number'], $data_row['game_level']);
+					$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $data_row['game_pack'], $data_row['game_number'], $this->difficulty[$data_row['game_level']]);
 					$title = ($this->config['mot_sudoku_title_enable'] && $data_row['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $data_row['game_name'] . '</strong>' : '';
 					$player_line = $classic_puzzle['player_line'];
 					$current_points = (int) $classic_puzzle['points'];

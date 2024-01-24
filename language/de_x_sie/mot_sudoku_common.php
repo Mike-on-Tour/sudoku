@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.3.0
+* @package MoT Sudoku v0.3.2
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -28,10 +28,14 @@ $lang = array_merge($lang, [
 	'MOT_SUDOKU_TAB_NINJA'			=> 'Ninja-Sudoku',
 
 	// General terms
+	'MOT_SUDOKU_EASY'				=> 'leicht',
+	'MOT_SUDOKU_MEDIUM'				=> 'mittel',
+	'MOT_SUDOKU_HARD'				=> 'schwer',
+	'MOT_SUDOKU_GAME_INFO'			=> 'Spielepaket:<strong>%1$s</strong>&nbsp;||&nbsp;Spiel:<strong>%2$s</strong>&nbsp;||&nbsp;Level:<strong>%3$s</strong>',
 	'MOT_SUDOKU_CONGRATULATIONS'	=> 'Gratulation',
 	'MOT_SUDOKU_PUZZLE_SOLVED'		=> '<strong>Sie haben das Rätsel korrekt gelöst!</strong><br>
 										Ihre erreichte Punktzahl in diesem Spiel beträgt: ',
-	'MOT_SUDOKU_BACK_TO_START'		=> '<br>Durch Anklicken eines der Tabs können Sie nun z.B. ein neues Spiel starten.',
+	'MOT_SUDOKU_BACK_TO_START'		=> '<br><br>Sie werden gleich zu einem neuen Spiel weitergeleitet.',
 	'MOT_SUDOKU_INCORRECT_END'		=> 'Ihree Lösung war leider nicht ganz korrekt. Die falsch eingetragenen Ziffern wurden entfernt und die Minuspunkte dafür von Ihrer Punktzahl
 										abgezogen.<br>
 										Sie haben jetzt Gelegenheit, die korrekten Ziffern einzutragen.',
@@ -52,7 +56,6 @@ $lang = array_merge($lang, [
 										Einige Startziffern wurden bereits gesetzt, um Ihnen beim Einstieg zu helfen, sie werden <strong>fett</strong> angezeigt. Klicken Sie einfach
 										in eine leere Zelle, um eine Ziffer einzufügen. Wenn Sie einen Fehler gemacht haben, einfach nochmal auf das Feld klicken, um eine neue
 										Ziffer einzufügen.',
-	'MOT_SUDOKU_GAME_INFO'			=> 'Spielepaket:<strong>%1$s</strong>&nbsp;||&nbsp;Spiel:<strong>%2$s</strong>&nbsp;||&nbsp;Level:<strong>%3$s</strong>',
 
 	// Samurai Sudoku
 	'MOT_SUDOKU_SAMURAI_TEXT'		=> 'Wem die klassischen Sudoku-Rätsel zu einfach sind, kann sich an dem deutlich komplexeren Samurai-Sudoku versuchen. Hier überschneiden sich
