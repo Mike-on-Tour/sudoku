@@ -3,7 +3,7 @@
 {% INCLUDECSS '@mot_sudoku/mot_sudoku_main.css' %}
 
 <script>
-	var motSudoku = {};
+	let motSudoku = {};
 	motSudoku.tab = "{{ MOT_SUDOKU_SELECTED_TAB|e('js') }}";
 	motSudoku.CellId = '';
 	motSudoku.ajaxNumberCall = "{{ MOT_SUDOKU_AJAX_NUMBER|e('js') }}";
@@ -20,10 +20,12 @@
 	motSudoku.congratulation = "{{ lang('MOT_SUDOKU_CONGRATULATIONS')|e('js') }}";
 	motSudoku.puzzleSolved = "{{ lang('MOT_SUDOKU_PUZZLE_SOLVED')|e('js') }}";
 	motSudoku.startNew = "{{ lang('MOT_SUDOKU_BACK_TO_START')|e('js') }}";
+	motSudoku.digitNoBuy = {{ MOT_SUDOKU_DIGIT_NO_BUY }};
 
 	motSudoku.errorErr = "{{ lang('MOT_SUDOKU_ERROR_TITLE')|e('js') }}";
 	motSudoku.errorReset = "{{ lang('MOT_SUDOKU_ERROR_RESET')|e('js') }}";
 	motSudoku.errorBuyDigit = "{{ lang('MOT_SUDOKU_ERROR_BUY_NOW')|e('js') }}";
+	motSudoku.errorBuyLastDigit = "{{ lang('MOT_SUDOKU_BUY_LAST_DIGIT')|e('js') }}";
 	motSudoku.errorHelper = "{{ lang('MOT_SUDOKU_ERROR_HELPER')|e('js') }}";
 	motSudoku.errorLevel = "{{ lang('MOT_SUDOKU_ERROR_LEVEL')|e('js') }}";
 	motSudoku.errorSolution = "{{ lang('MOT_SUDOKU_INCORRECT_END')|e('js') }}";

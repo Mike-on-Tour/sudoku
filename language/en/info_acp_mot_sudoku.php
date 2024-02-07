@@ -22,11 +22,12 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU'						=> 'Sudoku',
 	'ACP_MOT_SUDOKU_SETTINGS'				=> 'Settings',
+	'ACP_MOT_SUDOKU_GAMEPACKS'				=> 'Sudoku packs',
 
 	'ACP_MOT_SUDOKU_VERSION'				=> '<img src="https://img.shields.io/badge/Version-%1$s-green.svg?style=plastic"><br>&copy; 2023 - %2$d by Mike-on-Tour',
 	'SUPPORT_MOT_SUDOKU'					=> 'If you want to donate to Sudoku´s development please use this link:<br>',
 
-	'ACP_MOT_SUDOKU_CONFIGURATION'			=> 'Sudoku Administration',
+	// Settings tab
 	'ACP_MOT_SUDOKU_GENERAL'				=> 'General settings',
 	'ACP_MOT_SUDOKU_GENERAL_EXPL'			=> 'Here you can edit Sudoku´s general settings',
 
@@ -42,11 +43,6 @@ $lang = array_merge($lang, [
 												in a coloured box above `General settings`.',
 	'ACP_MOT_SUDOKU_ENABLE'					=> 'Activate Sudoku',
 	'ACP_MOT_SUDOKU_ENABLE_EXPL'			=> 'Enable/disable for authorised members, displays the link in the navigation bar depending on status.',
-	'ACP_MOT_SUDOKU_CACHE_ENABLE'			=> 'Enable database query cache',
-	'ACP_MOT_SUDOKU_CACHE_ENABLE_EXPL'		=> 'Query cache decreases database server load.',
-	'ACP_MOT_SUDOKU_PURGE_CACHE'			=> 'Purge the Sudoku cache',
-	'ACP_MOT_SUDOKU_PURGE_CACHE_MSG'		=> 'Sudoku cache successfully purged',
-	'ACP_MOT_SUDOKU_PURGE_CACHE_LOG'		=> '<strong>Purged the Sudoku cache</strong>',
 	'ACP_MOT_SUDOKU_PUZZLE_TITLE'			=> 'Display puzzle title',
 	'ACP_MOT_SUDOKU_PUZZLE_TITLE_EXPL'		=> 'Enables display of the current game`s title.',
 
@@ -110,6 +106,37 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_ADMIN_LIST' 			=> 'Sudoku reward system administrator',
 	'ACP_MOT_SUDOKU_ADMIN_LIST_EXPL' 		=> 'A board administrator or moderator who will receive the report of periodic results and who will be the sender of PMs to the winners.',
 
+	'ACP_MOT_SUDOKU_RESET_GAME'				=> 'Delete all game data',
+	'ACP_MOT_SUDOKU_RESET_GAME_EXPL'		=> '<font color=red>After clicking the `Delete` button <strong>ALL</strong> statistics, results and intermediate results will be
+												deleted and reset to their original state.</font>',
+	'ACP_MOT_SUDOKU_RESET_GAME_CONFIRM_MSG'	=> 'Do you really want to delete the data of all Sudoku players?',
+	'ACP_MOT_SUDOKU_RESET_SUCCESS'			=> 'All game data of Sudoku successfully deleted',
+	'ACP_MOT_SUDOKU_LOG_RESET_GAME'			=> '<strong>Deleted Sudoku game data</strong>',
+
+	'ACP_MOT_SUDOKU_SETTING_SAVED'			=> 'Settings for the Sudoku game successfully saved.',
+	'ACP_MOT_SUDOKU_LOG_SETTING_SAVED'		=> '<strong>Changed Sudoku settings</strong>',
+
+	// Gamepacks tab
+	'ACP_MOT_SUDOKU_GAMEPACKS_EXPL'			=> 'The table on this tab displays all the Sudoku packs and the number of puzzles contained which are currently installed.<br>
+												If you delete a pack all puzzles it is containing are removed, too. Puzzles currently in use will be kept for the player working
+												on it (and only for this player) until it is solved.',
+	'ACP_MOT_SUDOKU_SELECT_TYPE'			=> 'Select pack type',
+	'ACP_MOT_SUDOKU_ALL'					=> 'All',
+	'ACP_MOT_SUDOKU_GAME_PACK_NUMBER'		=> 'Pack #',
+	'ACP_MOT_SUDOKU_GAME_PACK_TYPE'			=> 'Pack type',
+	'ACP_MOT_SUDOKU_GAME_COUNT'				=> 'Puzzle count',
+	'ACP_MOT_SUDOKU_PACK_INSTALL_DATE'		=> 'Installation date',
+	'ACP_MOT_SUDOKU_PACKS_NOENTRY'			=> 'No Sudoku packs installed',
+
+	'ACP_MOT_SUDOKU_MIXED_PACK'				=> 'Mixed pack',
+	'ACP_MOT_SUDOKU_CLASSIC'				=> 'Classic pack',
+	'ACP_MOT_SUDOKU_SAMURAI'				=> 'Samurai pack',
+	'ACP_MOT_SUDOKU_NINJA'					=> 'Ninja pack',
+
+	'ACP_MOT_SUDOKU_PACK_DELETE'			=> 'Do you really want to remove the Sudoku pack with the number <strong>%1$d</strong> and all its puzzles vrom the database?<br>
+												This is a permanent action and can not be undone!',
+	'ACP_MOT_SUDOKU_DELETED_PACK'			=> 'The Sudoku pack with the number <strong>%1$d</strong> and all its puzzles removed from the database.',
+
 	'ACP_MOT_SUDOKU_UPLOAD_XML'				=> 'Import a locally stored Sudoku pack (xml file)',
 	'ACP_MOT_SUDOKU_UPLOAD_XML_EXP'			=> 'Here you can import into the database a Sudoku pack which is stored locally on your PC in order to provide your players with
 												new puzzles.<br>Please note that you can import only such packs which adhere to the file schema defined on mike-on-tour.com!<br>
@@ -134,14 +161,5 @@ $lang = array_merge($lang, [
 		1	=> '%1$d Ninja Sudoku puzzle imported.',
 		2	=> '%1$d Ninja Sudoku puzzles imported.',
 	],
-
-	'ACP_MOT_SUDOKU_RESET_GAME'				=> 'Delete all game data',
-	'ACP_MOT_SUDOKU_RESET_GAME_EXPL'		=> '<font color=red>After clicking the `Delete` button <strong>ALL</strong> statistics, results and intermediate results will be
-												deleted and reset to their original state.</font>',
-	'ACP_MOT_SUDOKU_RESET_GAME_CONFIRM_MSG'	=> 'Do you really want to delete the data of all Sudoku players?',
-	'ACP_MOT_SUDOKU_RESET_SUCCESS'			=> 'All game data of Sudoku successfully deleted',
-	'ACP_MOT_SUDOKU_LOG_RESET_GAME'			=> '<strong>Deleted Sudoku game data</strong>',
-
-	'ACP_MOT_SUDOKU_SETTING_SAVED'			=> 'Settings for the Sudoku game successfully saved.',
-	'ACP_MOT_SUDOKU_LOG_SETTING_SAVED'		=> '<strong>Changed Sudoku settings</strong>',
+	'MOT_SUDOKU_NO_IMPORT'				=> 'No puzzles imported because the number of the Sudoku pack is already in use!',
 ]);

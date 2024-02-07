@@ -22,11 +22,12 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU'						=> 'Sudoku',
 	'ACP_MOT_SUDOKU_SETTINGS'				=> 'Einstellungen',
+	'ACP_MOT_SUDOKU_GAMEPACKS'				=> 'Spielepakete',
 
 	'ACP_MOT_SUDOKU_VERSION'				=> '<img src="https://img.shields.io/badge/Version-%1$s-green.svg?style=plastic"><br>&copy; 2023 - %2$d by Mike-on-Tour',
 	'SUPPORT_MOT_SUDOKU'					=> 'Wenn Sie die Entwicklung des Sudoku-Spiels unterstützen möchten, können Sie das hier tun:<br>',
 
-	'ACP_MOT_SUDOKU_CONFIGURATION'			=> 'Sudoku Administration',
+	// Settings tab
 	'ACP_MOT_SUDOKU_GENERAL'				=> 'Allgemeine Einstellungen',
 	'ACP_MOT_SUDOKU_GENERAL_EXPL'			=> 'Hier werden die allgemeinen Einstellungen vorgenommen',
 
@@ -42,11 +43,6 @@ $lang = array_merge($lang, [
 												in einer farbigen Box oberhalb von `Allgemeine Einstellungen` angezeigt.',
 	'ACP_MOT_SUDOKU_ENABLE'					=> 'Sudoku aktivieren',
 	'ACP_MOT_SUDOKU_ENABLE_EXPL'			=> 'Sudoku für die berechtigten Mitglieder ein- bzw. ausschalten, zeigt je nach Einstellung den Link in der Navigationsleiste an.',
-	'ACP_MOT_SUDOKU_CACHE_ENABLE'			=> 'Cache aktivieren',
-	'ACP_MOT_SUDOKU_CACHE_ENABLE_EXPL'		=> 'Der Cache reduziert die Abfragen auf dem Datenbank-Server',
-	'ACP_MOT_SUDOKU_PURGE_CACHE'			=> 'Sudoku-Cache leeren',
-	'ACP_MOT_SUDOKU_PURGE_CACHE_MSG'		=> 'Sudoku-Cache wurde geleert',
-	'ACP_MOT_SUDOKU_PURGE_CACHE_LOG'		=> '<strong>Sudoku-Cache geleert</strong>',
 	'ACP_MOT_SUDOKU_PUZZLE_TITLE'			=> 'Zeige Puzzle Titel',
 	'ACP_MOT_SUDOKU_PUZZLE_TITLE_EXPL'		=> 'Zeigt den Titel des aktuellen Spiels an.',
 
@@ -111,6 +107,37 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_ADMIN_LIST'				=> 'Administrator für das Sudoko Bonussystem',
 	'ACP_MOT_SUDOKU_ADMIN_LIST_EXPL'		=> 'Ein Board Administrator oder Moderator, der die regelmäßigen Reports erhält und dessen Name als Absender in der PN für die Gewinner erscheint',
 
+	'ACP_MOT_SUDOKU_RESET_GAME'				=> 'Alle Spieledaten löschen',
+	'ACP_MOT_SUDOKU_RESET_GAME_EXPL'		=> '<font color=red>Nach Anklicken des `Löschen`-Buttons werden <strong>ALLE</strong> Statistiken, Ergebnisse und Zwischenergebnisse
+												gelöscht und auf den Anfangszustand zurückgesetzt.</font>',
+	'ACP_MOT_SUDOKU_RESET_GAME_CONFIRM_MSG'	=> 'Wollen Sie wirklich alle Spieledaten löschen?',
+	'ACP_MOT_SUDOKU_RESET_SUCCESS'			=> 'Es wurden sämtliche Daten gelöscht',
+	'ACP_MOT_SUDOKU_LOG_RESET_GAME'			=> '<strong>Sudoku Spieledaten gelöscht</strong>',
+
+	'ACP_MOT_SUDOKU_SETTING_SAVED'			=> 'Die Einstellungen für das Sudoku-Spiel wurden erfolgreich gesichert.',
+	'ACP_MOT_SUDOKU_LOG_SETTING_SAVED'		=> '<strong>Einstellungen für das Sudoku-Spiel geändert</strong>',
+
+	// Gamepacks tab
+	'ACP_MOT_SUDOKU_GAMEPACKS_EXPL'			=> 'Hier werden tabellarisch alle derzeit installierten Spiele-Pakete und die Anzahl der in ihnen enthaltenen Rätsel aufgelistet.<br>
+												Wird ein Paket gelöscht, werden auch die in ihm enthaltenen Rätsel gelöscht. Bereits in Nutzung befindliche Rätsel bleiben dem
+												jeweiligen Spieler (und nur diesem) bis zu deren Lösung erhalten.',
+	'ACP_MOT_SUDOKU_SELECT_TYPE'			=> 'Auswahl Spiele-Paket-Typ',
+	'ACP_MOT_SUDOKU_ALL'					=> 'Alle',
+	'ACP_MOT_SUDOKU_GAME_PACK_NUMBER'		=> 'Paket-Nr.',
+	'ACP_MOT_SUDOKU_GAME_PACK_TYPE'			=> 'Paket-Typ',
+	'ACP_MOT_SUDOKU_GAME_COUNT'				=> 'Anzahl Rätsel',
+	'ACP_MOT_SUDOKU_PACK_INSTALL_DATE'		=> 'Installations-Datum',
+	'ACP_MOT_SUDOKU_PACKS_NOENTRY'			=> 'Keine Spiele-Pakete installiert',
+
+	'ACP_MOT_SUDOKU_MIXED_PACK'				=> 'gemischtes Paket',
+	'ACP_MOT_SUDOKU_CLASSIC'				=> 'Klassik-Rätsel',
+	'ACP_MOT_SUDOKU_SAMURAI'				=> 'Samurai-Rätsel',
+	'ACP_MOT_SUDOKU_NINJA'					=> 'Ninja-Rätsel',
+
+	'ACP_MOT_SUDOKU_PACK_DELETE'			=> 'Wollen Sie wirklich das Spiele-Paket mit der Nr. <strong>%1$d</strong> und die dazugehörigen Rätsel aus der Datenbank löschen?<br>
+												Dieser Vorgang kann nicht rückgängig gemacht werden!',
+	'ACP_MOT_SUDOKU_DELETED_PACK'			=> 'Das Spiele-Paket mit der Nr. <strong>%1$d</strong> und die dazugehörigen Rätsel wurden aus der Datenbank gelöscht.',
+
 	'ACP_MOT_SUDOKU_UPLOAD_XML'				=> 'Lokales Sudoku-Pack (xml-Datei) importieren',
 	'ACP_MOT_SUDOKU_UPLOAD_XML_EXP'			=> 'Hier können Sie ein auf Ihrem PC gespeichertes Sudoku-Pack in die Datenbank importieren und neue Sudoku-Rätsel zum Spielen bereit
 												stellen.<br>Bitte beachten Sie^, dass nur Spiele-Packs importiert werden können, die dem auf mike-on-tour.com definierten Schema
@@ -136,14 +163,5 @@ $lang = array_merge($lang, [
 		1	=> 'Es wurde %1$d Ninja-Sudoku-Rätsel importiert.',
 		2	=> 'Es wurden %1$d Ninja-Sudoku-Rätsel importiert.',
 	],
-
-	'ACP_MOT_SUDOKU_RESET_GAME'				=> 'Alle Spieledaten löschen',
-	'ACP_MOT_SUDOKU_RESET_GAME_EXPL'		=> '<font color=red>Nach Anklicken des `Löschen`-Buttons werden <strong>ALLE</strong> Statistiken, Ergebnisse und Zwischenergebnisse
-												gelöscht und auf den Anfangszustand zurückgesetzt.</font>',
-	'ACP_MOT_SUDOKU_RESET_GAME_CONFIRM_MSG'	=> 'Wollen Sie wirklich alle Spieledaten löschen?',
-	'ACP_MOT_SUDOKU_RESET_SUCCESS'			=> 'Es wurden sämtliche Daten gelöscht',
-	'ACP_MOT_SUDOKU_LOG_RESET_GAME'			=> '<strong>Sudoku Spieledaten gelöscht</strong>',
-
-	'ACP_MOT_SUDOKU_SETTING_SAVED'			=> 'Die Einstellungen für das Sudoku-Spiel wurden erfolgreich gesichert.',
-	'ACP_MOT_SUDOKU_LOG_SETTING_SAVED'		=> '<strong>Einstellungen für das Sudoku-Spiel geändert</strong>',
+	'MOT_SUDOKU_NO_IMPORT'				=> 'Es wurden keine Rätsel importiert, da die Nummer des Spiele-Packs bereits vergeben ist!',
 ]);

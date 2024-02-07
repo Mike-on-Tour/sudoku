@@ -4,6 +4,25 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.0] - 2024-02-06
+
+### Added
+-	An ACP page to administer game packs (import and delete)
+-	The functionality for the Samurai puzzles
+-	The functionality to enable (display) the helper button for each game type
+
+### Changed
+-	Some code improvements
+-	The behaviour of the button buying a digit to prevent buying the last missing digit and thus circumfence the routine to check whether the last digit was entered
+-	The display of the activated cell by selecting another background colour instead of changing the border colour which a player can not easily detect
+
+### Fixed
+-	A bug which still did not protect digits bought through a game level change from being altered before the first re-loading of the puzzle
+
+### Removed
+-	The enabling and purging of a cache from the ACP settings page
+  
+  
 ## [0.3.2] - 2024-01-24
 
 ### Added
@@ -14,7 +33,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -	The selected cell is now "highlighted" with a blue border instead of box shadow since the latter didn't work properly with all browsers
 -	All CSS settings which will be used in one or more jQuery functions to variables to enable easy changing in other styles than prosilver
 -	Bought digits (this is valid for digits "bought" by changing the game level, too) are now displayed with a grey color until the game is loaded the next time
--	After solving a puzzzle the player will be rerouted to a new game after 5 seconds
+-	After solving a puzzle the player will be rerouted to a new game after 5 seconds
 
 ### Fixed
 

@@ -1,6 +1,6 @@
 /**
 *
-* @package MoT Sudoku v0.3.0
+* @package MoT Sudoku v0.4.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -14,16 +14,16 @@
 * Add the filled cells to the classic Sudoku puzzle at game start
 *
 */
-if (motSudoku.playerLine != null) {
+if (motSudoku.playerLineC != null) {
 	// Get the css variables, we do this here once since it is the same for all cells and thus improves performance
 	let fontWeightNormal = $("#mot_sudoku_c_cell_id_11").css('--fontWeightNormal');
 	let textColorPlayer = $("#mot_sudoku_c_cell_id_11").css('--textColorPlayer');
 
-	for (var i = 0; i < 9; i++) {
-		for (var j = 0; j < 9; j++) {
-			if (motSudoku.playerLine[i][j] > 0) {
+	for (let i = 0; i < 9; i++) {
+		for (let j = 0; j < 9; j++) {
+			if (motSudoku.playerLineC[i][j] > 0) {
 				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).css({"font-weight": fontWeightNormal, "color": textColorPlayer});
-				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).html(motSudoku.playerLine[i][j]);
+				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).html(motSudoku.playerLineC[i][j]);
 			}
 		}
 	}
@@ -68,10 +68,11 @@ $(
 		}
 
 		motSudoku.CellId = thisElementId;
-		let borderColour = $(this).css('--borderColourSelect');
-		if (!motSudoku.modalSwitch) {
-			$(this).css('border', borderColour);
-		}
+		motSudoku.backgroundColour = $(this).css('background-color');
+		let backgroundColour = $(this).css('--backgroundColorActive');
+//		if (!motSudoku.modalSwitch) {
+			$(this).css('background-color', backgroundColour);
+//		}
 		$("#mot_sudoku_modal_content").css({top: e.clientY - offsetY, left: e.clientX - offsetX, position: 'relative'});
 		$("#mot_sudoku_modal").show();
 	}
@@ -84,13 +85,13 @@ $(
 */
 motSudoku.resetClassic = function(puzzle) {
 	let systemColor = $(".panel").css('color');
-	for (var i = 0; i < 9; i++) {
-		for (var j = 0; j < 9; j++) {
+	for (let i = 0; i < 9; i++) {
+		for (let j = 0; j < 9; j++) {
 			if (puzzle[i][j]) {
-				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).html(puzzle[i][j]);
-				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).css('color', systemColor);
+				$("#mot_sudoku_c_cell_id_" + (i + 1) + (j + 1)).html(puzzle[i][j]);
+				$("#mot_sudoku_c_cell_id_" + (i + 1) + (j + 1)).css('color', systemColor);
 			} else {
-				$("#mot_sudoku_c_cell_id_" + (i +1) + (j + 1)).html('');
+				$("#mot_sudoku_c_cell_id_" + (i + 1) + (j + 1)).html('');
 			}
 			// since the 'motSudoku.preSelectedCells' array should still hold valid names we do not need to set it here, too
 		}
@@ -102,6 +103,13 @@ motSudoku.resetClassic = function(puzzle) {
 *
 */
 motSudoku.classicHelper = function() {
+	// Get the css variables
+	let fontSizeSmall = $("#mot_sudoku_c_cell_id_11").css('--fontSizeSmall');
+	let fontWeightNormal = $("#mot_sudoku_c_cell_id_11").css('--fontWeightNormal');
+	let textColorPlayer = $("#mot_sudoku_c_cell_id_11").css('--textColorPlayer');
+	let textAlignLeft = $("#mot_sudoku_c_cell_id_11").css('--textAlignLeft');
+	let verticalAlignTop = $("#mot_sudoku_c_cell_id_11").css('--verticalAlignTop');
+
 	let lines = new Array();
 	let columns = new Array();
 	let subGrids = new Array();
@@ -111,7 +119,7 @@ motSudoku.classicHelper = function() {
 	for (let i = 0; i <= 8; i++) {
 		lines[i] = new Array();
 		for (let j = 0; j <= 8; j++) {
-			content = this.puzzleLine[i][j] + this.playerLine[i][j];
+			content = this.puzzleLine[i][j] + this.playerLineC[i][j];
 			if (content > 0) {
 				lines[i].push(Number(content));
 			}
@@ -122,7 +130,7 @@ motSudoku.classicHelper = function() {
 	for (let j = 0; j <= 8; j++) {
 		columns[j] = new Array();
 		for (let i = 0; i <= 8; i++) {
-			content = this.puzzleLine[i][j] + this.playerLine[i][j];
+			content = this.puzzleLine[i][j] + this.playerLineC[i][j];
 			if (content > 0) {
 				columns[j].push(Number(content));
 			}
@@ -140,7 +148,7 @@ motSudoku.classicHelper = function() {
 				for (let j = 1; j <= 3; j++) {
 					line = ((3 * (l - 1)) + i) - 1;
 					row = ((3 * (r - 1)) + j) - 1;
-					content = this.puzzleLine[line][row] + this.playerLine[line][row];
+					content = this.puzzleLine[line][row] + this.playerLineC[line][row];
 					if (content > 0) {
 						subGrids[grid].push(Number(content));
 					}
@@ -160,7 +168,7 @@ motSudoku.classicHelper = function() {
 				for (let j = 1; j <= 3; j++) {
 					line = ((3 * (l - 1)) + i);
 					row = ((3 * (r - 1)) + j);
-					content = this.puzzleLine[line - 1][row - 1] + this.playerLine[line - 1][row - 1];
+					content = this.puzzleLine[line - 1][row - 1] + this.playerLineC[line - 1][row - 1];
 					if (content == 0) {
 						cellDigits = allDigits.filter(function(value) {
 							return !lines[line - 1].includes(value);
@@ -171,12 +179,6 @@ motSudoku.classicHelper = function() {
 						cellDigits = cellDigits.filter( function(value) {
 							return !subGrids[grid].includes(value);
 						});
-						// Get the css variables
-						let fontSizeSmall = $("#mot_sudoku_c_cell_id_" + line + row).css('--fontSizeSmall');
-						let fontWeightNormal = $("#mot_sudoku_c_cell_id_" + line + row).css('--fontWeightNormal');
-						let textColorPlayer = $("#mot_sudoku_c_cell_id_" + line + row).css('--textColorPlayer');
-						let textAlignLeft = $("#mot_sudoku_c_cell_id_" + line + row).css('--textAlignLeft');
-						let verticalAlignTop = $("#mot_sudoku_c_cell_id_" + line + row).css('--verticalAlignTop');
 						// Set the style
 						$("#mot_sudoku_c_cell_id_" + line + row).css({"font-size": fontSizeSmall, "font-weight": fontWeightNormal, "color": textColorPlayer, "text-align": textAlignLeft, "vertical-align": verticalAlignTop});
 						$("#mot_sudoku_c_cell_id_" + line + row).html(cellDigits.join(', '));
@@ -191,7 +193,7 @@ motSudoku.classicHelperMask = function() {
 	let content = '';
 	for (let x = 0; x <= 8; x++) {
 		for (let y = 0; y <= 8; y++) {
-			content = this.puzzleLine[x][y] + this.playerLine[x][y];
+			content = this.puzzleLine[x][y] + this.playerLineC[x][y];
 			if (content == 0) {
 				$("#mot_sudoku_c_cell_id_" + (x + 1) + (y + 1)).html('');
 			}

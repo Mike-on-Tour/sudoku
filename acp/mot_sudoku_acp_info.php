@@ -22,6 +22,11 @@ class mot_sudoku_acp_info
 					'auth'	=> 'ext_mot/sudoku && acl_a_manage_mot_sudoku',
 					'cat'	=> ['ACP_MOT_SUDOKU'],
 				],
+				'gamepacks'			=> [
+					'title'	=> 'ACP_MOT_SUDOKU_GAMEPACKS',
+					'auth'	=> 'ext_mot/sudoku && acl_a_manage_mot_sudoku',
+					'cat'	=> ['ACP_MOT_SUDOKU'],
+				],
 			],
 		];
 	}

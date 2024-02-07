@@ -4,7 +4,7 @@
 //	motSudoku.preSelectedCells = {{ MOT_SUDOKU_PRE_CELLS_ARR }};
 	motSudoku.puzzleId = {{ MOT_SUDOKU_NINJA_ID }};
 //	motSudoku.puzzleLine = {{ MOT_SUDOKU_PUZZLE_LINE }};
-//	motSudoku.playerLine = {{ MOT_SUDOKU_PLAYER_LINE }};
+//	motSudoku.playerLineN = {{ MOT_SUDOKU_PLAYER_LINE_N }};
 </script>
 
 <div class="samurai-container">
@@ -13,8 +13,10 @@
 			{{ MOT_SUDOKU_GAME_INFO }}
 		</div>
 
-		<div class="panel bg2">
-			Ninja Sudoku
+		<div class="panel bg2 centered-div">
+			<form id="mot_sudoku_ninja" method="post" enctype="application/x-www-form-urlencoded" action="{{ MOT_SUDOKU_NINJA_TAB }}">
+				Ninja Sudoku
+			</form>
 		</div>
 
 		<div class="panel bg2">
@@ -44,3 +46,5 @@
 		</div>
 	</div>
 </div>
+
+{% INCLUDEJS '@mot_sudoku/mot_sudoku_ninja.js' %}

@@ -9,12 +9,15 @@ services:
             - '@dbal.conn'
             - '@language'
             - '@log'
+            - '@pagination'
             - '@ext.manager'
             - '@request'
             - '@template'
             - '@user'
             - '%core.root_path%'
             - '%mot.sudoku.tables.mot_sudoku_classic%'
+            - '%mot.sudoku.tables.mot_sudoku_gamepacks%'
+            - '%mot.sudoku.tables.mot_sudoku_samurai%'
             - '%mot.sudoku.tables.mot_sudoku_stats%'
 
     mot.sudoku.mot_sudoku_main:
@@ -32,6 +35,7 @@ services:
             - '%core.root_path%'
             - '%mot.sudoku.tables.mot_sudoku_classic%'
             - '%mot.sudoku.tables.mot_sudoku_games%'
+            - '%mot.sudoku.tables.mot_sudoku_samurai%'
             - '%mot.sudoku.tables.mot_sudoku_stats%'
 
     mot.sudoku.listener:

@@ -27,7 +27,6 @@ class v_0_1_0 extends \phpbb\db\migration\migration
 			// Add the config variable we want to be able to set
 			['config.add', ['mot_sudoku_enable', true]],
 			['config.add', ['mot_sudoku_version_checker', true]],
-			['config.add', ['mot_sudoku_cache_enable', true]],
 			['config.add', ['mot_sudoku_title_enable', true]],
 			['config.add', ['mot_sudoku_helper_enable', true]],
 			['config.add', ['mot_sudoku_helper_cost', 50]],

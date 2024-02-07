@@ -13,11 +13,30 @@
 <div class="centered-text-div">
 	<button class="button options-button" id="game_reset_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ MOT_SUDOKU_GAME_RESET_TITLE }}">{{ lang('MOT_SUDOKU_GAME_RESET') }}</button>
 	<button class="button options-button" id="buy_digit_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ MOT_SUDOKU_BUY_NUMBER_TITLE }}">{{ lang('MOT_SUDOKU_BUY_NUMBER') }}</button>
-	<div class="centered-buttons">
-		<button class="button options-button" id="enable_helper_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ MOT_SUDOKU_HELPER_TITLE }}">{{ lang('MOT_SUDOKU_ENABLE_HELPER') }}</button>
 
-		<button class="button options-button" id="mask_helper_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ lang('MOT_SUDOKU_MASK_TITLE') }}">{{ lang('MOT_SUDOKU_MASK_HELPER') }}</button>
-	</div>
+	{% if MOT_SUDOKU_HELPER_ENABLED && MOT_SUDOKU_GAME_TYPE == 'c' %}
+		<div class="centered-buttons">
+			<button class="button options-button" id="enable_helper_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ MOT_SUDOKU_HELPER_TITLE }}">{{ lang('MOT_SUDOKU_ENABLE_HELPER') }}</button>
+
+			<button class="button options-button" id="mask_helper_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ lang('MOT_SUDOKU_MASK_TITLE') }}">{{ lang('MOT_SUDOKU_MASK_HELPER') }}</button>
+		</div>
+	{% endif %}
+
+	{% if MOT_SUDOKU_S_HELPER_ENABLED && MOT_SUDOKU_GAME_TYPE == 's' %}
+		<div class="centered-buttons">
+			<button class="button options-button" id="enable_helper_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ MOT_SUDOKU_HELPER_TITLE }}">{{ lang('MOT_SUDOKU_ENABLE_HELPER') }}</button>
+
+			<button class="button options-button" id="mask_helper_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ lang('MOT_SUDOKU_MASK_TITLE') }}">{{ lang('MOT_SUDOKU_MASK_HELPER') }}</button>
+		</div>
+	{% endif %}
+
+	{% if MOT_SUDOKU_N_HELPER_ENABLED && MOT_SUDOKU_GAME_TYPE == 'n' %}
+		<div class="centered-buttons">
+			<button class="button options-button" id="enable_helper_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ MOT_SUDOKU_HELPER_TITLE }}">{{ lang('MOT_SUDOKU_ENABLE_HELPER') }}</button>
+
+			<button class="button options-button" id="mask_helper_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ lang('MOT_SUDOKU_MASK_TITLE') }}">{{ lang('MOT_SUDOKU_MASK_HELPER') }}</button>
+		</div>
+	{% endif %}
 </div>
 
 <div class="centered-text-div">

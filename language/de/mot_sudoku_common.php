@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.3.2
+* @package MoT Sudoku v0.4.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -41,7 +41,7 @@ $lang = array_merge($lang, [
 										Du hast jetzt Gelegenheit, die korrekten Ziffern einzutragen.',
 
 	// Classic Sudoku
-	'MOT_SUDOKU_NO_PUZZLES'			=> 'Es existieren derzeit keine Classic-Sudoku-Rätsel, der Administrator muss erst ein Spielepaket importieren!',
+	'MOT_SUDOKU_NO_CLASSIC_PUZZLES'	=> 'Es existieren derzeit keine Classic-Sudoku-Rätsel, der Administrator muss erst ein Spielepaket importieren!',
 	'MOT_SUDOKU_HISTORY_TITLE'		=> 'Geschichte des Spiels',
 	'MOT_SUDOKU_HISTORY'			=> 'Die frühesten Vorläufer des Sudoku waren die lateinischen Quadrate des Schweizer Mathematikers Leonhard Euler, der solche bereits im 18.
 										Jahrhundert verfasste.<br><br>Anders als die modernen Sudoku-Rätsel waren diese noch nicht in Blöcke (Unterquadrate) unterteilt. Der
@@ -58,6 +58,7 @@ $lang = array_merge($lang, [
 										Ziffer einzufügen.',
 
 	// Samurai Sudoku
+	'MOT_SUDOKU_NO_SAMURAI_PUZZLES'	=> 'Es existieren derzeit keine Samurai-Sudoku-Rätsel, der Administrator muss erst ein Spielepaket importieren!',
 	'MOT_SUDOKU_SAMURAI_TEXT'		=> 'Wem die klassischen Sudoku-Rätsel zu einfach sind, kann sich an dem deutlich komplexeren Samurai-Sudoku versuchen. Hier überschneiden sich
 										5 klassische Rätsel jeweils an den Ecken. Du denkst, das ist das Gleiche wie 5 klassische Rätsel? Dann versuche es und zeige, dass du ein
 										wahrer Samurai bist!',
@@ -125,6 +126,7 @@ $lang = array_merge($lang, [
 	'MOT_SUDOKU_ERROR_TITLE'		=> 'Fehler!',
 	'MOT_SUDOKU_ERROR_RESET'		=> 'Du willst nicht wirklich ein Spiel zurücksetzen, in dem du noch keine Eintragung gemacht hast, oder?',
 	'MOT_SUDOKU_ERROR_BUY_NOW'		=> 'Willst du wirklich schon eine Ziffer kaufen, bevor du es selbst versucht hast?',
+	'MOT_SUDOKU_BUY_LAST_DIGIT'		=> 'Du willst nicht wirklich die letzte fehlende Ziffer kaufen, oder?',
 	'MOT_SUDOKU_ERROR_HELPER'		=> 'Willst du wirklich schon den Helfer benutzen, bevor du es selbst versucht hast?',
 	'MOT_SUDOKU_ERROR_LEVEL'		=> 'Du musst erst einen neuen Level auswählen!',
 ]);

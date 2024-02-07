@@ -1,6 +1,6 @@
 /**
 *
-* @package MoT Sudoku v0.3.1
+* @package MoT Sudoku v0.4.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -18,7 +18,7 @@
 * @return	none
 */
 motSudoku.selectTab = function(index) {
-	var elementId = "";
+	let elementId = "";
 
 	// Hide all boxes
 	$("div.inner").each(function() {
@@ -95,21 +95,20 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 		let textColorPlayer = $("#" + motSudoku.CellId).css('--textColorPlayer');
 		let textAlignCenter = $("#" + motSudoku.CellId).css('--textAlignCenter');
 		let verticalAlignMiddle = $("#" + motSudoku.CellId).css('--verticalAlignMiddle');
-		let borderColour = $("#" + motSudoku.CellId).css('--borderColour');
 
 		// Get this buttons ID
 		let thisElementId = $(this).attr('id');
 		// Extract the number from the ID
 		let number = thisElementId.substr(17, 1);
 
-		// Handle the type of button and
+		// Handle the type of button
 		if (number > 0) {
 			// Set the style for the selected cell and write the number into it
-			$("#" + motSudoku.CellId).css({"font-size": fontSizeBig, "font-weight": fontWeightNormal, "color": textColorPlayer, "text-align": textAlignCenter, "vertical-align": verticalAlignMiddle, 'border': borderColour});
+			$("#" + motSudoku.CellId).css({"font-size": fontSizeBig, "font-weight": fontWeightNormal, "color": textColorPlayer, "text-align": textAlignCenter, "vertical-align": verticalAlignMiddle, 'background-color': motSudoku.backgroundColour});
 			$("#" + motSudoku.CellId).html(number);
 		} else {
 			// Number was removed, reset style and delete it from cell
-			$("#" + motSudoku.CellId).css('border', borderColour);
+			$("#" + motSudoku.CellId).css('background-color', motSudoku.backgroundColour);
 			$("#" + motSudoku.CellId).html('');
 		}
 		$("#mot_sudoku_modal").hide();
@@ -127,35 +126,62 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 				cell:	motSudoku.CellId.substr(21),
 			},
 			function(result) {
+				motSudoku.digitNoBuy = result['digit_no_buy'];
 				motSudoku.gameEntryId = result['entry_id'];
 				$("#mot_sudoku_select_level_button_" + type).hide();
 				$("#mot_sudoku_current_points_" + type).html(result['points']);
-				// Update the array with player input
-				motSudoku.playerLine = result['player_line'];
-				if (result['filled']) {
-					if (result['solved']) {
-						// Puzzle is solved, first we set the puzzleInProgress to false
-						motSudoku.puzzleInProgress = false;
-						// Show the end of game message
-						phpbb.alert(motSudoku.congratulation, motSudoku.puzzleSolved + result['points'] + motSudoku.startNew);
-						setTimeout(function() {
-							$("#mot_sudoku_classic").trigger( "submit" );
-						}, 4000);
-					} else {
-						// Puzzle wasn't solved correctly, remove the incorrect digits from the grid
-						result['wrong_digits'].forEach(function(item) {
-							$("#mot_sudoku_c_cell_id_" + item.i + item.j).html('');
-						});
-						// Display a message to explain what happened
-						phpbb.alert(motSudoku.errorErr, motSudoku.errorSolution);
-					}
+				switch (type) {
+					case 'c':
+						// Update the array with player input
+						motSudoku.playerLineC = result['player_line'];
+						if (result['filled']) {
+							if (result['solved']) {
+								// Puzzle is solved, first we set the puzzleInProgress to false
+								motSudoku.puzzleInProgress = false;
+								// Show the end of game message
+								phpbb.alert(motSudoku.congratulation, motSudoku.puzzleSolved + result['points'] + motSudoku.startNew);
+								setTimeout(function() {
+									$("#mot_sudoku_classic").trigger( "submit" );
+								}, 5000);
+							} else {
+								// Puzzle wasn't solved correctly, remove the incorrect digits from the grid
+								result['wrong_digits'].forEach(function(item) {
+									$("#mot_sudoku_c_cell_id_" + item.i + item.j).html('');
+								});
+								// Display a message to explain what happened
+								phpbb.alert(motSudoku.errorErr, motSudoku.errorSolution);
+							}
+						}
+						break;
+
+					case 's':
+						// Update the array with player input
+						motSudoku.playerLineS = result['player_line'];
+						if (result['filled']) {
+							if (result['solved']) {
+								// Puzzle is solved, first we set the puzzleInProgress to false
+								motSudoku.puzzleInProgress = false;
+								// Show the end of game message
+								phpbb.alert(motSudoku.congratulation, motSudoku.puzzleSolved + result['points'] + motSudoku.startNew);
+								setTimeout(function() {
+									$("#mot_sudoku_samurai").trigger( "submit" );
+								}, 5000);
+							} else {
+								// Puzzle wasn't solved correctly, remove the incorrect digits from the grid
+								result['wrong_digits'].forEach(function(item) {
+									$("#mot_sudoku_S_cell_id_" + item.g + '_' + item.i + item.j).html('');
+								});
+								// Display a message to explain what happened
+								phpbb.alert(motSudoku.errorErr, motSudoku.errorSolution);
+							}
+						}
+						break;
 				}
 			}
 		);
 	} else {
 		// Puzzle is finished, do not do anything
-		let borderColour = $("#" + motSudoku.CellId).css('--borderColour');
-		$("#" + motSudoku.CellId).css('border', borderColour);
+		$("#" + motSudoku.CellId).css('background-color', motSudoku.backgroundColour);
 		$("#mot_sudoku_modal").hide();
 	}
 });
@@ -165,8 +191,7 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 *
 */
 $("#mot_sudoku_modal").on("click", function() {
-	let borderColour = $("#" + motSudoku.CellId).css('--borderColour');
-	$("#" + motSudoku.CellId).css('border', borderColour);
+	$("#" + motSudoku.CellId).css('background-color', motSudoku.backgroundColour);
 	$(this).hide();
 });
 
@@ -193,10 +218,12 @@ $("#game_reset_button_c, #game_reset_button_s, #game_reset_button_n").on("click"
 					switch (result['type']) {
 						case 'c':
 							motSudoku.resetClassic(result['puzzle_line']);
-							motSudoku.playerLine = result['player_line'];		// Reset the players input (no need to do it with the puzzle line since this hasn't changed
+							motSudoku.playerLineC = result['player_line'];		// Reset the players input (no need to do it with the puzzle line since this hasn't changed
 							break;
 
 						case 's':
+							motSudoku.resetSamurai(result['puzzle_line']);
+							motSudoku.playerLineS = result['player_line'];		// Reset the players input (no need to do it with the puzzle line since this hasn't changed
 							break;
 
 						case 'n':
@@ -216,47 +243,58 @@ $("#game_reset_button_c, #game_reset_button_s, #game_reset_button_n").on("click"
 */
 $("#buy_digit_button_c, #buy_digit_button_s, #buy_digit_button_n").on("click", function() {
 	if (motSudoku.puzzleInProgress) {
-		// Ajax call
-		$.post(
-			motSudoku.ajaxBuyDigit,
-			{
-				entry:	motSudoku.gameEntryId,
-			},
-			function(result) {
-				if (result['success']) {
-					// set the proper values
-					motSudoku.reset = result['reset'];
-					$("#mot_sudoku_negative_points").html(result['negative_points']);
+		// If somebody tries to buy the last missing digit display an error message
+		if (motSudoku.digitNoBuy) {
+			phpbb.alert(motSudoku.errorErr, motSudoku.errorBuyLastDigit);
+		} else {
+			// Ajax call
+			$.post(
+				motSudoku.ajaxBuyDigit,
+				{
+					entry:	motSudoku.gameEntryId,
+				},
+				function(result) {
+					if (result['success']) {
+						// set the proper values
+						motSudoku.reset = result['reset'];
+						$("#mot_sudoku_negative_points").html(result['negative_points']);
 
-					// restore the puzzle line according to the game type
-					switch (result['type']) {
-						case 'c':
-							// Get the proper css variables
-							let textColorBuy = $("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css('--textColorBuy');
-							let fontWeightBold = $("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css('--fontWeightBold');
-							let fontSizeBig = $("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css('--fontSizeBig');
-							let textAlignCenter = $("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css('--textAlignCenter');
-							let verticalAlignMiddle = $("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css('--verticalAlignMiddle');
-							// Set the new values
-							$("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).html(result['digit']);
-							$("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css({"color": textColorBuy, "font-weight": fontWeightBold, "font-size": fontSizeBig, "text-align": textAlignCenter, "vertical-align": verticalAlignMiddle});
-							motSudoku.preSelectedCells.push("mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1));
-							motSudoku.puzzleLine = result['puzzle_line'];		// Update the stored puzzle
-							break;
+						// Get the proper css variables
+						let textColorBuy = $("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css('--textColorBuy');
+						let fontWeightBold = $("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css('--fontWeightBold');
+						let fontSizeBig = $("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css('--fontSizeBig');
+						let textAlignCenter = $("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css('--textAlignCenter');
+						let verticalAlignMiddle = $("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css('--verticalAlignMiddle');
 
-						case 's':
-							break;
+						// restore the puzzle line according to the game type
+						switch (result['type']) {
+							case 'c':
+								// Set the new values
+								$("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).html(result['digit']);
+								$("#mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1)).css({"color": textColorBuy, "font-weight": fontWeightBold, "font-size": fontSizeBig, "text-align": textAlignCenter, "vertical-align": verticalAlignMiddle});
+								motSudoku.preSelectedCells.push("mot_sudoku_c_cell_id_" + (result['i'] + 1) + (result['j'] + 1));
+								motSudoku.puzzleLine = result['puzzle_line'];		// Update the stored puzzle
+								break;
 
-						case 'n':
-							break;
+							case 's':
+								// Set the new values
+								$("#mot_sudoku_s_cell_id_" + (result['g'] + 1) + "_" + (result['i'] + 1) + (result['j'] + 1)).html(result['digit']);
+								$("#mot_sudoku_s_cell_id_" + (result['g'] + 1) + "_" + (result['i'] + 1) + (result['j'] + 1)).css({"color": textColorBuy, "font-weight": fontWeightBold, "font-size": fontSizeBig, "text-align": textAlignCenter, "vertical-align": verticalAlignMiddle});
+								motSudoku.preSelectedCells.push("mot_sudoku_s_cell_id_" + (result['g'] + 1) + "_" + (result['i'] + 1) + (result['j'] + 1));
+								motSudoku.puzzleLine = result['puzzle_line'];		// Update the stored puzzle
+								break;
+
+							case 'n':
+								break;
+						}
+						$("#mot_sudoku_gainable_points_" + result['type']).html(result['gainable_points']);
+						$("#mot_sudoku_negative_points_" + result['type']).html(result['negative_points']);
+					} else {
+						phpbb.alert(motSudoku.errorErr, motSudoku.errorBuyDigit);
 					}
-					$("#mot_sudoku_gainable_points_" + result['type']).html(result['gainable_points']);
-					$("#mot_sudoku_negative_points_" + result['type']).html(result['negative_points']);
-				} else {
-					phpbb.alert(motSudoku.errorErr, motSudoku.errorBuyDigit);
 				}
-			}
-		);
+			);
+		}
 	}
 });
 
@@ -306,7 +344,19 @@ $("#enable_helper_button_c, #enable_helper_button_s, #enable_helper_button_n").o
 $("#mask_helper_button_c, #mask_helper_button_s, #mask_helper_button_n").on("click", function() {
 	if (motSudoku.puzzleInProgress) {
 		let type = $(this).attr('id').substr(19, 1);
-		motSudoku.callTypeMaskHelper(type);
+		switch (type) {
+		case 'c':
+			motSudoku.classicHelperMask();
+			break;
+
+		case 's':
+			motSudoku.samuraiHelperMask();
+			break;
+
+		case 'n':
+			break;
+		}
+//		motSudoku.callTypeMaskHelper(type);
 	}
 });
 
@@ -315,7 +365,7 @@ $("#mask_helper_button_c, #mask_helper_button_s, #mask_helper_button_n").on("cli
 *
 */
 $("input[name='mot_sudoku_modal_switch']").click(function() {
-	var switchPos = 0;
+	let switchPos = 0;
 
 	// Check radio buttons
 	if ($(this).attr('type') == 'radio') {
@@ -363,25 +413,32 @@ $("#mot_sudoku_select_level_button_c, #mot_sudoku_select_level_button_s, #mot_su
 				// Set the new entry_id
 				motSudoku.gameEntryId = result['entry_id'];
 				// Enter the additional digits into the displayed grid according to the game type
-
 				switch (result['type']) {
 					case 'c':
 						// Get the proper css variables first, and since these are equal for all cells we do it just once to improve performance
-						let textColorBuy = $("#mot_sudoku_c_cell_id_11").css('--textColorBuy');
+						let textColorBuyC = $("#mot_sudoku_c_cell_id_11").css('--textColorBuy');
 						result['new_digits'].forEach(function(item) {
 							$("#mot_sudoku_c_cell_id_" + (item.i + 1) + (item.j + 1)).html(item.digit);
-							$("#mot_sudoku_c_cell_id_" + (item.i + 1) + (item.j + 1)).css("color", textColorBuy);
-							motSudoku.preSelectedCells.push("#mot_sudoku_c_cell_id_" + (item.i + 1) + (item.j + 1));
-							motSudoku.puzzleLine = result['puzzle_line'];		// Update the stored puzzle
+							$("#mot_sudoku_c_cell_id_" + (item.i + 1) + (item.j + 1)).css("color", textColorBuyC);
+							motSudoku.preSelectedCells.push("mot_sudoku_c_cell_id_" + (item.i + 1) + (item.j + 1));
 						});
 						break;
 
 					case 's':
+						// Get the proper css variables first, and since these are equal for all cells we do it just once to improve performance
+						let textColorBuyS = $("#mot_sudoku_s_cell_id_1_11").css('--textColorBuy');
+						result['new_digits'].forEach(function(item) {
+							$("#mot_sudoku_s_cell_id_" + (item.g + 1) + '_' + (item.i + 1) + (item.j + 1)).html(item.digit);
+							$("#mot_sudoku_s_cell_id_" + (item.g + 1) + '_' + (item.i + 1) + (item.j + 1)).css("color", textColorBuyS);
+							motSudoku.preSelectedCells.push("mot_sudoku_s_cell_id_" + (item.g + 1) + '_' + (item.i + 1) + (item.j + 1));
+						});
 						break;
 
 					case 'n':
 						break;
 				}
+
+				motSudoku.puzzleLine = result['puzzle_line'];		// Update the stored puzzle
 				$("#mot_sudoku_gainable_points_" + result['type']).html(result['gainable_points']);
 				$("#mot_sudoku_negative_points_" + result['type']).html(result['negative_points']);
 				$("#mot_sudoku_select_level_button_" + result['type']).hide();
@@ -403,24 +460,29 @@ motSudoku.callTypeHelper = function(type) {
 			break;
 
 		case 's':
-			break;
+			let tempPuzzle = new Array();
+			for (let g = 0; g < 5; g++) {
+				tempPuzzle[g] = new Array();
+				for (let i = 0; i < 9; i++) {
+					tempPuzzle[g][i] = new Array();
+					for (let j = 0; j < 9; j++) {
+						tempPuzzle[g][i].push(this.puzzleLine[g][i][j]);
+					}
+				}
+			}
 
-		case 'n':
-			break;
-	}
-}
+			let tempPlayer = new Array();
+			for (let g = 0; g < 5; g++) {
+				tempPlayer[g] = new Array();
+				for (let i = 0; i < 9; i++) {
+					tempPlayer[g][i] = new Array();
+					for (let j = 0; j < 9; j++) {
+						tempPlayer[g][i].push(this.playerLineS[g][i][j]);
+					}
+				}
+			}
 
-/*
-* Call the correct function for each game type helper mask
-*
-*/
-motSudoku.callTypeMaskHelper = function(type) {
-	switch (type) {
-		case 'c':
-			motSudoku.classicHelperMask();
-			break;
-
-		case 's':
+			this.samuraiHelper(tempPuzzle, tempPlayer);
 			break;
 
 		case 'n':

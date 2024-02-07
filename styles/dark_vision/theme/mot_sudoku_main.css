@@ -10,6 +10,49 @@
 * General style settings
 */
 
+.classic-table {
+	border-collapse: collapse;
+	border: 2px solid grey;
+}
+
+.samurai-table {
+	border-collapse: collapse;
+}
+
+.classic-table td, .samurai-table td {
+	border: 2px solid grey;
+	border-collapse: collapse;
+}
+
+.sudoku-sub-table td {
+	width: 40px;
+	height: 40px;
+	cursor: default;
+
+	--textAlignCenter: center;
+	--textAlignLeft: left;
+	text-align: var(--textAlignCenter);
+
+	--verticalAlignMiddle: middle;
+	--verticalAlignTop: top;
+	vertical-align: var(--verticalAlignMiddle);
+
+	--fontSizeBig: 2.4em;
+	--fontSizeSmall: 1em;
+	font-size: var(--fontSizeBig);
+
+	--fontWeightBold: bold;
+	--fontWeightNormal: normal;
+	font-weight: var(--fontWeightBold);
+
+	border: 1px solid grey;
+
+	--textColorPlayer: blue;
+	--textColorBuy: grey;
+
+	--backgroundColorActive: yellow;
+}
+
 .centered-div {
 	display: flex;
 	justify-content: center;
@@ -65,45 +108,6 @@
 	padding-left: 10px;
 }
 
-.classic-table {
-	border-collapse: collapse;
-	border: solid grey;
-}
-
-.classic-table td {
-	border: 2px solid grey;
-	border-collapse: collapse;
-}
-
-.classic-sub-table td {
-	width: 40px;
-	height: 40px;
-	cursor: default;
-
-	--textAlignCenter: center;
-	--textAlignLeft: left;
-	text-align: var(--textAlignCenter);
-
-	--verticalAlignMiddle: middle;
-	--verticalAlignTop: top;
-	vertical-align: var(--verticalAlignMiddle);
-
-	--fontSizeBig: 2.4em;
-	--fontSizeSmall: 1em;
-	font-size: var(--fontSizeBig);
-
-	--fontWeightBold: bold;
-	--fontWeightNormal: normal;
-	font-weight: var(--fontWeightBold);
-
-	--borderColour: 1px solid grey;
-	--borderColourSelect: 1px solid blue;
-	border: var(--borderColour);
-
-	--textColorPlayer: blue;
-	--textColorBuy: grey;
-}
-
 /*
 * Everything for mobile devices
 */
@@ -126,7 +130,7 @@
 		margin-right: 0px;
 	}
 
-	.classic-sub-table td {
+	.sudoku-sub-table td {
 		width: 35px;
 		height: 35px;
 	}
@@ -175,28 +179,8 @@
 	width: 30%;
 }
 
-.samurai-table {
-	border-collapse: collapse;
-}
-
-.samurai-table td {
-	border: 2px solid grey;
-	border-collapse: collapse;
-}
-
 .samurai-table .samurai-empty-td {
 	border: none;
-}
-
-.samurai-sub-table td {
-	width: 35px;
-	height: 35px;
-	border: 1px solid grey;
-	text-align: center;
-	vertical-align: middle;
-	font-size: 2.4em;
-	font-weight: bold;
-	cursor: default;
 }
 
 /*
@@ -293,6 +277,10 @@
 
 .mot-sudoku-modal-button {
 	width: 1.2em;
+}
+
+.mot-sudoku-modal-button:hover {
+	background-color: #cccfbc47;
 }
 
 .mot-sudoku-modal-button span {

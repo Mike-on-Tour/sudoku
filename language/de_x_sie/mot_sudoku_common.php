@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.3.2
+* @package MoT Sudoku v0.4.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -31,7 +31,7 @@ $lang = array_merge($lang, [
 	'MOT_SUDOKU_EASY'				=> 'leicht',
 	'MOT_SUDOKU_MEDIUM'				=> 'mittel',
 	'MOT_SUDOKU_HARD'				=> 'schwer',
-	'MOT_SUDOKU_GAME_INFO'			=> 'Spielepaket:<strong>%1$s</strong>&nbsp;||&nbsp;Spiel:<strong>%2$s</strong>&nbsp;||&nbsp;Level:<strong>%3$s</strong>',
+	'MOT_SUDOKU_GAME_INFO'			=> 'Spielepaket:&nbsp;<strong>%1$s</strong>&nbsp;||&nbsp;Spiel:&nbsp;<strong>%2$s</strong>&nbsp;||&nbsp;Schwierigkeitsgrad:&nbsp;<strong>%3$s</strong>',
 	'MOT_SUDOKU_CONGRATULATIONS'	=> 'Gratulation',
 	'MOT_SUDOKU_PUZZLE_SOLVED'		=> '<strong>Sie haben das Rätsel korrekt gelöst!</strong><br>
 										Ihre erreichte Punktzahl in diesem Spiel beträgt: ',
@@ -41,7 +41,7 @@ $lang = array_merge($lang, [
 										Sie haben jetzt Gelegenheit, die korrekten Ziffern einzutragen.',
 
 	// Classic Sudoku
-	'MOT_SUDOKU_NO_PUZZLES'			=> 'Es existieren derzeit keine Classic-Sudoku-Rätsel, der Administrator muss erst ein Spielepaket importieren!',
+	'MOT_SUDOKU_NO_CLASSIC_PUZZLES'	=> 'Es existieren derzeit keine Classic-Sudoku-Rätsel, der Administrator muss erst ein Spielepaket importieren!',
 	'MOT_SUDOKU_HISTORY_TITLE'		=> 'Geschichte des Spiels',
 	'MOT_SUDOKU_HISTORY'			=> 'Die frühesten Vorläufer des Sudoku waren die lateinischen Quadrate des Schweizer Mathematikers Leonhard Euler, der solche bereits im 18.
 										Jahrhundert verfasste.<br><br>Anders als die modernen Sudoku-Rätsel waren diese noch nicht in Blöcke (Unterquadrate) unterteilt. Der
@@ -58,6 +58,7 @@ $lang = array_merge($lang, [
 										Ziffer einzufügen.',
 
 	// Samurai Sudoku
+	'MOT_SUDOKU_NO_SAMURAI_PUZZLES'	=> 'Es existieren derzeit keine Samurai-Sudoku-Rätsel, der Administrator muss erst ein Spielepaket importieren!',
 	'MOT_SUDOKU_SAMURAI_TEXT'		=> 'Wem die klassischen Sudoku-Rätsel zu einfach sind, kann sich an dem deutlich komplexeren Samurai-Sudoku versuchen. Hier überschneiden sich
 										5 klassische Rätsel jeweils an den Ecken. Sie denken, das ist das Gleiche wie 5 klassische Rätsel? Dann versuchen Sie es und zeigen, dass Sie ein
 										wahrer Samurai sind!',
@@ -125,6 +126,7 @@ $lang = array_merge($lang, [
 	'MOT_SUDOKU_ERROR_TITLE'		=> 'Fehler!',
 	'MOT_SUDOKU_ERROR_RESET'		=> 'Sie wollen nicht wirklich ein Spiel zurücksetzen, in dem Sie noch keine Eintragung gemacht haben, oder?',
 	'MOT_SUDOKU_ERROR_BUY_NOW'		=> 'Wollen Sie wirklich schon eine Ziffer kaufen, bevor Sie es selbst versucht haben?',
+	'MOT_SUDOKU_BUY_LAST_DIGIT'		=> 'Sie wollen nicht wirklich die letzte fehlende Ziffer kaufen, oder?',
 	'MOT_SUDOKU_ERROR_HELPER'		=> 'Wollen Sie wirklich schon den Helfer benutzen, bevor Sie es selbst versucht haben?',
 	'MOT_SUDOKU_ERROR_LEVEL'		=> 'Sie müssen erst einen neuen Level auswählen!',
 ]);

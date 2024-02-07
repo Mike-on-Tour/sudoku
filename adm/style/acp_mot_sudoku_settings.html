@@ -3,7 +3,7 @@
 {% INCLUDEJS '@mot_sudoku/mot_sudoku_acp.js' %}
 {% set switch_type = TOGGLECTRL_TYPE ?? 'toggle' %}
 
-<h1>{{ lang('ACP_MOT_SUDOKU_CONFIGURATION') }}</h1>
+<h1>{{ lang('ACP_MOT_SUDOKU') ~ ' - ' ~ lang('ACP_MOT_SUDOKU_SETTINGS') }}</h1>
 
 {% if ACP_MOT_SUDOKU_VERSION_CHECKER %}
 	<h2>{{ lang('ACP_MOT_SUDOKU_VERSION_CHECK') }}</h2>
@@ -53,17 +53,6 @@
 			<dd>{{ _self.switch('mot_sudoku_enable', ACP_MOT_SUDOKU_ENABLE, switch_type) }}</dd>
 		</dl>
 
-{#		<dl>
-			<dt><label for="mot_sudoku_cache_enable">{{ lang('ACP_MOT_SUDOKU_CACHE_ENABLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_CACHE_ENABLE_EXPL') }}</p></dt>
-			<dd>{{ _self.switch('mot_sudoku_cache_enable', ACP_MOT_SUDOKU_CACHE_ENABLE, switch_type) }}</dd>
-		</dl>
-		<dl>
-			<dt></dt>
-			<dd>
-				<input class="dt-button button1" type="submit" id="mot_sudoku_cache_purge" name="mot_sudoku_cache_purge" formaction="{{ U_ACTION_CACHE_PURGE }}" value="{{ lang('ACP_MOT_SUDOKU_PURGE_CACHE') }}">
-			</dd>
-		</dl>
-#}
 		<dl>
 			<dt><label for="mot_sudoku_title_enable">{{ lang('ACP_MOT_SUDOKU_PUZZLE_TITLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_PUZZLE_TITLE_EXPL') }}</p></dt>
 			<dd>{{ _self.switch('mot_sudoku_title_enable', ACP_MOT_SUDOKU_TITLE_ENABLE, switch_type) }}</dd>
@@ -314,21 +303,6 @@
 </form>
 
 	<br>
-
-	<hr>
-
-	<fieldset>
-		<form id="acp_mot_sudoku_file_upload" method="post" action="{{ U_ACTION_IMPORT_GAME_PACK }}" enctype="multipart/form-data">
-			<dl>
-				<dt><label for="acp_mot_sudoku_file">{{ lang('ACP_MOT_SUDOKU_UPLOAD_XML') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_UPLOAD_XML_EXP') }}</p></dt>
-				<dd>
-					<input type="file" id="acp_mot_sudoku_file" name="acp_mot_sudoku_file" class="inputbox autowidth" accept=".xml">&nbsp;
-					<input class="dt-button button1" type="submit" id="mot_sudoku_upload_file" name="mot_sudoku_upload_file" value="{{ lang('ACP_MOT_SUDOKU_UPLOAD') }}">
-				</dd>
-			</dl>
-			{{ S_FORM_TOKEN }}
-		</form>
-	</fieldset>
 
 	<hr>
 
