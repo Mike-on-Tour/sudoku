@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.3.0
+* @package MoT Sudoku v0.4.1
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -77,6 +77,16 @@ class mot_sudoku_main
 		$this->md_manager = $this->phpbb_extension_manager->create_extension_metadata_manager('mot/sudoku');
 		$this->ext_data = $this->md_manager->get_metadata();
 
+		$this->level_array = [
+			''			=> 1,
+			'classic'	=> 1,
+			'samurai'	=> 5,
+			'ninja'		=> 9,
+			'c'			=> 1,
+			's'			=> 5,
+			'n'			=> 9,
+		];
+
 		$this->classic_array = [
 			[0,0,0,0,0,0,0,0,0],
 			[0,0,0,0,0,0,0,0,0],
@@ -104,6 +114,8 @@ class mot_sudoku_main
 			],
 			$this->classic_array, $this->classic_array,
 		];
+
+		$this->ninja_array = [];
 	}
 
 	public function handle()
@@ -430,8 +442,8 @@ $puzzle_id = 14;
 			$level_select .= '<option value="' . $i . '"' . $selected . '>' . $this->language->lang('MOT_SUDOKU_LEVEL_' . $i) . '</option>';
 			$this->template->assign_block_vars('levels', [
 				'NAME'		=> $this->language->lang('MOT_SUDOKU_LEVEL_' . $i),
-				'DIGIT'		=> $i,
-				'DEDUCT'	=> $i * $this->config['mot_sudoku_level_cost'],
+				'DIGIT'		=> $this->level_array[$tab] * $i,
+				'DEDUCT'	=> $this->level_array[$tab] * $i * $this->config['mot_sudoku_level_cost'],
 			]);
 		}
 
@@ -469,7 +481,8 @@ $puzzle_id = 14;
 			'MOT_SUDOKU_GAME_HELPER'		=> $game_helper,
 			'MOT_SUDOKU_GAME_LEVEL'			=> $game_level,
 			'MOT_SUDOKU_ENTRY_ID'			=> $entry_id,						// SUDOKU_PLAYERS_TABLE entry_id if loading an unsolved puzzle, 0 if new puzzle
-			'MOT_SUDOKU_NEGATIVE_POINTS'	=> -1 * (($game_reset * $this->config['mot_sudoku_reset_cost']) + ($game_buy_digit * $this->config['mot_sudoku_number_cost']) + ($game_helper * $helper_cost) + ($game_level * $this->config['mot_sudoku_level_cost'])),
+			'MOT_SUDOKU_NEGATIVE_POINTS'	=> -1 * (($game_reset * $this->config['mot_sudoku_reset_cost']) + ($game_buy_digit * $this->config['mot_sudoku_number_cost']) +
+												($game_helper * $helper_cost) + ($game_level * $this->level_array[$tab] * $this->config['mot_sudoku_level_cost'])),
 		]);
 
 		// Add breadcrumbs link
@@ -728,7 +741,7 @@ fclose ($handle);*/
 							$sql_arr['points'] -= (($sql_arr['reset'] * $this->config['mot_sudoku_reset_cost']) +
 													($sql_arr['buy_digit'] * $this->config['mot_sudoku_number_cost']) +
 													($sql_arr['helper'] * $this->config['mot_sudoku_helper_cost']) +
-													($sql_arr['level'] * $this->config['mot_sudoku_level_cost']));
+													($sql_arr['level'] * $this->level_array[$sudoku_type] * $this->config['mot_sudoku_level_cost']));
 
 							// Now we can store this solved game to the SUDOKU_STATS_TABLE
 							$sql = 'SELECT * FROM ' . $this->sudoku_stats_table . '
@@ -824,8 +837,8 @@ fclose ($handle);*/
 							// To get the really gained points we have to deduct the negative points
 							$sql_arr['points'] -= (($sql_arr['reset'] * $this->config['mot_sudoku_reset_cost']) +
 													($sql_arr['buy_digit'] * $this->config['mot_sudoku_number_cost']) +
-													($sql_arr['helper'] * $this->config['mot_sudoku_helper_cost']) +
-													($sql_arr['level'] * $this->config['mot_sudoku_level_cost']));
+													($sql_arr['helper'] * $this->config['mot_sudoku_helper_samurai_cost']) +
+													($sql_arr['level'] * $this->level_array[$sudoku_type] * $this->config['mot_sudoku_level_cost']));
 
 							// Now we can store this solved game to the SUDOKU_STATS_TABLE
 							$sql = 'SELECT * FROM ' . $this->sudoku_stats_table . '
@@ -967,7 +980,7 @@ fclose ($handle);*/
 						'player_line'		=> $player_line,
 						'reset'				=> $sql_arr['reset'],
 						'points'			=> $sql_arr['points'],
-						'negative_points'	=> -1 * (($sql_arr['reset'] * $this->config['mot_sudoku_reset_cost']) + ($sql_arr['buy_digit'] * $this->config['mot_sudoku_number_cost']) + ($sql_arr['helper'] * $helper_cost) + ($sql_arr['level'] * $this->config['mot_sudoku_level_cost'])),
+						'negative_points'	=> -1 * (($sql_arr['reset'] * $this->config['mot_sudoku_reset_cost']) + ($sql_arr['buy_digit'] * $this->config['mot_sudoku_number_cost']) + ($sql_arr['helper'] * $helper_cost) + ($sql_arr['level'] * $this->level_array[$sql_arr['game_type']] * $this->config['mot_sudoku_level_cost'])),
 					];
 				}
 			}
@@ -1085,7 +1098,7 @@ fclose ($handle);*/
 						'digit'				=> $digit,
 						'puzzle_line'		=> $puzzle_line,
 						'gainable_points'	=> $empty_cells[0] * $this->config['mot_sudoku_cell_points'],
-						'negative_points'	=> -1 * (($sql_arr['reset'] * $this->config['mot_sudoku_reset_cost']) + ($sql_arr['buy_digit'] * $this->config['mot_sudoku_number_cost']) + ($sql_arr['helper'] * $helper_cost) + ($sql_arr['level'] * $this->config['mot_sudoku_level_cost'])),
+						'negative_points'	=> -1 * (($sql_arr['reset'] * $this->config['mot_sudoku_reset_cost']) + ($sql_arr['buy_digit'] * $this->config['mot_sudoku_number_cost']) + ($sql_arr['helper'] * $helper_cost) + ($sql_arr['level'] * $this->level_array[$sql_arr['game_type']] * $this->config['mot_sudoku_level_cost'])),
 					];
 				}
 			}
@@ -1150,7 +1163,7 @@ fclose ($handle);*/
 				$result = [
 					'success'			=> true,
 					'type'				=> $sql_arr['game_type'],
-					'negative_points'	=> -1 * (($sql_arr['reset'] * $this->config['mot_sudoku_reset_cost']) + ($sql_arr['buy_digit'] * $this->config['mot_sudoku_number_cost']) + ($sql_arr['helper'] * $helper_cost) + ($sql_arr['level'] * $this->config['mot_sudoku_level_cost'])),
+					'negative_points'	=> -1 * (($sql_arr['reset'] * $this->config['mot_sudoku_reset_cost']) + ($sql_arr['buy_digit'] * $this->config['mot_sudoku_number_cost']) + ($sql_arr['helper'] * $helper_cost) + ($sql_arr['level'] * $this->level_array[$sql_arr['game_type']] * $this->config['mot_sudoku_level_cost'])),
 				];
 			}
 
@@ -1231,27 +1244,29 @@ fclose ($handle);*/
 						$new_digits_arr = [];
 						$puzzle_line = json_decode($samurai_puzzle['puzzle_line']);
 						$solution_line = json_decode($samurai_puzzle['solution_line']);
-						for ($l = 0; $l < $sudoku_level; $l++)
+						for ($g = 0; $g < 5; $g++)
 						{
-							// Get random numbers for grid, line and column
-							do
+							for ($l = 0; $l < $sudoku_level; $l++)
 							{
-								$g = rand(0, 4);
-								$i = rand(0, 8);
-								$j = rand(0, 8);
-							} while (!($puzzle_line[$g][$i][$j] == 0));
+								// Get random numbers for grid, line and column
+								do
+								{
+									$i = rand(0, 8);
+									$j = rand(0, 8);
+								} while (!($puzzle_line[$g][$i][$j] == 0));
 
-							// We found a matching cell, now get its digit from the solution
-							$digit = $solution_line[$g][$i][$j];
-							// and write it into the puzzle array
-							$puzzle_line[$g][$i][$j] = $digit;
-							// and into the array we will pass back to fill the grid
-							$new_digits_arr[] = [
-								'g'			=> $g,
-								'i'			=> $i,
-								'j'			=> $j,
-								'digit'		=> $digit,
-							];
+								// We found a matching cell, now get its digit from the solution
+								$digit = $solution_line[$g][$i][$j];
+								// and write it into the puzzle array
+								$puzzle_line[$g][$i][$j] = $digit;
+								// and into the array we will pass back to fill the grid
+								$new_digits_arr[] = [
+									'g'			=> $g,
+									'i'			=> $i,
+									'j'			=> $j,
+									'digit'		=> $digit,
+								];
+							}
 						}
 						// Get the new count of empty cells
 						$empty_cells = $this->array_count_recursive($puzzle_line);
@@ -1283,7 +1298,7 @@ fclose ($handle);*/
 					'new_digits'		=> $new_digits_arr,
 					'puzzle_line'		=> $puzzle_line,
 					'gainable_points'	=> $empty_cells[0] * $this->config['mot_sudoku_cell_points'],
-					'negative_points'	=> -1 * ($sql_arr['level'] * $this->config['mot_sudoku_level_cost']),
+					'negative_points'	=> -1 * ($sql_arr['level'] * $this->level_array[$sudoku_type] * $this->config['mot_sudoku_level_cost']),
 				];
 
 				return new \Symfony\Component\HttpFoundation\JsonResponse($result);

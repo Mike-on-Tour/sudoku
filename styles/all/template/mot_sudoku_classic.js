@@ -1,6 +1,6 @@
 /**
 *
-* @package MoT Sudoku v0.4.0
+* @package MoT Sudoku v0.4.1
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -51,28 +51,26 @@ $(
 		let offsetX = 0;
 		let offsetY = 0;
 
-		if ($(window).width() >= 390) {
+		if ($(window).width() >= motSudoku.screenWidth) {
 			offsetX = (columnNumber * 40) - (10/columnNumber);
 			if (motSudoku.modalSwitch) {
-				offsetY = 65;
+				offsetY = motSudoku.normalOffsetY;
 			} else {
-				offsetY = (lineNumber * 40) + 50;
+				offsetY = (lineNumber * 40) + motSudoku.normalOffsetYAbove;
 			}
 		} else {
 			offsetX = columnNumber * 20;
 			if (motSudoku.modalSwitch) {
-				offsetY = 95;
+				offsetY = motSudoku.smallOffsetY;
 			} else {
-				offsetY = (lineNumber * 37) + 70;
+				offsetY = (lineNumber * 37) + motSudoku.smallOffsetYAbove;
 			}
 		}
 
 		motSudoku.CellId = thisElementId;
 		motSudoku.backgroundColour = $(this).css('background-color');
 		let backgroundColour = $(this).css('--backgroundColorActive');
-//		if (!motSudoku.modalSwitch) {
-			$(this).css('background-color', backgroundColour);
-//		}
+		$(this).css('background-color', backgroundColour);
 		$("#mot_sudoku_modal_content").css({top: e.clientY - offsetY, left: e.clientX - offsetX, position: 'relative'});
 		$("#mot_sudoku_modal").show();
 	}

@@ -4,6 +4,23 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.1] - 2024-02-07
+
+### Added
+
+### Changed
+-	The vertical distance of the digit selection window from the mouse pointer in `styles/all/template/mot_sudoku_classic.js` and `styles/all/template/mot_sudoku_samurai.js`
+	by 15 pixel to the upper screen border
+-	The number of additional digits gained with a new level for the Samurai and Ninja puzzles
+-	The modal window holding the digit buttons is double-spaced at a screen width smaller than 700 pixels
+-	The div holding the Samurai puzzle has aminimum width of 895 pixels and becomes scrollable if the screen width is smaller than that
+
+### Fixed
+-	A bug which prevented the removing of wrong digits from the grid due to an inadvertently used upper-case letter in the cell identifier in `styles/all/template/mot_sudoku_main.js`
+
+### Removed
+  
+  
 ## [0.4.0] - 2024-02-06
 
 ### Added

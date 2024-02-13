@@ -1,6 +1,6 @@
 /**
 *
-* @package MoT Sudoku v0.4.0
+* @package MoT Sudoku v0.4.1
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -48,6 +48,12 @@ motSudoku.selectTab(motSudoku.tab);
 motSudoku.newLevel = motSudoku.gameLevel;
 
 motSudoku.puzzleInProgress = true;
+
+motSudoku.screenWidth = 700;
+motSudoku.normalOffsetY = 80;
+motSudoku.smallOffsetY = 110;
+motSudoku.normalOffsetYAbove = 50;
+motSudoku.smallOffsetYAbove = 70;
 
 /*
 * Hide the level submit button if this is a stored game
@@ -169,7 +175,7 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 							} else {
 								// Puzzle wasn't solved correctly, remove the incorrect digits from the grid
 								result['wrong_digits'].forEach(function(item) {
-									$("#mot_sudoku_S_cell_id_" + item.g + '_' + item.i + item.j).html('');
+									$("#mot_sudoku_s_cell_id_" + item.g + "_" + item.i + '' + item.j).html('');
 								});
 								// Display a message to explain what happened
 								phpbb.alert(motSudoku.errorErr, motSudoku.errorSolution);
