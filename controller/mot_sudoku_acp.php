@@ -1,7 +1,7 @@
 <?php
 /*
 *
-* @package MoT Sudoku v0.4.0
+* @package MoT Sudoku v0.5.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -50,6 +50,9 @@ class mot_sudoku_acp
 	/** @var string mot.sudoku.tables.mot_sudoku_gamepacks */
 	protected $mot_sudoku_gamepacks_table;
 
+	/** @var string mot.sudoku.tables.mot_sudoku_ninja */
+	protected $mot_sudoku_ninja_table;
+
 	/** @var string mot.sudoku.tables.mot_sudoku_samurai */
 	protected $mot_sudoku_samurai_table;
 
@@ -62,7 +65,7 @@ class mot_sudoku_acp
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\language\language $language, \phpbb\log\log $log,
 								\phpbb\pagination $pagination, \phpbb\extension\manager $phpbb_extension_manager, \phpbb\request\request_interface $request,
 								\phpbb\template\template $template, \phpbb\user $user, $root_path, $mot_sudoku_classic_table, $mot_sudoku_gamepacks_table,
-								$mot_sudoku_samurai_table, $mot_sudoku_stats_table)
+								$mot_sudoku_ninja_table, $mot_sudoku_samurai_table, $mot_sudoku_stats_table)
 	{
 		$this->config = $config;
 		$this->db = $db;
@@ -77,6 +80,7 @@ class mot_sudoku_acp
 
 		$this->classic_sudoku_table = $mot_sudoku_classic_table;
 		$this->sudoku_gamepacks_table = $mot_sudoku_gamepacks_table;
+		$this->ninja_sudoku_table = $mot_sudoku_ninja_table;
 		$this->samurai_sudoku_table = $mot_sudoku_samurai_table;
 		$this->sudoku_stats_table = $mot_sudoku_stats_table;
 
@@ -352,6 +356,18 @@ class mot_sudoku_acp
 								break;
 
 							case 'ninja_sudoku':
+								if (!in_array(['game_pack' => $row->game_pack], $existing_packs))
+								{
+									$ninja_sudoku[] = [
+										'game_pack'			=> (int) $row->game_pack,
+										'game_number'		=> (int) $row->game_number,
+										'game_level'		=> (int) $row->game_level,
+										'game_name'			=> (string) $row->game_name,
+										'creator_name'		=> (string) $row->creator_name,
+										'puzzle_line'		=> (string) $row->puzzle_line,
+										'solution_line'		=> (string) $row->solution_line,
+									];
+								}
 
 								break;
 						}
@@ -377,8 +393,8 @@ class mot_sudoku_acp
 					$ninja_games = count($ninja_sudoku);
 					if (!empty($ninja_sudoku))
 					{
-//						$this->db->sql_multi_insert($this->ninja_sudoku_table, $ninja_sudoku);
-						$message[] .= $this->language->lang('ACP_MOT_SUDOKU_SAMURAI_IMPORTED', $ninja_games);
+						$this->db->sql_multi_insert($this->ninja_sudoku_table, $ninja_sudoku);
+						$message[] .= $this->language->lang('ACP_MOT_SUDOKU_NINJA_IMPORTED', $ninja_games);
 						$game_type[] = 'n';
 					}
 

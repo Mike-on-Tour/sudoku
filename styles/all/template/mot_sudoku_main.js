@@ -182,6 +182,29 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 							}
 						}
 						break;
+
+					case 'n':
+						// Update the array with player input
+						motSudoku.playerLineN = result['player_line'];
+						if (result['filled']) {
+							if (result['solved']) {
+								// Puzzle is solved, first we set the puzzleInProgress to false
+								motSudoku.puzzleInProgress = false;
+								// Show the end of game message
+								phpbb.alert(motSudoku.congratulation, motSudoku.puzzleSolved + result['points'] + motSudoku.startNew);
+								setTimeout(function() {
+									$("#mot_sudoku_ninja").trigger( "submit" );
+								}, 5000);
+							} else {
+								// Puzzle wasn't solved correctly, remove the incorrect digits from the grid
+								result['wrong_digits'].forEach(function(item) {
+									$("#mot_sudoku_n_cell_id_" + item.g + "_" + item.i + '' + item.j).html('');
+								});
+								// Display a message to explain what happened
+								phpbb.alert(motSudoku.errorErr, motSudoku.errorSolution);
+							}
+						}
+						break;
 				}
 			}
 		);
@@ -233,6 +256,8 @@ $("#game_reset_button_c, #game_reset_button_s, #game_reset_button_n").on("click"
 							break;
 
 						case 'n':
+							motSudoku.resetNinja(result['puzzle_line']);
+							motSudoku.playerLineN = result['player_line'];		// Reset the players input (no need to do it with the puzzle line since this hasn't changed
 							break;
 					}
 				} else {
@@ -291,6 +316,12 @@ $("#buy_digit_button_c, #buy_digit_button_s, #buy_digit_button_n").on("click", f
 								break;
 
 							case 'n':
+								fontSizeBig = $("#mot_sudoku_n_cell_id_" + (result['g'] + 1) + '_' + (result['i'] + 1) + (result['j'] + 1)).css('--fontSizeBig');
+								// Set the new values
+								$("#mot_sudoku_n_cell_id_" + (result['g'] + 1) + "_" + (result['i'] + 1) + (result['j'] + 1)).html(result['digit']);
+								$("#mot_sudoku_n_cell_id_" + (result['g'] + 1) + "_" + (result['i'] + 1) + (result['j'] + 1)).css({"color": textColorBuy, "font-weight": fontWeightBold, "font-size": fontSizeBig, "text-align": textAlignCenter, "vertical-align": verticalAlignMiddle});
+								motSudoku.preSelectedCells.push("mot_sudoku_n_cell_id_" + (result['g'] + 1) + "_" + (result['i'] + 1) + (result['j'] + 1));
+								motSudoku.puzzleLine = result['puzzle_line'];		// Update the stored puzzle
 								break;
 						}
 						$("#mot_sudoku_gainable_points_" + result['type']).html(result['gainable_points']);
@@ -360,9 +391,9 @@ $("#mask_helper_button_c, #mask_helper_button_s, #mask_helper_button_n").on("cli
 			break;
 
 		case 'n':
+			motSudoku.ninjaHelperMask();
 			break;
 		}
-//		motSudoku.callTypeMaskHelper(type);
 	}
 });
 
@@ -441,6 +472,13 @@ $("#mot_sudoku_select_level_button_c, #mot_sudoku_select_level_button_s, #mot_su
 						break;
 
 					case 'n':
+						// Get the proper css variables first, and since these are equal for all cells we do it just once to improve performance
+						let textColorBuyN = $("#mot_sudoku_n_cell_id_1_11").css('--textColorBuy');
+						result['new_digits'].forEach(function(item) {
+							$("#mot_sudoku_n_cell_id_" + (item.g + 1) + '_' + (item.i + 1) + (item.j + 1)).html(item.digit);
+							$("#mot_sudoku_n_cell_id_" + (item.g + 1) + '_' + (item.i + 1) + (item.j + 1)).css("color", textColorBuyN);
+							motSudoku.preSelectedCells.push("mot_sudoku_n_cell_id_" + (item.g + 1) + '_' + (item.i + 1) + (item.j + 1));
+						});
 						break;
 				}
 
@@ -466,8 +504,10 @@ motSudoku.callTypeHelper = function(type) {
 			break;
 
 		case 's':
+		case 'n':
 			let tempPuzzle = new Array();
-			for (let g = 0; g < 5; g++) {
+			let grid = type == 's' ? 5 : 9;
+			for (let g = 0; g < grid; g++) {
 				tempPuzzle[g] = new Array();
 				for (let i = 0; i < 9; i++) {
 					tempPuzzle[g][i] = new Array();
@@ -477,23 +517,117 @@ motSudoku.callTypeHelper = function(type) {
 				}
 			}
 
-			let tempPlayer = new Array();
-			for (let g = 0; g < 5; g++) {
-				tempPlayer[g] = new Array();
-				for (let i = 0; i < 9; i++) {
-					tempPlayer[g][i] = new Array();
-					for (let j = 0; j < 9; j++) {
-						tempPlayer[g][i].push(this.playerLineS[g][i][j]);
+			if (type == 's') {
+				let tempPlayer = new Array();
+				for (let g = 0; g < grid; g++) {
+					tempPlayer[g] = new Array();
+					for (let i = 0; i < 9; i++) {
+						tempPlayer[g][i] = new Array();
+						for (let j = 0; j < 9; j++) {
+							tempPlayer[g][i].push(this.playerLineS[g][i][j]);
+						}
+					}
+				}
+
+				this.samuraiHelper(tempPuzzle, tempPlayer);
+			}
+
+			if (type == 'n') {
+				let tempPlayer = new Array();
+				for (let g = 0; g < grid; g++) {
+					tempPlayer[g] = new Array();
+					for (let i = 0; i < 9; i++) {
+						tempPlayer[g][i] = new Array();
+						for (let j = 0; j < 9; j++) {
+							tempPlayer[g][i].push(this.playerLineN[g][i][j]);
+						}
+					}
+				}
+
+				this.ninjaHelper(tempPuzzle, tempPlayer);
+			}
+			break;
+	}
+}
+
+motSudoku.getGridDigits = function(puzzle, player) {
+	let lines = [];
+	let columns = [];
+	let subGrids = [];
+	let content = '';
+	let digitsArray = [[], [], [], [], [], [], [], [], []];
+
+	// Get the digits already present in the 9 lines
+	for (let i = 0; i <= 8; i++) {
+		lines[i] = [];
+		for (let j = 0; j <= 8; j++) {
+			content = puzzle[i][j] + player[i][j];
+			if (content > 0) {
+				lines[i].push(Number(content));
+			}
+		}
+	}
+
+	// Get the digits already present in the 9 columns
+	for (let j = 0; j <= 8; j++) {
+		columns[j] = [];
+		for (let i = 0; i <= 8; i++) {
+			content = puzzle[i][j] + player[i][j];
+			if (content > 0) {
+				columns[j].push(Number(content));
+			}
+		}
+	}
+
+	// Get the digits already present in the 9 sub grids
+	let line = 0;
+	let row = 0;
+	for (let l = 1; l <= 3; l++) {
+		for (let r = 1; r <= 3; r++) {
+			let grid = ((3 * (l - 1)) + r);
+			subGrids[grid] = [];
+			for (let i = 1; i <= 3; i++) {
+				for (let j = 1; j <= 3; j++) {
+					line = ((3 * (l - 1)) + i) - 1;
+					row = ((3 * (r - 1)) + j) - 1;
+					content = puzzle[line][row] + player[line][row];
+					if (content > 0) {
+						subGrids[grid].push(Number(content));
 					}
 				}
 			}
-
-			this.samuraiHelper(tempPuzzle, tempPlayer);
-			break;
-
-		case 'n':
-			break;
+		}
 	}
+
+	// Go through every cell and if it is empty get the digits which are not excluded by line, row or subgrid
+	let allDigits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+	let cellDigits = [];
+
+	for (let l = 1; l <= 3; l++) {
+		for (let r = 1; r <= 3; r++) {
+			let grid = ((3 * (l - 1)) + r);
+			for (let i = 1; i <= 3; i++) {
+				for (let j = 1; j <= 3; j++) {
+					line = ((3 * (l - 1)) + i);
+					row = ((3 * (r - 1)) + j);
+					content = puzzle[line - 1][row - 1] + player[line - 1][row - 1];
+					if (content == 0) {
+						cellDigits = allDigits.filter(function(value) {
+							return !lines[line - 1].includes(value);
+						});
+						cellDigits = cellDigits.filter( function(value) {
+							return !columns[row - 1].includes(value);
+						});
+						cellDigits = cellDigits.filter( function(value) {
+							return !subGrids[grid].includes(value);
+						});
+						digitsArray[line - 1][row - 1] = cellDigits;
+					}
+				}
+			}
+		}
+	}
+	return digitsArray;
 }
 
 })(jQuery); // Avoid conflicts with other libraries

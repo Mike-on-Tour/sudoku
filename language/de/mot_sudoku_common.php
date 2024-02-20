@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.4.0
+* @package MoT Sudoku v0.5.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -64,6 +64,7 @@ $lang = array_merge($lang, [
 										wahrer Samurai bist!',
 
 	// Ninja Sudoku
+	'MOT_SUDOKU_NO_NINJA_PUZZLES'	=> 'Es existieren derzeit keine Ninja-Sudoku-Rätsel, der Administrator muss erst ein Spielepaket importieren!',
 	'MOT_SUDOKU_NINJA_TEXT'			=> 'Ninja-Sudoku sind eine echte Herausforderung, weil sie aus insgesamt 9 klassischen Rätseln bestehen, die sich natürlich öfter überschneiden,
 										nämlich zwischen zwei- bis viermal. Sie sind damit äußerst schwierig, aber für einen echten Ninja sicher ein Klacks!',
 

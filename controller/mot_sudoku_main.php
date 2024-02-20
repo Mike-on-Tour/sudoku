@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.4.1
+* @package MoT Sudoku v0.5.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -47,6 +47,9 @@ class mot_sudoku_main
 	/** @var string mot.sudoku.tables.mot_sudoku_classic */
 	protected $mot_sudoku_games_table;
 
+	/** @var string mot.sudoku.tables.mot_sudoku_ninja */
+	protected $mot_sudoku_ninja_table;
+
 	/** @var string mot.sudoku.tables.mot_sudoku_samurai */
 	protected $mot_sudoku_samurai_table;
 
@@ -55,8 +58,8 @@ class mot_sudoku_main
 
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper,
 								\phpbb\language\language $language, \phpbb\extension\manager $phpbb_extension_manager, \phpbb\request\request_interface $request,
-								\phpbb\template\template $template, \phpbb\user $user, $root_path, $mot_sudoku_classic_table, $mot_sudoku_games_table, $mot_sudoku_samurai_table,
-								$mot_sudoku_stats_table)
+								\phpbb\template\template $template, \phpbb\user $user, $root_path, $mot_sudoku_classic_table, $mot_sudoku_games_table, $mot_sudoku_ninja_table,
+								$mot_sudoku_samurai_table, $mot_sudoku_stats_table)
 	{
 		$this->auth = $auth;
 		$this->config = $config;
@@ -71,6 +74,7 @@ class mot_sudoku_main
 
 		$this->classic_sudoku_table = $mot_sudoku_classic_table;
 		$this->sudoku_games_table = $mot_sudoku_games_table;
+		$this->ninja_sudoku_table = $mot_sudoku_ninja_table;
 		$this->samurai_sudoku_table = $mot_sudoku_samurai_table;
 		$this->sudoku_stats_table = $mot_sudoku_stats_table;
 
@@ -115,7 +119,65 @@ class mot_sudoku_main
 			$this->classic_array, $this->classic_array,
 		];
 
-		$this->ninja_array = [];
+		$this->ninja_array = [
+			$this->classic_array, $this->classic_array,
+			[
+				[-19,-19,-19,0,0,0,-27,-27,-27],
+				[-19,-19,-19,0,0,0,-27,-27,-27],
+				[-19,-19,-19,0,0,0,-27,-27,-27],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[-43,-43,-43,0,0,0,-51,-51,-51],
+				[-43,-43,-43,0,0,0,-51,-51,-51],
+				[-43,-43,-43,0,0,0,-51,-51,-51],
+			],
+			$this->classic_array, $this->classic_array,
+			[
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[-13,-13,-13,0,0,0,-21,-21,-21],
+				[-13,-13,-13,0,0,0,-21,-21,-21],
+				[-13,-13,-13,0,0,0,-21,-21,-21],
+			],
+			[
+				[0,0,0,0,0,0,-17,-17,-17],
+				[0,0,0,0,0,0,-17,-17,-17],
+				[0,0,0,0,0,0,-17,-17,-17],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,-41,-41,-41],
+				[0,0,0,0,0,0,-41,-41,-41],
+				[0,0,0,0,0,0,-41,-41,-41],
+			],
+			[
+				[-29,-29,-29,0,0,0,0,0,0],
+				[-29,-29,-29,0,0,0,0,0,0],
+				[-29,-29,-29,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[-53,-53,-53,0,0,0,0,0,0],
+				[-53,-53,-53,0,0,0,0,0,0],
+				[-53,-53,-53,0,0,0,0,0,0],
+			],
+			[
+				[-49,-49,-49,0,0,0,-57,-57,-57],
+				[-49,-49,-49,0,0,0,-57,-57,-57],
+				[-49,-49,-49,0,0,0,-57,-57,-57],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0],
+			],
+		];
 	}
 
 	public function handle()
@@ -186,6 +248,7 @@ class mot_sudoku_main
 					$classic_ids = [];
 				}
 
+				$puzzle_exists = true;
 				// Then check whether there is an unsolved puzzle for this user
 				$sql = "SELECT * FROM " . $this->sudoku_games_table . "
 						WHERE game_type = 'c'
@@ -205,24 +268,24 @@ class mot_sudoku_main
 
 					$classic_count = count($classic_puzzles);
 					// Check whether we do have at least one puzzle to work with
-					if ($classic_count == 0)
+					$puzzle_exists = $classic_count == 0 ? false : true;
+
+					if ($puzzle_exists)
 					{
-						trigger_error($this->language->lang('MOT_SUDOKU_NO_CLASSIC_PUZZLES'));
+						$puzzle_number = rand(0, $classic_count - 1);
+
+						$classic_puzzle = $classic_puzzles[$puzzle_number];
+						$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $classic_puzzle['game_pack'], $classic_puzzle['game_number'], $this->difficulty[$classic_puzzle['game_level']]);
+						$title = ($this->config['mot_sudoku_title_enable'] && $classic_puzzle['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $classic_puzzle['game_name'] . '</strong>' : '';
+						$puzzle_id = $classic_puzzle['classic_id'];
+						$entry_id = 0;
+						$player_line = json_encode($this->classic_array);
+						$current_points = 0;
+						$game_buy_digit = 0;
+						$game_reset = 0;
+						$game_helper = 0;
+						$game_level = 0;
 					}
-
-					$puzzle_number = rand(0, $classic_count - 1);
-
-					$classic_puzzle = $classic_puzzles[$puzzle_number];
-					$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $classic_puzzle['game_pack'], $classic_puzzle['game_number'], $this->difficulty[$classic_puzzle['game_level']]);
-					$title = ($this->config['mot_sudoku_title_enable'] && $classic_puzzle['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $classic_puzzle['game_name'] . '</strong>' : '';
-					$puzzle_id = $classic_puzzle['classic_id'];
-					$entry_id = 0;
-					$player_line = json_encode($this->classic_array);
-					$current_points = 0;
-					$game_buy_digit = 0;
-					$game_reset = 0;
-					$game_helper = 0;
-					$game_level = 0;
 				}
 				else
 				{
@@ -245,35 +308,38 @@ class mot_sudoku_main
 					$game_level = (int) $classic_puzzle['level'];
 				}
 
-				$puzzle_line = json_decode($classic_puzzle['puzzle_line']);
-				$pre_cells_arr = [];
-				for ($i = 0; $i < 9; $i++)
+				if ($puzzle_exists)
 				{
-					for ($j = 0; $j < 9; $j++)
+					$puzzle_line = json_decode($classic_puzzle['puzzle_line']);
+					$pre_cells_arr = [];
+					for ($i = 0; $i < 9; $i++)
 					{
-						if ($puzzle_line[$i][$j])
+						for ($j = 0; $j < 9; $j++)
 						{
-							$this->template->assign_var('MOT_SUDOKU_CELL_' . ($i + 1) . ($j + 1), $puzzle_line[$i][$j]);
-							$pre_cells_arr[] = 'mot_sudoku_c_cell_id_' . ($i + 1) . ($j + 1);
+							if ($puzzle_line[$i][$j])
+							{
+								$this->template->assign_var('MOT_SUDOKU_CELL_' . ($i + 1) . ($j + 1), $puzzle_line[$i][$j]);
+								$pre_cells_arr[] = 'mot_sudoku_c_cell_id_' . ($i + 1) . ($j + 1);
+							}
 						}
 					}
+					$gainable_points = (81 - count($pre_cells_arr)) * $this->config['mot_sudoku_cell_points'];
+					$empty_cells = $this->array_count_recursive($puzzle_line)[0];
+
+					$this->template->assign_vars([
+						'MOT_SUDOKU_PRE_CELLS_ARR'		=> json_encode($pre_cells_arr),
+						'MOT_SUDOKU_CLASSIC_ID'			=> $puzzle_id,
+						'MOT_SUDOKU_PUZZLE_LINE'		=> json_encode($puzzle_line),
+						'MOT_SUDOKU_PLAYER_LINE_C'		=> $player_line,
+					]);
+
+					$helper_title = $this->language->lang('MOT_SUDOKU_HELPER_TITLE', $this->config['mot_sudoku_helper_cost']);
+					$note_text = $this->language->lang('MOT_SUDOKU_NOTE_TEXT', $this->config['mot_sudoku_cell_points'], $this->config['mot_sudoku_cell_cost'],
+									$this->config['mot_sudoku_number_cost'], $this->config['mot_sudoku_reset_cost'], $this->config['mot_sudoku_helper_cost'],
+									$this->config['mot_sudoku_level_cost']
+					);
+					$helper_cost = $this->config['mot_sudoku_helper_cost'];
 				}
-				$gainable_points = (81 - count($pre_cells_arr)) * $this->config['mot_sudoku_cell_points'];
-				$empty_cells = $this->array_count_recursive($puzzle_line)[0];
-
-				$this->template->assign_vars([
-					'MOT_SUDOKU_PRE_CELLS_ARR'		=> json_encode($pre_cells_arr),
-					'MOT_SUDOKU_CLASSIC_ID'			=> $puzzle_id,
-					'MOT_SUDOKU_PUZZLE_LINE'		=> json_encode($puzzle_line),
-					'MOT_SUDOKU_PLAYER_LINE_C'		=> $player_line,
-				]);
-
-				$helper_title = $this->language->lang('MOT_SUDOKU_HELPER_TITLE', $this->config['mot_sudoku_helper_cost']);
-				$note_text = $this->language->lang('MOT_SUDOKU_NOTE_TEXT', $this->config['mot_sudoku_cell_points'], $this->config['mot_sudoku_cell_cost'],
-								$this->config['mot_sudoku_number_cost'], $this->config['mot_sudoku_reset_cost'], $this->config['mot_sudoku_helper_cost'],
-								$this->config['mot_sudoku_level_cost']
-				);
-				$helper_cost = $this->config['mot_sudoku_helper_cost'];
 
 				$selected_tab = 'classic';
 				break;
@@ -294,6 +360,7 @@ class mot_sudoku_main
 					$samurai_ids = [];
 				}
 
+				$puzzle_exists = true;
 				// Then check whether there is an unsolved puzzle for this user
 				$sql = "SELECT * FROM " . $this->sudoku_games_table . "
 						WHERE game_type = 's'
@@ -313,24 +380,24 @@ class mot_sudoku_main
 
 					$samurai_count = count($samurai_puzzles);
 					// Check whether we do have at least one puzzle to work with
-					if ($samurai_count == 0)
+					$puzzle_exists = $samurai_count == 0 ? false : true;
+
+					if ($puzzle_exists)
 					{
-						trigger_error($this->language->lang('MOT_SUDOKU_NO_SAMURAI_PUZZLES'));
+						$puzzle_number = rand(0, $samurai_count - 1);
+
+						$samurai_puzzle = $samurai_puzzles[$puzzle_number];
+						$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $samurai_puzzle['game_pack'], $samurai_puzzle['game_number'], $this->difficulty[$samurai_puzzle['game_level']]);
+						$title = ($this->config['mot_sudoku_title_enable'] && $samurai_puzzle['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $samurai_puzzle['game_name'] . '</strong>' : '';
+						$puzzle_id = $samurai_puzzle['samurai_id'];
+						$entry_id = 0;
+						$player_line = json_encode($this->samurai_array);
+						$current_points = 0;
+						$game_buy_digit = 0;
+						$game_reset = 0;
+						$game_helper = 0;
+						$game_level = 0;
 					}
-
-					$puzzle_number = rand(0, $samurai_count - 1);
-
-					$samurai_puzzle = $samurai_puzzles[$puzzle_number];
-					$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $samurai_puzzle['game_pack'], $samurai_puzzle['game_number'], $this->difficulty[$samurai_puzzle['game_level']]);
-					$title = ($this->config['mot_sudoku_title_enable'] && $samurai_puzzle['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $samurai_puzzle['game_name'] . '</strong>' : '';
-					$puzzle_id = $samurai_puzzle['samurai_id'];
-					$entry_id = 0;
-					$player_line = json_encode($this->samurai_array);
-					$current_points = 0;
-					$game_buy_digit = 0;
-					$game_reset = 0;
-					$game_helper = 0;
-					$game_level = 0;
 				}
 				else
 				{
@@ -353,38 +420,41 @@ class mot_sudoku_main
 					$game_level = (int) $samurai_puzzle['level'];
 				}
 
-				$puzzle_line = json_decode($samurai_puzzle['puzzle_line']);
-				$pre_cells_arr = [];
-				for ($grid = 0; $grid < 5; $grid++)
+				if ($puzzle_exists)
 				{
-					for ($i = 0; $i < 9; $i++)
+					$puzzle_line = json_decode($samurai_puzzle['puzzle_line']);
+					$pre_cells_arr = [];
+					for ($grid = 0; $grid < 5; $grid++)
 					{
-						for ($j = 0; $j < 9; $j++)
+						for ($i = 0; $i < 9; $i++)
 						{
-							if ($puzzle_line[$grid][$i][$j] > 0)
+							for ($j = 0; $j < 9; $j++)
 							{
-								$this->template->assign_var('MOT_SUDOKU_S_CELL_' . ($grid + 1) . '_' . ($i + 1) . ($j + 1), $puzzle_line[$grid][$i][$j]);
-								$pre_cells_arr[] = 'mot_sudoku_s_cell_id_' . ($grid + 1) . '_' . ($i + 1) . ($j + 1);
+								if ($puzzle_line[$grid][$i][$j] > 0)
+								{
+									$this->template->assign_var('MOT_SUDOKU_S_CELL_' . ($grid + 1) . '_' . ($i + 1) . ($j + 1), $puzzle_line[$grid][$i][$j]);
+									$pre_cells_arr[] = 'mot_sudoku_s_cell_id_' . ($grid + 1) . '_' . ($i + 1) . ($j + 1);
+								}
 							}
 						}
 					}
+					$gainable_points = (369 - count($pre_cells_arr)) * $this->config['mot_sudoku_cell_points'];
+					$empty_cells = $this->array_count_recursive($puzzle_line)[0];
+
+					$this->template->assign_vars([
+						'MOT_SUDOKU_PRE_CELLS_ARR'		=> json_encode($pre_cells_arr),
+						'MOT_SUDOKU_SAMURAI_ID'			=> $puzzle_id,
+						'MOT_SUDOKU_PUZZLE_LINE'		=> json_encode($puzzle_line),
+						'MOT_SUDOKU_PLAYER_LINE_S'		=> $player_line,
+					]);
+
+					$helper_title = $this->language->lang('MOT_SUDOKU_HELPER_TITLE', $this->config['mot_sudoku_helper_samurai_cost']);
+					$note_text = $this->language->lang('MOT_SUDOKU_NOTE_TEXT', $this->config['mot_sudoku_cell_points'], $this->config['mot_sudoku_cell_cost'],
+									$this->config['mot_sudoku_number_cost'], $this->config['mot_sudoku_reset_cost'], $this->config['mot_sudoku_helper_samurai_cost'],
+									$this->config['mot_sudoku_level_cost']
+					);
+					$helper_cost = $this->config['mot_sudoku_helper_samurai_cost'];
 				}
-				$gainable_points = (369 - count($pre_cells_arr)) * $this->config['mot_sudoku_cell_points'];
-				$empty_cells = $this->array_count_recursive($puzzle_line)[0];
-
-				$this->template->assign_vars([
-					'MOT_SUDOKU_PRE_CELLS_ARR'		=> json_encode($pre_cells_arr),
-					'MOT_SUDOKU_SAMURAI_ID'			=> $puzzle_id,
-					'MOT_SUDOKU_PUZZLE_LINE'		=> json_encode($puzzle_line),
-					'MOT_SUDOKU_PLAYER_LINE_S'		=> $player_line,
-				]);
-
-				$helper_title = $this->language->lang('MOT_SUDOKU_HELPER_TITLE', $this->config['mot_sudoku_helper_samurai_cost']);
-				$note_text = $this->language->lang('MOT_SUDOKU_NOTE_TEXT', $this->config['mot_sudoku_cell_points'], $this->config['mot_sudoku_cell_cost'],
-								$this->config['mot_sudoku_number_cost'], $this->config['mot_sudoku_reset_cost'], $this->config['mot_sudoku_helper_samurai_cost'],
-								$this->config['mot_sudoku_level_cost']
-				);
-				$helper_cost = $this->config['mot_sudoku_helper_samurai_cost'];
 
 				$selected_tab = 'samurai';
 				break;
@@ -395,40 +465,111 @@ class mot_sudoku_main
 					$modal_position = $user_stats['modal_position'];
 					$games_solved = $user_stats['ninja_played'];
 					$total_points = $user_stats['ninja_points'];
+					$ninja_ids = json_decode($user_stats['ninja_ids']);
 				}
 				else
 				{
 					$modal_position = 0;
 					$games_solved = 0;
 					$total_points = 0;
+					$ninja_ids = [];
 				}
 
-$empty_cells = 80;
-$game_info = '';
-$title = '';
-$entry_id = 1;
-$puzzle_id = 14;
+				$puzzle_exists = true;
+				// Then check whether there is an unsolved puzzle for this user
+				$sql = "SELECT * FROM " . $this->sudoku_games_table . "
+						WHERE game_type = 'n'
+						AND user_id = " . (int) $this->user->data['user_id'];
+				$result = $this->db->sql_query($sql);
+				$ninja_puzzle = $this->db->sql_fetchrow($result);
+				$this->db->sql_freeresult($result);
 
-				$modal_position = true;
-				$game_buy_digit = 0;
-				$game_reset = 0;
-				$game_helper = 0;
-				$game_level = 0;
-				$gainable_points = 0;
-				$current_points = 0;
+				if (empty($ninja_puzzle))
+				{
+					// No unsolved puzzle so we can choose a new one which has not been played so far by this user
+					$in_set = !empty($ninja_ids) ? ' WHERE ' . $this->db->sql_in_set('ninja_id', $ninja_ids, true) : '';
+					$sql = 'SELECT * FROM ' . $this->ninja_sudoku_table . $in_set;
+					$result = $this->db->sql_query($sql);
+					$ninja_puzzles = $this->db->sql_fetchrowset($result);
+					$this->db->sql_freeresult($result);
 
-				$this->template->assign_vars([
-//					'MOT_SUDOKU_PRE_CELLS_ARR'		=> json_encode($pre_cells_arr),
-					'MOT_SUDOKU_NINJA_ID'			=> $puzzle_id,
-//					'MOT_SUDOKU_PLAYER_LINE_N'		=> $player_line,
-				]);
+					$ninja_count = count($ninja_puzzles);
+					// Check whether we do have at least one puzzle to work with
+					$puzzle_exists = $ninja_count == 0 ? false : true;
 
-				$helper_title = $this->language->lang('MOT_SUDOKU_HELPER_TITLE', $this->config['mot_sudoku_helper_ninja_cost']);
-				$note_text = $this->language->lang('MOT_SUDOKU_NOTE_TEXT', $this->config['mot_sudoku_cell_points'], $this->config['mot_sudoku_cell_cost'],
-								$this->config['mot_sudoku_number_cost'], $this->config['mot_sudoku_reset_cost'], $this->config['mot_sudoku_helper_ninja_cost'],
-								$this->config['mot_sudoku_level_cost']
-				);
-				$helper_cost = $this->config['mot_sudoku_helper_ninja_cost'];
+					if ($puzzle_exists)
+					{
+						$puzzle_number = rand(0, $ninja_count - 1);
+
+						$ninja_puzzle = $ninja_puzzles[$puzzle_number];
+						$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $ninja_puzzle['game_pack'], $ninja_puzzle['game_number'], $this->difficulty[$ninja_puzzle['game_level']]);
+						$title = ($this->config['mot_sudoku_title_enable'] && $ninja_puzzle['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $ninja_puzzle['game_name'] . '</strong>' : '';
+						$puzzle_id = $ninja_puzzle['ninja_id'];
+						$entry_id = 0;
+						$player_line = json_encode($this->ninja_array);
+						$current_points = 0;
+						$game_buy_digit = 0;
+						$game_reset = 0;
+						$game_helper = 0;
+						$game_level = 0;
+					}
+				}
+				else
+				{
+					// We have an unsolved puzzle, so we have to get its data and send it to the game
+					$puzzle_id = $ninja_puzzle['game_id'];
+					$entry_id = $ninja_puzzle['entry_id'];
+					// Get some data from the original puzzle itself
+					$sql = 'SELECT game_pack, game_number, game_level, game_name FROM ' . $this->ninja_sudoku_table . '
+							WHERE ninja_id = ' . (int) $ninja_puzzle['game_id'];
+					$result = $this->db->sql_query($sql);
+					$data_row = $this->db->sql_fetchrow($result);
+					$this->db->sql_freeresult($result);
+					$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $data_row['game_pack'], $data_row['game_number'], $this->difficulty[$data_row['game_level']]);
+					$title = ($this->config['mot_sudoku_title_enable'] && $data_row['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $data_row['game_name'] . '</strong>' : '';
+					$player_line = $ninja_puzzle['player_line'];
+					$current_points = (int) $ninja_puzzle['points'];
+					$game_reset = (int) $ninja_puzzle['reset'];
+					$game_buy_digit = (int) $ninja_puzzle['buy_digit'];
+					$game_helper = (int) $ninja_puzzle['helper'];
+					$game_level = (int) $ninja_puzzle['level'];
+				}
+
+				if ($puzzle_exists)
+				{
+					$puzzle_line = json_decode($ninja_puzzle['puzzle_line']);
+					$pre_cells_arr = [];
+					for ($grid = 0; $grid < 9; $grid++)
+					{
+						for ($i = 0; $i < 9; $i++)
+						{
+							for ($j = 0; $j < 9; $j++)
+							{
+								if ($puzzle_line[$grid][$i][$j] > 0)
+								{
+									$this->template->assign_var('MOT_SUDOKU_N_CELL_' . ($grid + 1) . '_' . ($i + 1) . ($j + 1), $puzzle_line[$grid][$i][$j]);
+									$pre_cells_arr[] = 'mot_sudoku_n_cell_id_' . ($grid + 1) . '_' . ($i + 1) . ($j + 1);
+								}
+							}
+						}
+					}
+					$gainable_points = (621 - count($pre_cells_arr)) * $this->config['mot_sudoku_cell_points'];
+					$empty_cells = $this->array_count_recursive($puzzle_line)[0];
+
+					$this->template->assign_vars([
+						'MOT_SUDOKU_PRE_CELLS_ARR'		=> json_encode($pre_cells_arr),
+						'MOT_SUDOKU_NINJA_ID'			=> $puzzle_id,
+						'MOT_SUDOKU_PUZZLE_LINE'		=> json_encode($puzzle_line),
+						'MOT_SUDOKU_PLAYER_LINE_N'		=> $player_line,
+					]);
+
+					$helper_title = $this->language->lang('MOT_SUDOKU_HELPER_TITLE', $this->config['mot_sudoku_helper_ninja_cost']);
+					$note_text = $this->language->lang('MOT_SUDOKU_NOTE_TEXT', $this->config['mot_sudoku_cell_points'], $this->config['mot_sudoku_cell_cost'],
+									$this->config['mot_sudoku_number_cost'], $this->config['mot_sudoku_reset_cost'], $this->config['mot_sudoku_helper_ninja_cost'],
+									$this->config['mot_sudoku_level_cost']
+					);
+					$helper_cost = $this->config['mot_sudoku_helper_ninja_cost'];
+				}
 
 				$selected_tab = 'ninja';
 				break;
@@ -452,6 +593,7 @@ $puzzle_id = 14;
 			'MOT_SUDOKU_CLASSIC_TAB'		=> $this->classic_action,
 			'MOT_SUDOKU_SAMURAI_TAB'		=> $this->samurai_action,
 			'MOT_SUDOKU_NINJA_TAB'			=> $this->ninja_action,
+			'MOT_SUDOKU_PUZZLE_EXISTS'		=> $puzzle_exists,
 			'MOT_SUDOKU_ACTIVE'				=> true,								// signal the footer copyright notice that Sudoku is running
 			'MOT_SUDOKU_AJAX_NUMBER'		=> $this->helper->route('mot_sudoku_ajax_number'),
 			'MOT_SUDOKU_AJAX_RESET'			=> $this->helper->route('mot_sudoku_ajax_reset'),
@@ -460,29 +602,31 @@ $puzzle_id = 14;
 			'MOT_SUDOKU_AJAX_MODAL'			=> $this->helper->route('mot_sudoku_ajax_modal'),
 			'MOT_SUDOKU_AJAX_LEVEL'			=> $this->helper->route('mot_sudoku_ajax_level'),
 			'MOT_SUDOKU_COPYRIGHT'			=> $this->ext_data['extra']['display-name'] . ' ' . $this->ext_data['version'] . ' &copy; Mike-on-Tour (<a href="' . $this->ext_data['homepage'] . '">' . $this->ext_data['homepage'] . '</a>)',
-			'MOT_SUDOKU_NOTE_TEXT'			=> $note_text,
+			'MOT_SUDOKU_NOTE_TEXT'			=> $puzzle_exists ? $note_text : '',
 			'MOT_SUDOKU_GAME_RESET_TITLE'	=> $this->language->lang('MOT_SUDOKU_GAME_RESET_TITLE', $this->config['mot_sudoku_reset_cost']),
 			'MOT_SUDOKU_BUY_NUMBER_TITLE'	=> $this->language->lang('MOT_SUDOKU_BUY_NUMBER_TITLE', $this->config['mot_sudoku_number_cost']),
-			'MOT_SUDOKU_GAME_INFO'			=> $game_info . $title,
-			'MOT_SUDOKU_DIGIT_NO_BUY'		=> $empty_cells == 1 ? 1 : 0,
-			'MOT_SUDOKU_HELPER_TITLE'		=> $helper_title,
+			'MOT_SUDOKU_GAME_INFO'			=> $puzzle_exists ? $game_info . $title : '',
+			'MOT_SUDOKU_DIGIT_NO_BUY'		=> $puzzle_exists ? ($empty_cells == 1 ? 1 : 0) : 0,
+			'MOT_SUDOKU_HELPER_TITLE'		=> $puzzle_exists ? $helper_title : '',
 			'MOT_SUDOKU_SELECT_LEVEL'		=> $level_select,
 			'MOT_SUDOKU_MODAL_SWITCH'		=> $modal_position,
 			'MOT_SUDOKU_TOTAL_GAMES'		=> $games_solved,
 			'MOT_SUDOKU_TOTAL_POINTS'		=> $total_points,
 			'MOT_SUDOKU_MEAN_POINTS'		=> $games_solved ? number_format($total_points / $games_solved, 0, ',', '') : 0,
-			'MOT_SUDOKU_GAINABLE_POINTS'	=> $gainable_points,
-			'MOT_SUDOKU_CURRENT_POINTS'		=> $current_points,
-			'MOT_SUDOKU_GAME_RESET'			=> $game_reset,
+			'MOT_SUDOKU_GAINABLE_POINTS'	=> $puzzle_exists ? $gainable_points : 0,
+			'MOT_SUDOKU_CURRENT_POINTS'		=> $puzzle_exists ? $current_points : 0,
+			'MOT_SUDOKU_GAME_RESET'			=> $puzzle_exists ? $game_reset : 0,
 			'MOT_SUDOKU_HELPER_ENABLED'		=> $this->config['mot_sudoku_helper_enable'],
 			'MOT_SUDOKU_S_HELPER_ENABLED'	=> $this->config['mot_sudoku_helper_samurai_enable'],
 			'MOT_SUDOKU_N_HELPER_ENABLED'	=> $this->config['mot_sudoku_helper_ninja_enable'],
-			'MOT_SUDOKU_GAME_BUY_DIGIT'		=> $game_buy_digit,
-			'MOT_SUDOKU_GAME_HELPER'		=> $game_helper,
-			'MOT_SUDOKU_GAME_LEVEL'			=> $game_level,
-			'MOT_SUDOKU_ENTRY_ID'			=> $entry_id,						// SUDOKU_PLAYERS_TABLE entry_id if loading an unsolved puzzle, 0 if new puzzle
-			'MOT_SUDOKU_NEGATIVE_POINTS'	=> -1 * (($game_reset * $this->config['mot_sudoku_reset_cost']) + ($game_buy_digit * $this->config['mot_sudoku_number_cost']) +
-												($game_helper * $helper_cost) + ($game_level * $this->level_array[$tab] * $this->config['mot_sudoku_level_cost'])),
+			'MOT_SUDOKU_GAME_BUY_DIGIT'		=> $puzzle_exists ? $game_buy_digit : 0,
+			'MOT_SUDOKU_GAME_HELPER'		=> $puzzle_exists ? $game_helper : 0,
+			'MOT_SUDOKU_GAME_LEVEL'			=> $puzzle_exists ? $game_level : 0,
+			'MOT_SUDOKU_ENTRY_ID'			=> $puzzle_exists ? $entry_id : 0,						// SUDOKU_PLAYERS_TABLE entry_id if loading an unsolved puzzle, 0 if new puzzle
+			'MOT_SUDOKU_NEGATIVE_POINTS'	=> $puzzle_exists ?
+												-1 * (($game_reset * $this->config['mot_sudoku_reset_cost']) + ($game_buy_digit * $this->config['mot_sudoku_number_cost']) +
+												($game_helper * $helper_cost) + ($game_level * $this->level_array[$tab] * $this->config['mot_sudoku_level_cost']))
+												: 0,
 		]);
 
 		// Add breadcrumbs link
@@ -547,7 +691,7 @@ fclose ($handle);*/
 							'user_id'			=> $this->user->data['user_id'],
 							'game_type'			=> $sudoku_type,
 							'game_id'			=> $sudoku_id,
-							'points'			=> $sudoku_number ? $this->config['mot_sudoku_cell_points'] : $sudoku_number, // give ponts only if a real number was selected
+							'points'			=> $sudoku_number ? $this->config['mot_sudoku_cell_points'] : $sudoku_number, // give points only if a real number was selected
 							'player_line'		=> json_encode($player_line),
 							'puzzle_line'		=> $classic_puzzle['puzzle_line'],
 							'solution_line'		=> $classic_puzzle['solution_line'],
@@ -575,7 +719,7 @@ fclose ($handle);*/
 							'user_id'			=> $this->user->data['user_id'],
 							'game_type'			=> $sudoku_type,
 							'game_id'			=> $sudoku_id,
-							'points'			=> $sudoku_number ? $this->config['mot_sudoku_cell_points'] : $sudoku_number, // give ponts only if a real number was selected
+							'points'			=> $sudoku_number ? $this->config['mot_sudoku_cell_points'] : $sudoku_number, // give points only if a real number was selected
 							'player_line'		=> json_encode($player_line),
 							'puzzle_line'		=> $samurai_puzzle['puzzle_line'],
 							'solution_line'		=> $samurai_puzzle['solution_line'],
@@ -583,6 +727,31 @@ fclose ($handle);*/
 						break;
 
 					case 'n':
+						// Make a new player line
+						$player_line = $this->ninja_array;
+						// Get grid, line and row of the cell just filled
+						$grid = ((int) substr($sudoku_cell, 0, 1)) - 1;
+						$line = ((int) substr($sudoku_cell, 2, 1)) - 1;
+						$row = ((int) substr($sudoku_cell, 3, 1)) - 1;
+						// Store the number in the player line
+						$player_line[$grid][$line][$row] = $sudoku_number;
+
+						$sql = 'SELECT puzzle_line, solution_line FROM ' . $this->ninja_sudoku_table . '
+								WHERE ninja_id = ' . (int) $sudoku_id;
+						$result = $this->db->sql_query($sql);
+						$ninja_puzzle = $this->db->sql_fetchrow($result);
+						$this->db->sql_freeresult($result);
+
+						// Store all data as a new item
+						$sql_arr = [
+							'user_id'			=> $this->user->data['user_id'],
+							'game_type'			=> $sudoku_type,
+							'game_id'			=> $sudoku_id,
+							'points'			=> $sudoku_number ? $this->config['mot_sudoku_cell_points'] : $sudoku_number, // give points only if a real number was selected
+							'player_line'		=> json_encode($player_line),
+							'puzzle_line'		=> $ninja_puzzle['puzzle_line'],
+							'solution_line'		=> $ninja_puzzle['solution_line'],
+						];
 						break;
 				}
 
@@ -640,6 +809,7 @@ fclose ($handle);*/
 						break;
 
 					case 's':
+					case 'n':
 						// Get grid, line and row of the cell just filled
 						$grid = ((int) substr($sudoku_cell, 0, 1)) - 1;
 						$line = ((int) substr($sudoku_cell, 2, 1)) - 1;
@@ -674,9 +844,6 @@ fclose ($handle);*/
 						}
 						// and encode the array again for storage
 						$sql_arr['player_line'] = json_encode($sql_arr['player_line']);
-						break;
-
-					case 'n':
 						break;
 				}
 
@@ -887,6 +1054,100 @@ fclose ($handle);*/
 					break;
 
 				case 'n':
+					$empty_cells = $this->count_empty_grid_cells($player_line, $puzzle_line, 9);
+
+					// If we have only one empty cell we inhibit buying a digit
+					$digit_no_buy = $empty_cells == 1 ? true : false;
+
+					// Check if all cells are filled, if yes we can check whether the puzzle is solved or needs fixing
+					if ($empty_cells == 0)
+					{
+						// Indicate that the player filled all cells
+						$filled = true;
+
+						// And now we check whether the cells are filled correctly
+						$solution_line = json_decode($sql_arr['solution_line']);
+						for ($g = 0; $g < 9; $g++)
+						{
+							for ($i = 0; $i < 9; $i++)
+							{
+								for ($j = 0; $j < 9; $j++)
+								{
+									if (($player_line[$g][$i][$j] > -1) && ($player_line[$g][$i][$j] + $puzzle_line[$g][$i][$j] != $solution_line[$g][$i][$j]))
+									{
+										// Indicate that we do not have a valid solution
+										$solved = false;
+										$wrong_digits[] = [
+											'g'		=> $g + 1,
+											'i'		=> $i + 1,
+											'j'		=> $j + 1,
+										];
+										// Delete the wrong digit
+										$player_line[$g][$i][$j] = 0;
+										// Deduct points for deleted digit
+										$sql_arr['points'] -= $this->config['mot_sudoku_cell_cost'];
+									}
+								}
+							}
+						}
+						$empty_cells = $this->count_empty_grid_cells( $player_line, $puzzle_line, 9);
+
+						// If we have only one empty cell we inhibit buying a digit
+						$digit_no_buy = $empty_cells == 1 ? true : false;
+
+						// Now check whether we have a solved puzzle
+						if ($solved)
+						{
+							// To get the really gained points we have to deduct the negative points
+							$sql_arr['points'] -= (($sql_arr['reset'] * $this->config['mot_sudoku_reset_cost']) +
+													($sql_arr['buy_digit'] * $this->config['mot_sudoku_number_cost']) +
+													($sql_arr['helper'] * $this->config['mot_sudoku_helper_ninja_cost']) +
+													($sql_arr['level'] * $this->level_array[$sudoku_type] * $this->config['mot_sudoku_level_cost']));
+
+							// Now we can store this solved game to the SUDOKU_STATS_TABLE
+							$sql = 'SELECT * FROM ' . $this->sudoku_stats_table . '
+									WHERE user_id = ' . (int) $this->user->data['user_id'];
+							$result = $this->db->sql_query($sql);
+							$stats = $this->db->sql_fetchrow($result);
+							$this->db->sql_freeresult($result);
+
+							if ($stats['ninja_played'] == 0)
+							{
+								$ninja_ids = [(int) $sql_arr['game_id']];
+							}
+							else
+							{
+								$ninja_ids = json_decode($stats['ninja_ids']);
+								$ninja_ids[] = (int) $sql_arr['game_id'];
+							}
+
+							// Add the gained points
+							$stats['ninja_points'] += $sql_arr['points'];
+							// Increment the played games count
+							$stats['ninja_played']++;
+							// Add the game id to the played games list
+							$stats['ninja_ids'] = json_encode($ninja_ids);
+
+							$sql = 'UPDATE ' . $this->sudoku_stats_table . '
+									SET ' . $this->db->sql_build_array('UPDATE', $stats) . '
+									WHERE user_id = ' . (int) $this->user->data['user_id'];
+							$this->db->sql_query($sql);
+
+							// Since this game is finished we delete it from the SUDOKU_GAMES_TABLE
+							$sql = 'DELETE FROM ' . $this->sudoku_games_table . '
+									WHERE entry_id = ' . (int) $sudoku_entry;
+							$this->db->sql_query($sql);
+						}
+						else
+						{
+							// Store the game into the SUDOKU_GAMES_TABLE
+							$sql_arr['player_line'] = json_encode($player_line);
+							$sql = 'UPDATE ' . $this->sudoku_games_table . '
+									SET ' . $this->db->sql_build_array('UPDATE', $sql_arr) . '
+									WHERE entry_id = ' . (int) $sudoku_entry;
+							$this->db->sql_query($sql);
+						}
+					}
 					break;
 			}
 
@@ -960,7 +1221,7 @@ fclose ($handle);*/
 							break;
 
 						case 'n':
-//							$player_line = $this->ninja_array;
+							$player_line = $this->ninja_array;
 							$helper_cost = $this->config['mot_sudoku_helper_ninja_cost'];
 							break;
 					}
@@ -1057,10 +1318,12 @@ fclose ($handle);*/
 							break;
 
 						case 's':
-							// Get random numbers for line and column
+						case 'n':
+							$grid = $sql_arr['game_type'] == 's' ? 4 : 9;
+							// Get random numbers for grid, line and column
 							do
 							{
-								$g = rand(0, 4);
+								$g = rand(0, $grid);
 								$i = rand(0, 8);
 								$j = rand(0, 8);
 							} while (!($player_line[$g][$i][$j] == 0 && $puzzle_line[$g][$i][$j] == 0));
@@ -1075,10 +1338,7 @@ fclose ($handle);*/
 							$sql_arr['buy_digit']++;
 							$sql_arr['puzzle_line'] = json_encode($puzzle_line);
 							$empty_cells = $this->array_count_recursive($puzzle_line);
-							$helper_cost = $this->config['mot_sudoku_helper_samurai_cost'];
-							break;
-
-						case 'n':
+							$helper_cost = $sql_arr['game_type'] == 's' ? $this->config['mot_sudoku_helper_samurai_cost'] : $this->config['mot_sudoku_helper_ninja_cost'];
 							break;
 					}
 
@@ -1274,6 +1534,47 @@ fclose ($handle);*/
 						break;
 
 					case 'n':
+						// Make a new player line
+						$player_line = $this->ninja_array;
+
+						// Since this is a new game we have to get the information from the correct puzzle type table
+						$sql = 'SELECT puzzle_line, solution_line FROM ' . $this->ninja_sudoku_table . '
+								WHERE ninja_id = ' . (int) $sudoku_id;
+						$result = $this->db->sql_query($sql);
+						$ninja_puzzle = $this->db->sql_fetchrow($result);
+						$this->db->sql_freeresult($result);
+
+						// Get the puzzle line and add the additional digits according to the level
+						$new_digits_arr = [];
+						$puzzle_line = json_decode($ninja_puzzle['puzzle_line']);
+						$solution_line = json_decode($ninja_puzzle['solution_line']);
+						for ($g = 0; $g < 9; $g++)
+						{
+							for ($l = 0; $l < $sudoku_level; $l++)
+							{
+								// Get random numbers for line and column
+								do
+								{
+									$i = rand(0, 8);
+									$j = rand(0, 8);
+								} while (!($puzzle_line[$g][$i][$j] == 0));
+
+								// We found a matching cell, now get its digit from the solution
+								$digit = $solution_line[$g][$i][$j];
+								// and write it into the puzzle array
+								$puzzle_line[$g][$i][$j] = $digit;
+								// and into the array we will pass back to fill the grid
+								$new_digits_arr[] = [
+									'g'			=> $g,
+									'i'			=> $i,
+									'j'			=> $j,
+									'digit'		=> $digit,
+								];
+							}
+						}
+						// Get the new count of empty cells
+						$empty_cells = $this->array_count_recursive($puzzle_line);
+
 						break;
 				}
 

@@ -2,5 +2,6 @@ parameters:
     mot.sudoku.tables.mot_sudoku_classic: '%core.table_prefix%mot_sudoku_classic'
     mot.sudoku.tables.mot_sudoku_gamepacks: '%core.table_prefix%mot_sudoku_gamepacks'
     mot.sudoku.tables.mot_sudoku_games: '%core.table_prefix%mot_sudoku_games'
+    mot.sudoku.tables.mot_sudoku_ninja: '%core.table_prefix%mot_sudoku_ninja'
     mot.sudoku.tables.mot_sudoku_samurai: '%core.table_prefix%mot_sudoku_samurai'
     mot.sudoku.tables.mot_sudoku_stats: '%core.table_prefix%mot_sudoku_stats'

@@ -159,28 +159,23 @@ motSudoku.samuraiHelper = function(puzzleLine, playerLine) {
 			cellDigitsArray[item] = motSudoku.getGridDigits(puzzleLine[item], playerLine[item]);
 		} else {
 			// Now we have to handle the center grid
-			let grid = 0;
 			for (let i = 0; i < 9; i++) {
 				for (let j = 0; j < 9; j++) {
 					if (puzzleLine[item][i][j] == -1) {
-						grid = (puzzleLine[item][i][j] * -1) - 1;
-						puzzleLine[item][i][j] = puzzleLine[grid][i + 6][j + 6];
-						playerLine[item][i][j] = playerLine[grid][i + 6][j + 6];
+						puzzleLine[item][i][j] = puzzleLine[0][i + 6][j + 6];
+						playerLine[item][i][j] = playerLine[0][i + 6][j + 6];
 					}
 					if (puzzleLine[item][i][j] == -2) {
-						grid = (puzzleLine[item][i][j] * -1) - 1;
-						puzzleLine[item][i][j] = puzzleLine[grid][i + 6][j - 6];
-						playerLine[item][i][j] = playerLine[grid][i + 6][j - 6];
+						puzzleLine[item][i][j] = puzzleLine[1][i + 6][j - 6];
+						playerLine[item][i][j] = playerLine[1][i + 6][j - 6];
 					}
 					if (puzzleLine[item][i][j] == -4) {
-						grid = (puzzleLine[item][i][j] * -1) - 1;
-						puzzleLine[item][i][j] = puzzleLine[grid][i - 6][j + 6];
-						playerLine[item][i][j] = playerLine[grid][i - 6][j + 6];
+						puzzleLine[item][i][j] = puzzleLine[3][i - 6][j + 6];
+						playerLine[item][i][j] = playerLine[3][i - 6][j + 6];
 					}
 					if (puzzleLine[item][i][j] == -5) {
-						grid = (puzzleLine[item][i][j] * -1) - 1;
-						puzzleLine[item][i][j] = puzzleLine[grid][i - 6][j - 6];
-						playerLine[item][i][j] = playerLine[grid][i - 6][j - 6];
+						puzzleLine[item][i][j] = puzzleLine[4][i - 6][j - 6];
+						playerLine[item][i][j] = playerLine[4][i - 6][j - 6];
 					}
 				}
 			}
@@ -292,86 +287,6 @@ motSudoku.samuraiHelperMask = function() {
 			}
 		}
 	}
-}
-
-motSudoku.getGridDigits = function(puzzle, player) {
-	let lines = [];
-	let columns = [];
-	let subGrids = [];
-	let content = '';
-	let digitsArray = [[], [], [], [], [], [], [], [], []];
-
-	// Get the digits already present in the 9 lines
-	for (let i = 0; i <= 8; i++) {
-		lines[i] = [];
-		for (let j = 0; j <= 8; j++) {
-			content = puzzle[i][j] + player[i][j];
-			if (content > 0) {
-				lines[i].push(Number(content));
-			}
-		}
-	}
-
-	// Get the digits already present in the 9 columns
-	for (let j = 0; j <= 8; j++) {
-		columns[j] = [];
-		for (let i = 0; i <= 8; i++) {
-			content = puzzle[i][j] + player[i][j];
-			if (content > 0) {
-				columns[j].push(Number(content));
-			}
-		}
-	}
-
-	// Get the digits already present in the 9 sub grids
-	let line = 0;
-	let row = 0;
-	for (let l = 1; l <= 3; l++) {
-		for (let r = 1; r <= 3; r++) {
-			let grid = ((3 * (l - 1)) + r);
-			subGrids[grid] = [];
-			for (let i = 1; i <= 3; i++) {
-				for (let j = 1; j <= 3; j++) {
-					line = ((3 * (l - 1)) + i) - 1;
-					row = ((3 * (r - 1)) + j) - 1;
-					content = puzzle[line][row] + player[line][row];
-					if (content > 0) {
-						subGrids[grid].push(Number(content));
-					}
-				}
-			}
-		}
-	}
-
-	// Go through every cell and if it is empty get the digits which are not excluded by line, row or subgrid
-	let allDigits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-	let cellDigits = [];
-
-	for (let l = 1; l <= 3; l++) {
-		for (let r = 1; r <= 3; r++) {
-			let grid = ((3 * (l - 1)) + r);
-			for (let i = 1; i <= 3; i++) {
-				for (let j = 1; j <= 3; j++) {
-					line = ((3 * (l - 1)) + i);
-					row = ((3 * (r - 1)) + j);
-					content = puzzle[line - 1][row - 1] + player[line - 1][row - 1];
-					if (content == 0) {
-						cellDigits = allDigits.filter(function(value) {
-							return !lines[line - 1].includes(value);
-						});
-						cellDigits = cellDigits.filter( function(value) {
-							return !columns[row - 1].includes(value);
-						});
-						cellDigits = cellDigits.filter( function(value) {
-							return !subGrids[grid].includes(value);
-						});
-						digitsArray[line - 1][row - 1] = cellDigits;
-					}
-				}
-			}
-		}
-	}
-	return digitsArray;
 }
 
 })(jQuery); // Avoid conflicts with other libraries

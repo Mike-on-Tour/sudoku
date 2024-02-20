@@ -17,6 +17,7 @@ services:
             - '%core.root_path%'
             - '%mot.sudoku.tables.mot_sudoku_classic%'
             - '%mot.sudoku.tables.mot_sudoku_gamepacks%'
+            - '%mot.sudoku.tables.mot_sudoku_ninja%'
             - '%mot.sudoku.tables.mot_sudoku_samurai%'
             - '%mot.sudoku.tables.mot_sudoku_stats%'
 
@@ -35,6 +36,7 @@ services:
             - '%core.root_path%'
             - '%mot.sudoku.tables.mot_sudoku_classic%'
             - '%mot.sudoku.tables.mot_sudoku_games%'
+            - '%mot.sudoku.tables.mot_sudoku_ninja%'
             - '%mot.sudoku.tables.mot_sudoku_samurai%'
             - '%mot.sudoku.tables.mot_sudoku_stats%'
 

@@ -4,6 +4,20 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.0] - 2024-02-19
+
+### Added
+-	The functionality for the Ninja puzzles
+
+### Changed
+-	If no puzzle exists the user no longer only sees an error message, now the different tabs are visible and the error message is displayed for the puzzle type which does not
+	exist. The player may still do not have a classic puzzle (e.g. because they all were played) but still may solve a Samurai or Ninja puzzle.
+
+### Fixed
+
+### Removed
+  
+  
 ## [0.4.1] - 2024-02-07
 
 ### Added
