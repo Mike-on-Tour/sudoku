@@ -68,13 +68,18 @@
 
 <form id="acp_mot_sudoku_file_upload" method="post" action="{{ U_ACTION_IMPORT_GAME_PACK }}" enctype="multipart/form-data">
 	<fieldset>
-		<dl>
-			<dt><label for="acp_mot_sudoku_file">{{ lang('ACP_MOT_SUDOKU_UPLOAD_XML') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_UPLOAD_XML_EXP') }}</p></dt>
-			<dd>
-				<input type="file" id="acp_mot_sudoku_file" name="acp_mot_sudoku_file" class="inputbox autowidth" accept=".xml">&nbsp;
-				<input class="dt-button button1" type="submit" id="mot_sudoku_upload_file" name="mot_sudoku_upload_file" value="{{ lang('ACP_MOT_SUDOKU_UPLOAD') }}">
-			</dd>
-		</dl>
+		<legend>{{ lang('ACP_MOT_SUDOKU_UPLOAD_TITLE') }}</legend>
+		{% if ACP_MOT_SUDOKU_FILE_UPLOAD %}
+			<dl>
+				<dt><label for="acp_mot_sudoku_file">{{ lang('ACP_MOT_SUDOKU_UPLOAD_XML') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_UPLOAD_XML_EXP') }}</p></dt>
+				<dd>
+					<input type="file" id="acp_mot_sudoku_file" name="acp_mot_sudoku_file[]" class="inputbox autowidth" accept=".xml" multiple>&nbsp;
+					<input class="dt-button button1" type="submit" id="mot_sudoku_upload_file" name="mot_sudoku_upload_file" value="{{ lang('ACP_MOT_SUDOKU_UPLOAD') }}">
+				</dd>
+			</dl>
+		{% else %}
+			{{ lang('ACP_MOT_SUDOKU_UPLOAD_DISABLED') }}
+		{% endif %}
 	</fieldset>
 
 	{{ S_FORM_TOKEN }}

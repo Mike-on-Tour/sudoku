@@ -135,27 +135,28 @@ $(
 		let offsetY = 0;
 
 		if ($(window).width() >= motSudoku.screenWidth) {
-			offsetX = (columnNumber * 40) - 0;//(10/columnNumber);
+			offsetX = columnNumber * 40;
 			if (motSudoku.modalSwitch) {
 				offsetY = motSudoku.normalOffsetY;
 			} else {
-				offsetY = (lineNumber * 32) + motSudoku.normalOffsetYAbove;
+				offsetY = (lineNumber * 26) + motSudoku.normalOffsetYAbove;
 			}
 		} else {
-			offsetX = columnNumber * 20;
+			offsetX = (columnNumber * 20);
 			if (motSudoku.modalSwitch) {
 				offsetY = motSudoku.smallOffsetY;
 			} else {
-				offsetY = (lineNumber * 25) + motSudoku.smallOffsetYAbove;
+				offsetY = (lineNumber * 26) + (18/lineNumber) + motSudoku.smallOffsetYAbove;
 			}
 		}
 
 		motSudoku.CellId = thisElementId;
-		let xStart = e.clientX - offsetX > 30 ? e.clientX - offsetX : 36;
+		let yStart = e.clientY - offsetY > 0 ? e.clientY - offsetY : 0;
+		let xStart = e.clientX - offsetX > 30 ? e.clientX - offsetX : 30;
 		motSudoku.backgroundColour = $(this).css('background-color');
 		let backgroundColour = $(this).css('--backgroundColorActive');
 		$(this).css('background-color', backgroundColour);
-		$("#mot_sudoku_modal_content").css({top: e.clientY - offsetY, left: xStart, position: 'relative'});
+		$("#mot_sudoku_modal_content").css({top: yStart, left: xStart, position: 'relative'});
 		$("#mot_sudoku_modal").show();
 	}
 });

@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.4.0
+* @package MoT Sudoku v0.5.1
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -138,30 +138,30 @@ $lang = array_merge($lang, [
 												Dieser Vorgang kann nicht rückgängig gemacht werden!',
 	'ACP_MOT_SUDOKU_DELETED_PACK'			=> 'Das Spiele-Paket mit der Nr. <strong>%1$d</strong> und die dazugehörigen Rätsel wurden aus der Datenbank gelöscht.',
 
+	'ACP_MOT_SUDOKU_UPLOAD_TITLE'			=> 'Sudoku-Pack hochladen',
 	'ACP_MOT_SUDOKU_UPLOAD_XML'				=> 'Lokales Sudoku-Pack (xml-Datei) importieren',
-	'ACP_MOT_SUDOKU_UPLOAD_XML_EXP'			=> 'Hier können Sie ein auf Ihrem PC gespeichertes Sudoku-Pack in die Datenbank importieren und neue Sudoku-Rätsel zum Spielen bereit
-												stellen.<br>Bitte beachten Sie^, dass nur Spiele-Packs importiert werden können, die dem auf mike-on-tour.com definierten Schema
-												entsprechen!<br>
+	'ACP_MOT_SUDOKU_UPLOAD_XML_EXP'			=> 'Hier können Sie ein oder mehrere auf Ihrem PC gespeichertes Sudoku-Pack in die Datenbank importieren und neue Sudoku-Rätsel
+												zum Spielen bereit stellen.<br>Bitte beachten Sie^, dass nur Spiele-Packs importiert werden können, die dem auf mike-on-tour.com
+												definierten Schema entsprechen!<br>
 												Um doppelte Spiele zu vermeiden, werden die Nummern des Spiele-Packs und der darin enthaltenen Spiele vor dem Import mit der
 												Datenbank abgeglichen.',
 	'ACP_MOT_SUDOKU_UPLOAD'					=> 'Sudoku-Pack importieren',
+	'ACP_MOT_SUDOKU_UPLOAD_DISABLED'		=> 'Das Hochladen von Dateien ist in den Einstellungen (php.ini) abgeschaltet.',
 	'ACP_MOT_SUDOKU_NO_FILE'				=> 'Keine Datei ausgewählt.',
-	'ACP_MOT_SUDOKU_INVALID_FILE_EXT'		=> 'Ungültige Datei-Erweiterung.',
-	'ACP_MOT_SUDOKU_INVALID_FILE_CONTENT'	=> 'Datei ist fehlerhaft, Laden abgebrochen.',
+	'ACP_MOT_SUDOKU_INVALID_FILE_EXT'		=> 'Die Datei <strong>%1$s</strong> hat eine ungültige Datei-Erweiterung.',
+	'ACP_MOT_SUDOKU_INVALID_FILE_CONTENT'	=> 'Datei <strong>%1$s</strong> ist fehlerhaft, Laden abgebrochen.',
+	'ACP_MOT_SUDOKU_IMPORT_FILES'			=> 'Aus der Datei/den Dateien <strong>%1$s</strong> wurden folgende Rätsel importiert:',
 	'ACP_MOT_SUDOKU_CLASSIC_IMPORTED'		=> [
-		0	=> 'Es wurden keine Classic-Sudoku-Rätsel importiert.',
-		1	=> 'Es wurde %1$d Classic-Sudoku-Rätsel importiert.',
-		2	=> 'Es wurden %1$d Classic-Sudoku-Rätsel importiert.',
+		1	=> '%1$d Classic-Sudoku-Rätsel',
+		2	=> '%1$d Classic-Sudoku-Rätsel',
 	],
 	'ACP_MOT_SUDOKU_SAMURAI_IMPORTED'		=> [
-		0	=> 'Es wurden keine Samurai-Sudoku-Rätsel importiert.',
-		1	=> 'Es wurde %1$d Samurai-Sudoku-Rätsel importiert.',
-		2	=> 'Es wurden %1$d Samurai-Sudoku-Rätsel importiert.',
+		1	=> '%1$d Samurai-Sudoku-Rätsel',
+		2	=> '%1$d Samurai-Sudoku-Rätsel',
 	],
 	'ACP_MOT_SUDOKU_NINJA_IMPORTED'		=> [
-		0	=> 'Es wurden keine Ninja-Sudoku-Rätsel importiert.',
-		1	=> 'Es wurde %1$d Ninja-Sudoku-Rätsel importiert.',
-		2	=> 'Es wurden %1$d Ninja-Sudoku-Rätsel importiert.',
+		1	=> '%1$d Ninja-Sudoku-Rätsel',
+		2	=> '%1$d Ninja-Sudoku-Rätsel',
 	],
-	'MOT_SUDOKU_NO_IMPORT'				=> 'Es wurden keine Rätsel importiert, da die Nummer des Spiele-Packs bereits vergeben ist!',
+	'MOT_SUDOKU_NO_IMPORT'				=> 'Es wurden aus der Datei <strong>%1$s</strong> keine Rätsel importiert, da die Nummer des Spiele-Packs bereits vergeben ist!',
 ]);

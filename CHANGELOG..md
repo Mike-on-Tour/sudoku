@@ -4,6 +4,25 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.1] - 2024-02-22
+
+### Added
+-	The css code to horizontally scroll the Ninja puzzle if screen width is smaller than 970 pixels
+
+### Changed
+-	Cell dimensions within the Samurai puzzle from 40 x 40 pixels to 38 x 38 pixels to prevent the puzzle from overflowing to the right using prosilver
+-	Corrected the formula to calculate the modal digit windows position in Ninja puzzles
+-	Adjusted Ninja css to min width of 850 pixels for prosilver and 860 pixels for Dark Vision
+-	The game pack upload now accepts multiple files
+
+### Fixed
+-	The missing game level definition if no game pack is installed which led to a PHP warning
+-	The disappearance of the modal digit window after scrolling vertically
+-	A problem with the "buy digit" function of Ninja puzzles which led to an invalid entry into the puzzle line (tried to enter an illegal 10th grid)
+
+### Removed
+  
+  
 ## [0.5.0] - 2024-02-19
 
 ### Added

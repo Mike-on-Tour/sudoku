@@ -106,11 +106,13 @@ $(
 			}
 		}
 
+		let yStart = e.clientY - offsetY > 0 ? e.clientY - offsetY : 0;
+		let xStart = e.clientX - offsetX > 30 ? e.clientX - offsetX : 30;
 		motSudoku.CellId = thisElementId;
 		motSudoku.backgroundColour = $(this).css('background-color');
 		let backgroundColour = $(this).css('--backgroundColorActive');
 		$(this).css('background-color', backgroundColour);
-		$("#mot_sudoku_modal_content").css({top: e.clientY - offsetY, left: e.clientX - offsetX, position: 'relative'});
+		$("#mot_sudoku_modal_content").css({top: yStart, left: xStart, position: 'relative'});
 		$("#mot_sudoku_modal").show();
 	}
 });

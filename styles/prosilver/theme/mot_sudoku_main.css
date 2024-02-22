@@ -1,6 +1,6 @@
 /**
 *
-* @package MoT Sudoku v0.5.0
+* @package MoT Sudoku v0.5.1
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -15,11 +15,11 @@
 	border: 2px solid grey;
 }
 
-.samurai-table {
+.samurai-table, .ninja-table {
 	border-collapse: collapse;
 }
 
-.classic-table td, .samurai-table td {
+.classic-table td, .samurai-table td, .ninja-table td {
 	border: 2px solid grey;
 	border-collapse: collapse;
 }
@@ -53,12 +53,20 @@
 	--backgroundColorActive: yellow;
 }
 
-.ninja-table .sudoku-sub-table td {
-	width: 30px;
-	height: 30px;
+.samurai-table .sudoku-sub-table td {
+	width: 38px;
+	height: 38px;
 
-	--fontSizeBig: 2em;
-	--fontSizeSmall: 0.7em;
+	--fontSizeSmall: 0.69em;
+}
+
+.ninja-table .sudoku-sub-table td {
+	width: 24px;
+	height: 24px;
+
+	--fontSizeBig: 1.8em;
+	--fontSizeSmall: 0.65em;
+	font-size: var(--fontSizeBig);
 }
 
 .centered-div {
@@ -195,7 +203,7 @@
 }
 
 .samurai-game-container {
-	min-width: 895px;
+	min-width: 850px;
 	width: 70%;
 }
 
@@ -211,7 +219,7 @@
 * Everything for mobile devices
 */
 
-@media (max-width: 1222px) {
+@media (max-width: 1230px) {
 	.samurai-container {
 		display: block;
 	}
@@ -246,7 +254,7 @@
 }
 
 .ninja-game-container {
-	min-width: 895px;
+	min-width: 850px;
 	width: 74%;
 }
 
@@ -258,7 +266,7 @@
 * Everything for mobile devices
 */
 
-@media (max-width: 1222px) {
+@media (max-width: 1230px) {
 	.ninja-container {
 		display: block;
 	}
@@ -268,14 +276,7 @@
 	}
 }
 
-@media (max-width: 879px) {
-	.ninja-sub-table td {
-		width: 25px;
-		height: 25px;
-	}
-}
-
-@media (max-width: 770px) {
+@media (max-width: 970px) {
 	.ninja-container {
 		overflow: scroll;
 	}

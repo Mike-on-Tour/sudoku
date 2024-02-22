@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.5.0
+* @package MoT Sudoku v0.5.1
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -270,6 +270,7 @@ class mot_sudoku_main
 					// Check whether we do have at least one puzzle to work with
 					$puzzle_exists = $classic_count == 0 ? false : true;
 
+					$game_level = 0;
 					if ($puzzle_exists)
 					{
 						$puzzle_number = rand(0, $classic_count - 1);
@@ -284,7 +285,6 @@ class mot_sudoku_main
 						$game_buy_digit = 0;
 						$game_reset = 0;
 						$game_helper = 0;
-						$game_level = 0;
 					}
 				}
 				else
@@ -382,6 +382,7 @@ class mot_sudoku_main
 					// Check whether we do have at least one puzzle to work with
 					$puzzle_exists = $samurai_count == 0 ? false : true;
 
+					$game_level = 0;
 					if ($puzzle_exists)
 					{
 						$puzzle_number = rand(0, $samurai_count - 1);
@@ -396,7 +397,6 @@ class mot_sudoku_main
 						$game_buy_digit = 0;
 						$game_reset = 0;
 						$game_helper = 0;
-						$game_level = 0;
 					}
 				}
 				else
@@ -497,6 +497,7 @@ class mot_sudoku_main
 					// Check whether we do have at least one puzzle to work with
 					$puzzle_exists = $ninja_count == 0 ? false : true;
 
+					$game_level = 0;
 					if ($puzzle_exists)
 					{
 						$puzzle_number = rand(0, $ninja_count - 1);
@@ -511,7 +512,6 @@ class mot_sudoku_main
 						$game_buy_digit = 0;
 						$game_reset = 0;
 						$game_helper = 0;
-						$game_level = 0;
 					}
 				}
 				else
@@ -651,20 +651,7 @@ class mot_sudoku_main
 			$sudoku_type = $this->request->variable('type', '');
 			$sudoku_number = $this->request->variable('number', 0);
 			$sudoku_cell = $this->request->variable('cell', '');
-/*$handle = fopen ($this->root_path . 'ext/mot/sudoku/ajax.log', 'a');
-$msg = date(DATE_RSS) . "\n";
-fwrite ($handle, $msg);
-$msg = 'entry: ' . print_r($sudoku_entry, true) . "\n";
-fwrite ($handle, $msg);
-$msg = 'id: ' . print_r($sudoku_id, true) . "\n";
-fwrite ($handle, $msg);
-$msg = 'type: ' . print_r($sudoku_type, true) . "\n";
-fwrite ($handle, $msg);
-$msg = 'number: ' . print_r($sudoku_number, true) . "\n";
-fwrite ($handle, $msg);
-$msg = 'cell: ' . print_r($sudoku_cell, true) . "\n\n";
-fwrite ($handle, $msg);
-fclose ($handle);*/
+
 			// Check whether we already have this game in the database
 			if (!$sudoku_entry)
 			{
@@ -1319,7 +1306,7 @@ fclose ($handle);*/
 
 						case 's':
 						case 'n':
-							$grid = $sql_arr['game_type'] == 's' ? 4 : 9;
+							$grid = $sql_arr['game_type'] == 's' ? 4 : 8;
 							// Get random numbers for grid, line and column
 							do
 							{

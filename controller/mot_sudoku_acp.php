@@ -1,7 +1,7 @@
 <?php
 /*
 *
-* @package MoT Sudoku v0.5.0
+* @package MoT Sudoku v0.5.1
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -285,138 +285,180 @@ class mot_sudoku_acp
 				break;
 
 			case 'import_gamepack':
-				$file_info = $this->request->file('acp_mot_sudoku_file');
-				$filename = $file_info['name'];
-				$temp_file = $file_info['tmp_name'];
+				$files_to_import = [];
+				$file_info = $this->request->raw_variable('acp_mot_sudoku_file', [], \phpbb\request\request_interface::FILES);
+				$file_count = count($file_info['name']);
+				for ($i = 0; $i < $file_count; $i++)
+				{
+					$files_to_import[] = [
+						'name'			=> $file_info['name'][$i],
+						'tmp_name'		=> $file_info['tmp_name'][$i],
+					];
+				}
 
-				// Check for valid file extension
-				$path_parts = pathinfo($filename);
-
-				if ($path_parts['basename'] == '')
+				if (count($files_to_import) == 1 && $files_to_import[0]['name'] == '')
 				{
 					trigger_error($this->language->lang('ACP_MOT_SUDOKU_NO_FILE') . adm_back_link($this->u_action), E_USER_WARNING);
 				}
 
-				if (strtolower($path_parts['extension']) != 'xml' || !isset($path_parts['extension']))
+				$imported_files = [];
+				$message = [];
+				$classic_games = 0;
+				$samurai_games = 0;
+				$ninja_games = 0;
+				foreach ($files_to_import as $file)
 				{
-					trigger_error($this->language->lang('ACP_MOT_SUDOKU_INVALID_FILE_EXT') . adm_back_link($this->u_action), E_USER_WARNING);
-				}
+					$valid_file = true;
+					// Check for valid file extension
+					$path_parts = pathinfo($file['name']);
 
-				// load temp file (no need to store the file somewhere else since we only want the puzzles
-				$xml = @simplexml_load_file($temp_file);
-				if ($xml === false || $xml->getName() != 'mot_sudoku_pack')
-				{
-					trigger_error($this->language->lang('ACP_MOT_SUDOKU_INVALID_FILE_CONTENT') . adm_back_link($this->u_action), E_USER_WARNING);
-				}
-				else
-				{
-					// Get all currently existing items by their game pack number from the GAMEPACKS_TABLE
-					$sql = 'SELECT game_pack FROM ' . $this->sudoku_gamepacks_table;
-					$result = $this->db->sql_query($sql);
-					$existing_packs = $this->db->sql_fetchrowset($result);
-					$this->db->sql_freeresult($result);
-
-					$classic_sudoku = $samurai_sudoku = $ninja_sudoku = [];
-					$game_type = [];
-
-					foreach ($xml->children() as $row)
+					if (strtolower($path_parts['extension']) != 'xml' || !isset($path_parts['extension']))
 					{
-						switch ($row->getName())
+						$message[] = $this->language->lang('ACP_MOT_SUDOKU_INVALID_FILE_EXT', $file['name']);
+						$valid_file = false;
+					}
+
+					if ($valid_file)
+					{
+						$classic_count = 0;
+						$samurai_count = 0;
+						$ninja_count = 0;
+						// load temp file (no need to store the file somewhere else since we only want the puzzles
+						$xml = @simplexml_load_file($file['tmp_name']);
+						if ($xml === false || $xml->getName() != 'mot_sudoku_pack')
 						{
-							case 'classic_sudoku':
-								if (!in_array(['game_pack' => $row->game_pack], $existing_packs))
+							$message[] = $this->language->lang('ACP_MOT_SUDOKU_INVALID_FILE_CONTENT', $file['name']);
+						}
+						else
+						{
+							// Get all currently existing items by their game pack number from the GAMEPACKS_TABLE
+							$sql = 'SELECT game_pack FROM ' . $this->sudoku_gamepacks_table;
+							$result = $this->db->sql_query($sql);
+							$existing_packs = $this->db->sql_fetchrowset($result);
+							$this->db->sql_freeresult($result);
+
+							$classic_sudoku = $samurai_sudoku = $ninja_sudoku = [];
+							$game_type = [];
+
+							foreach ($xml->children() as $row)
+							{
+								switch ($row->getName())
 								{
-									$classic_sudoku[] = [
-										'game_pack'			=> (int) $row->game_pack,
-										'game_number'		=> (int) $row->game_number,
-										'game_level'		=> (int) $row->game_level,
-										'game_name'			=> (string) $row->game_name,
-										'creator_name'		=> (string) $row->creator_name,
-										'puzzle_line'		=> (string) $row->puzzle_line,
-										'solution_line'		=> (string) $row->solution_line,
-									];
+									case 'classic_sudoku':
+										if (!in_array(['game_pack' => $row->game_pack], $existing_packs))
+										{
+											$classic_sudoku[] = [
+												'game_pack'			=> (int) $row->game_pack,
+												'game_number'		=> (int) $row->game_number,
+												'game_level'		=> (int) $row->game_level,
+												'game_name'			=> (string) $row->game_name,
+												'creator_name'		=> (string) $row->creator_name,
+												'puzzle_line'		=> (string) $row->puzzle_line,
+												'solution_line'		=> (string) $row->solution_line,
+											];
+										}
+
+										break;
+
+									case 'samurai_sudoku':
+										if (!in_array(['game_pack' => $row->game_pack], $existing_packs))
+										{
+											$samurai_sudoku[] = [
+												'game_pack'			=> (int) $row->game_pack,
+												'game_number'		=> (int) $row->game_number,
+												'game_level'		=> (int) $row->game_level,
+												'game_name'			=> (string) $row->game_name,
+												'creator_name'		=> (string) $row->creator_name,
+												'puzzle_line'		=> (string) $row->puzzle_line,
+												'solution_line'		=> (string) $row->solution_line,
+											];
+										}
+
+										break;
+
+									case 'ninja_sudoku':
+										if (!in_array(['game_pack' => $row->game_pack], $existing_packs))
+										{
+											$ninja_sudoku[] = [
+												'game_pack'			=> (int) $row->game_pack,
+												'game_number'		=> (int) $row->game_number,
+												'game_level'		=> (int) $row->game_level,
+												'game_name'			=> (string) $row->game_name,
+												'creator_name'		=> (string) $row->creator_name,
+												'puzzle_line'		=> (string) $row->puzzle_line,
+												'solution_line'		=> (string) $row->solution_line,
+											];
+										}
+
+										break;
 								}
+							}
 
-								break;
+							if (!empty($classic_sudoku))
+							{
+								$classic_count = count($classic_sudoku);
+								$classic_games += $classic_count;
+								$this->db->sql_multi_insert($this->classic_sudoku_table, $classic_sudoku);
+								$game_type[] = 'c';
+							}
 
-							case 'samurai_sudoku':
-								if (!in_array(['game_pack' => $row->game_pack], $existing_packs))
-								{
-									$samurai_sudoku[] = [
-										'game_pack'			=> (int) $row->game_pack,
-										'game_number'		=> (int) $row->game_number,
-										'game_level'		=> (int) $row->game_level,
-										'game_name'			=> (string) $row->game_name,
-										'creator_name'		=> (string) $row->creator_name,
-										'puzzle_line'		=> (string) $row->puzzle_line,
-										'solution_line'		=> (string) $row->solution_line,
-									];
-								}
+							if (!empty($samurai_sudoku))
+							{
+								$samurai_count = count($samurai_sudoku);
+								$samurai_games += $samurai_count;
+								$this->db->sql_multi_insert($this->samurai_sudoku_table, $samurai_sudoku);
+								$game_type[] = 's';
+							}
 
-								break;
+							if (!empty($ninja_sudoku))
+							{
+								$ninja_count = count($ninja_sudoku);
+								$ninja_games += $ninja_count;
+								$this->db->sql_multi_insert($this->ninja_sudoku_table, $ninja_sudoku);
+								$game_type[] = 'n';
+							}
 
-							case 'ninja_sudoku':
-								if (!in_array(['game_pack' => $row->game_pack], $existing_packs))
-								{
-									$ninja_sudoku[] = [
-										'game_pack'			=> (int) $row->game_pack,
-										'game_number'		=> (int) $row->game_number,
-										'game_level'		=> (int) $row->game_level,
-										'game_name'			=> (string) $row->game_name,
-										'creator_name'		=> (string) $row->creator_name,
-										'puzzle_line'		=> (string) $row->puzzle_line,
-										'solution_line'		=> (string) $row->solution_line,
-									];
-								}
-
-								break;
+							if (empty($classic_sudoku) && empty($samurai_sudoku) && empty($ninja_sudoku))
+							{
+								$message[] = $this->language->lang('MOT_SUDOKU_NO_IMPORT', $file['name']);
+							}
+							else
+							{
+								$sql_ary = [
+									'game_pack'			=> $row->game_pack,
+									'game_type'			=> implode(',', $game_type),
+									'classic_count'		=> $classic_count,
+									'samurai_count'		=> $samurai_count,
+									'ninja_count'		=> $ninja_count,
+									'install_date'		=> time(),
+								];
+								$sql = 'INSERT INTO ' . $this->sudoku_gamepacks_table . ' ' . $this->db->sql_build_array('INSERT', $sql_ary);
+								$this->db->sql_query($sql);
+								$imported_files[] = $file['name'];
+							}
 						}
 					}
+				}
 
-					$message = [];
-					$classic_games = count($classic_sudoku);
-					if (!empty($classic_sudoku))
+				if (!empty($imported_files))
+				{
+					$message[] = $this->language->lang('ACP_MOT_SUDOKU_IMPORT_FILES', implode(', ', $imported_files));
+					if ($classic_games)
 					{
-						$this->db->sql_multi_insert($this->classic_sudoku_table, $classic_sudoku);
 						$message[] .= $this->language->lang('ACP_MOT_SUDOKU_CLASSIC_IMPORTED', $classic_games);
-						$game_type[] = 'c';
 					}
 
-					$samurai_games = count($samurai_sudoku);
-					if (!empty($samurai_sudoku))
+					if ($samurai_games)
 					{
-						$this->db->sql_multi_insert($this->samurai_sudoku_table, $samurai_sudoku);
 						$message[] .= $this->language->lang('ACP_MOT_SUDOKU_SAMURAI_IMPORTED', $samurai_games);
-						$game_type[] = 's';
 					}
 
-					$ninja_games = count($ninja_sudoku);
-					if (!empty($ninja_sudoku))
+					if ($ninja_games)
 					{
-						$this->db->sql_multi_insert($this->ninja_sudoku_table, $ninja_sudoku);
 						$message[] .= $this->language->lang('ACP_MOT_SUDOKU_NINJA_IMPORTED', $ninja_games);
-						$game_type[] = 'n';
-					}
-
-					if ($classic_games == 0 && $samurai_games == 0 && $ninja_games == 0)
-					{
-						trigger_error($this->language->lang('MOT_SUDOKU_NO_IMPORT') . adm_back_link($this->u_action) , E_USER_WARNING);
-					}
-					else
-					{
-						$sql_ary = [
-							'game_pack'			=> $row->game_pack,
-							'game_type'			=> implode(',', $game_type),
-							'classic_count'		=> $classic_games,
-							'samurai_count'		=> $samurai_games,
-							'ninja_count'		=> $ninja_games,
-							'install_date'		=> time(),
-						];
-						$sql = 'INSERT INTO ' . $this->sudoku_gamepacks_table . ' ' . $this->db->sql_build_array('INSERT', $sql_ary);
-						$this->db->sql_query($sql);
-						trigger_error(implode('<br>', $message) . adm_back_link($this->u_action));
 					}
 				}
+				trigger_error(implode('<br>', $message) . adm_back_link($this->u_action));
 
 				break;
 		}
@@ -530,6 +572,7 @@ class mot_sudoku_acp
 			'U_ACP_MS_SELECT_ACTION'				=> $this->u_action . '&amp;action=select_type',
 			'U_ACTION_IMPORT_GAME_PACK'				=> $this->u_action . '&amp;action=import_gamepack',
 			'ACP_MOT_SUDOKU_SELECT_TYPE'			=> $selected_type,
+			'ACP_MOT_SUDOKU_FILE_UPLOAD'			=> ini_get('file_uploads'),
 
 			'ACP_MOT_SUDOKU_VERSION_STRING'			=> $this->language->lang('ACP_MOT_SUDOKU_VERSION', $this->mot_sudoku_version, date('Y')),
 		]);

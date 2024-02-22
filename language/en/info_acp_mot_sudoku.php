@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.4.0
+* @package MoT Sudoku v0.5.1
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -137,29 +137,29 @@ $lang = array_merge($lang, [
 												This is a permanent action and can not be undone!',
 	'ACP_MOT_SUDOKU_DELETED_PACK'			=> 'The Sudoku pack with the number <strong>%1$d</strong> and all its puzzles removed from the database.',
 
+	'ACP_MOT_SUDOKU_UPLOAD_TITLE'			=> 'Upload Sudoku pack',
 	'ACP_MOT_SUDOKU_UPLOAD_XML'				=> 'Import a locally stored Sudoku pack (xml file)',
-	'ACP_MOT_SUDOKU_UPLOAD_XML_EXP'			=> 'Here you can import into the database a Sudoku pack which is stored locally on your PC in order to provide your players with
+	'ACP_MOT_SUDOKU_UPLOAD_XML_EXP'			=> 'Here you can import into the database one or more Sudoku packs stored locally on your PC in order to provide your players with
 												new puzzles.<br>Please note that you can import only such packs which adhere to the file schema defined on mike-on-tour.com!<br>
 												To prevent puzzles already in the database from being imported a second time the import function checks the numbers of the game
 												pack and the games against those already in the database.',
 	'ACP_MOT_SUDOKU_UPLOAD'					=> 'Import Sudoku pack',
+	'ACP_MOT_SUDOKU_UPLOAD_DISABLED'		=> 'File upload is disabled by a configuration setting (php.ini).',
 	'ACP_MOT_SUDOKU_NO_FILE'				=> 'No file selected.',
-	'ACP_MOT_SUDOKU_INVALID_FILE_EXT'		=> 'Invalid file extension.',
-	'ACP_MOT_SUDOKU_INVALID_FILE_CONTENT'	=> 'File is corrupted, import aborted.',
+	'ACP_MOT_SUDOKU_INVALID_FILE_EXT'		=> 'The file <strong>%1$s</strong> has an invalid file extension.',
+	'ACP_MOT_SUDOKU_INVALID_FILE_CONTENT'	=> 'File <strong>%1$s</strong> is corrupted, import aborted.',
+	'ACP_MOT_SUDOKU_IMPORT_FILES'			=> 'The following puzzles were imported from the file(s) <strong>%1$s</strong>:',
 	'ACP_MOT_SUDOKU_CLASSIC_IMPORTED'		=> [
-		0	=> 'No Classic Sudoku puzzles imported.',
-		1	=> '%1$d Classic Sudoku puzzle imported.',
-		2	=> '%1$d Classic Sudoku puzzles imported.',
+		1	=> '%1$d Classic Sudoku puzzle.',
+		2	=> '%1$d Classic Sudoku puzzles',
 	],
 	'ACP_MOT_SUDOKU_SAMURAI_IMPORTED'		=> [
-		0	=> 'No Samurai Sudoku puzzles imported.',
-		1	=> '%1$d Samurai Sudoku puzzle imported.',
-		2	=> '%1$d Samurai Sudoku puzzles imported.',
+		1	=> '%1$d Samurai Sudoku puzzle',
+		2	=> '%1$d Samurai Sudoku puzzles',
 	],
 	'ACP_MOT_SUDOKU_NINJA_IMPORTED'		=> [
-		0	=> 'No Ninja Sudoku puzzles imported.',
-		1	=> '%1$d Ninja Sudoku puzzle imported.',
-		2	=> '%1$d Ninja Sudoku puzzles imported.',
+		1	=> '%1$d Ninja Sudoku puzzle',
+		2	=> '%1$d Ninja Sudoku puzzles',
 	],
-	'MOT_SUDOKU_NO_IMPORT'				=> 'No puzzles imported because the number of the Sudoku pack is already in use!',
+	'MOT_SUDOKU_NO_IMPORT'				=> 'No puzzles imported from the file <strong>%1$s</strong> because the number of the Sudoku pack is already in use!',
 ]);
