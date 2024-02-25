@@ -1,0 +1,54 @@
+<div>
+	<h2>{{ lang('MOT_SUDOKU_TAB_RANK') ~ ' ' ~ MOT_SUDOKU_SELECTED_TYPE }}</h2>
+</div>
+
+<form id="mot_sudoku_type_select" method="post" action="{{ MOT_SUDOKU_RANK_TAB }}">
+	<fieldset class="quick">
+		{{ lang('MOT_SUDOKU_SELECT_TYPE') ~ lang('COLON') }}
+		<select id="mot_sudoku_select_type" name="mot_sudoku_select_type" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">
+			{{ MOT_SUDOKU_TYPE_SELECTION }}
+		</select>
+		<input class="button2" type="submit" value="{{ lang('GO') }}">
+		{{ S_FORM_TOKEN }}
+	</fieldset>
+</form>
+
+{% if pagination %}
+	<div class="pagination">
+		{% include 'pagination.html' %}
+	</div>
+	<div><p>&nbsp;</p></div>
+{% endif %}
+
+<table class="table1 zebra-list">
+	<tbody>
+		<tr>
+			<th style="text-align: center; width: 15%;">{{ lang('RANK') }}</th>
+			<th style="text-align: center; width: 25%;">{{ lang('USERNAME') }}</th>
+			<th style="text-align: center;">{{ lang('MOT_SUDOKU_TOTAL_GAMES') }}</th>
+			<th style="text-align: center;">{{ lang('MOT_SUDOKU_TOTAL_POINTS') }}</th>
+			<th style="text-align: center;">{{ lang('MOT_SUDOKU_MEAN_POINTS') }}</th>
+		</tr>
+		{% for ranking in rankings %}
+			<tr>
+				<td style="text-align: center;">{{ ranking.RANK }}</td>
+				<td {% if ranking.USER_COLOUR %}style="color: #{{ ranking.USER_COLOUR }}; font-weight: bold;"{% endif %}>{{ ranking.USERNAME }}</td>
+				<td style="text-align: center;">{{ ranking.RANK_GAMES }}</td>
+				<td style="text-align: center;">{{ ranking.RANK_POINTS }}</td>
+				<td style="text-align: center;">{{ ranking.RANK_AVG_POINTS }}</td>
+			</tr>
+		{% else %}
+		<tr>
+			<td colspan="5" style="text-align: center;">{{ lang('MOT_SUDOKU_NO_ENTRIES') }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% if pagination %}
+	<div>&nbsp;</div>
+	<div class="pagination">
+		{% include 'pagination.html' %}
+	</div>
+	<div><p>&nbsp;</p></div>
+{% endif %}

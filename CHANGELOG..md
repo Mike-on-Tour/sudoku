@@ -4,6 +4,25 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.6.0] - 2024-02-25
+
+### Added
+-	A highscore tab including a switch in the ACP to enable or disable it
+-	A Hall of Fame tab including a switch in the ACP to enable or disable it and a setting to choose the number of entries to be displayed
+-	A function to `event/mot_sudoku_listener.php` to remove the entries belonging to a deleted user from the games, stats and fame tables
+
+### Changed
+-	The game pack upload now shows a message what variable has to be set if file uploads are disabled within php.ini and the number of files allowed in one upload in the upload
+	explanation if it is enabled
+-	If disabled founders still can see and operate Sudoku
+-	Some code optimization
+
+### Fixed
+-	The config setting "enable_sudoku" has been inactive so far, it is now activated
+
+### Removed
+  
+  
 ## [0.5.1] - 2024-02-22
 
 ### Added

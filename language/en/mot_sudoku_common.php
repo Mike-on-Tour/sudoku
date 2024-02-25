@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.5.0
+* @package MoT Sudoku v0.6.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -26,6 +26,8 @@ $lang = array_merge($lang, [
 	'MOT_SUDOKU_TAB_CLASSIC'		=> 'Classic Sudoku',
 	'MOT_SUDOKU_TAB_SAMURAI'		=> 'Samurai Sudoku',
 	'MOT_SUDOKU_TAB_NINJA'			=> 'Ninja Sudoku',
+	'MOT_SUDOKU_TAB_RANK'			=> 'Highscore',
+	'MOT_SUDOKU_TAB_FAME'			=> 'Hall of Fame',
 
 	// General terms
 	'MOT_SUDOKU_EASY'				=> 'easy',
@@ -116,6 +118,22 @@ $lang = array_merge($lang, [
 	'MOT_SUDOKU_GAINABLE_POINTS'	=> 'Optainable points in this game',
 	'MOT_SUDOKU_CURRENT_POINTS'		=> 'Points in this game',
 	'MOT_SUDOKU_NEGATIVE_POINTS'	=> 'Current negative points',
+
+	// Highscore Tab
+	'MOT_SUDOKU_SELECT_TYPE'		=> 'Choose Sudoku type',
+	'MOT_SUDOKU_NO_ENTRIES'			=> 'No items',
+
+	// Hall of Fame tab
+	'MOT_SUDOKU_CURRENT_MONTH'		=> 'Current month',
+	'MOT_SUDOKU_CURRENT_YEAR'		=> 'Current year',
+	'MOT_SUDOKU_LAST_MONTHS'		=> [
+		1	=> 'Last month',
+		2	=> 'Last %1$d monthse',
+	],
+	'MOT_SUDOKU_LAST_YEARS'			=> [
+		1	=> 'Last year',
+		2	=> 'Last %1$d years',
+	],
 
 	// Online list
 	'MOT_SUDOKU_TOTAL_PLAYERS'		=> [

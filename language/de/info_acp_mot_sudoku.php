@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.5.1
+* @package MoT Sudoku v0.6.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -32,6 +32,9 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_GENERAL_EXPL'			=> 'Hier werden die allgemeinen Einstellungen vorgenommen',
 
 	'ACP_MOT_SUDOKU_GENERAL_SETTINGS'		=> 'Allgemeine Einstellungen',
+	'ACP_MOT_SUDOKU_ENABLE'					=> 'Sudoku aktivieren',
+	'ACP_MOT_SUDOKU_ENABLE_EXPL'			=> 'Sudoku für die berechtigten Mitglieder ein- bzw. ausschalten, zeigt je nach Einstellung den Link in der Navigationsleiste an.<br>
+												Diese Einstellung gilt nicht für Gründer, diese können Sudoku immer sehen.',
 	'ACP_MOT_SUDOKU_VERSION_CHECK'			=> 'Sudoku Versionsprüfung',
 	'ACP_MOT_SUDOKU_VERSION_CHECK_EXPL'		=> 'Überprüft, ob eine neuere Version von Sudoku verfügbar ist',
 	'ACP_MOT_SUDOKU_VERSION_UP_TO_DATE'		=> 'Deine Version von Sudoku ist auf dem neuesten Stand.',
@@ -41,8 +44,13 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_VERSION_CHECKER_ON'		=> 'Automatische Versionsüberprüfung',
 	'ACP_MOT_SUDOKU_VERSION_CHECKER_EXPL'	=> 'Bei Aktivierung dieser Option wird bei jedem Aufruf dieser Seite geprüft, ob eine neuere Version verfügbar ist; das Ergebnis wird
 												in einer farbigen Box oberhalb von `Allgemeine Einstellungen` angezeigt.',
-	'ACP_MOT_SUDOKU_ENABLE'					=> 'Sudoku aktivieren',
-	'ACP_MOT_SUDOKU_ENABLE_EXPL'			=> 'Sudoku für die berechtigten Mitglieder ein- bzw. ausschalten, zeigt je nach Einstellung den Link in der Navigationsleiste an.',
+	'ACP_MOT_SUDOKU_ENABLE_RANK'			=> 'Anzeige der Rangliste',
+	'ACP_MOT_SUDOKU_ENABLE_RANK_EXPL'		=> 'Diese Einstellung schaltet die Anzeige der Rangliste ein oder aus.',
+	'ACP_MOT_SUDOKU_ENABLE_FAME'			=> 'Anzeige der Ruhmeshalle',
+	'ACP_MOT_SUDOKU_ENABLE_FAME_EXPL'		=> 'Diese Einstellung schaltet die Anzeige der Ruhmeshalle ein oder aus.<br>
+												Wenn aktiviert, wird ein weiteres Eingabefeld angezeigt, mit dem die Anzahl der anzuzeigenden Spieler ausgewählt wird.',
+	'ACP_MOT_SUDOKU_FAME_LIMIT'				=> 'Anzahl der anzuzeigenden Spieler pro Tabelle der Ruhmeshalle',
+	'ACP_MOT_SUDOKU_FAME_LIMIT_EXP'			=> 'Hier kannst du auswählen wie viele Spieler in den Tabellen der Ruhmeshalle angezeigt werden sollen.',
 	'ACP_MOT_SUDOKU_PUZZLE_TITLE'			=> 'Zeige Puzzle Titel',
 	'ACP_MOT_SUDOKU_PUZZLE_TITLE_EXPL'		=> 'Zeigt den Namen des aktuellen Spiels an.',
 
@@ -138,15 +146,15 @@ $lang = array_merge($lang, [
 												Dieser Vorgang kann nicht rückgängig gemacht werden!',
 	'ACP_MOT_SUDOKU_DELETED_PACK'			=> 'Das Spiele-Paket mit der Nr. <strong>%1$d</strong> und die dazugehörigen Rätsel wurden aus der Datenbank gelöscht.',
 
-	'ACP_MOT_SUDOKU_UPLOAD_TITLE'			=> 'Sudoku-Pack hochladen',
-	'ACP_MOT_SUDOKU_UPLOAD_XML'				=> 'Lokales Sudoku-Pack (xml-Datei) importieren',
-	'ACP_MOT_SUDOKU_UPLOAD_XML_EXP'			=> 'Hier kannst du ein oder mehrere auf deinem PC gespeichertes Sudoku-Pack in die Datenbank importieren und neue Sudoku-Rätsel
+	'ACP_MOT_SUDOKU_UPLOAD_TITLE'			=> 'Sudoku-Packs importieren',
+	'ACP_MOT_SUDOKU_UPLOAD_XML'				=> 'Lokale Sudoku-Packs (xml-Datei) importieren',
+	'ACP_MOT_SUDOKU_UPLOAD_XML_EXP'			=> 'Hier kannst du bis zu %1$s auf deinem PC gespeicherte Sudoku-Packs in die Datenbank importieren und neue Sudoku-Rätsel
 												zum Spielen bereit stellen.<br>Bitte beachte, dass nur Spiele-Packs importiert werden können, die dem auf mike-on-tour.com
 												definierten Schema entsprechen!<br>
 												Um doppelte Spiele zu vermeiden, werden die Nummern des Spiele-Packs und der darin enthaltenen Spiele vor dem Import mit der
 												Datenbank abgeglichen.',
-	'ACP_MOT_SUDOKU_UPLOAD'					=> 'Sudoku-Pack importieren',
-	'ACP_MOT_SUDOKU_UPLOAD_DISABLED'		=> 'Das Hochladen von Dateien ist in den Einstellungen (php.ini) abgeschaltet.',
+	'ACP_MOT_SUDOKU_UPLOAD'					=> 'Importieren',
+	'ACP_MOT_SUDOKU_UPLOAD_DISABLED'		=> 'Das Hochladen von Dateien ist in den Einstellungen abgeschaltet, in der ´php.ini´ muss <strong>file_uploads</strong> auf ´On´ gesetzt sein.',
 	'ACP_MOT_SUDOKU_NO_FILE'				=> 'Keine Datei ausgewählt.',
 	'ACP_MOT_SUDOKU_INVALID_FILE_EXT'		=> 'Die Datei <strong>%1$s</strong> hat eine ungültige Datei-Erweiterung.',
 	'ACP_MOT_SUDOKU_INVALID_FILE_CONTENT'	=> 'Datei <strong>%1$s</strong> ist fehlerhaft, Laden abgebrochen.',

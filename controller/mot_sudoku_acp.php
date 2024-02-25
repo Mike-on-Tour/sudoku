@@ -1,7 +1,7 @@
 <?php
 /*
 *
-* @package MoT Sudoku v0.5.1
+* @package MoT Sudoku v0.6.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -105,6 +105,9 @@ class mot_sudoku_acp
 				// save the settings to the phpbb_config table
 				$this->config->set('mot_sudoku_enable', $this->request->variable('mot_sudoku_enable', 0));
 				$this->config->set('mot_sudoku_version_checker', $this->request->variable('mot_sudoku_version_checker', 0));
+				$this->config->set('mot_sudoku_enable_rank', $this->request->variable('mot_sudoku_enable_rank', 0));
+				$this->config->set('mot_sudoku_enable_fame', $this->request->variable('mot_sudoku_enable_fame', 0));
+				$this->config->set('mot_sudoku_fame_limit', $this->request->variable('mot_sudoku_fame_limit', 0));
 				$this->config->set('mot_sudoku_title_enable', $this->request->variable('mot_sudoku_title_enable', 0));
 				$this->config->set('mot_sudoku_cell_points', $this->request->variable('mot_sudoku_cell_points', 5));
 				$this->config->set('mot_sudoku_cell_cost', $this->request->variable('mot_sudoku_cell_cost', 15));
@@ -117,7 +120,7 @@ class mot_sudoku_acp
 				$this->config->set('mot_sudoku_helper_samurai_cost', $this->request->variable('mot_sudoku_helper_samurai_cost', 0));
 				$this->config->set('mot_sudoku_helper_ninja_enable', $this->request->variable('mot_sudoku_helper_ninja_enable', 0));
 				$this->config->set('mot_sudoku_helper_ninja_cost', $this->request->variable('mot_sudoku_helper_ninja_cost', 0));
-				// The folowing settings handle Ultimate Points and bonuses
+				// The following settings handle Ultimate Points and bonuses
 				$this->config->set('mot_sudoku_points_enable', $this->request->variable('mot_sudoku_points_enable', 0));
 				$this->config->set('mot_sudoku_points_ratio', $this->request->variable('mot_sudoku_points_ratio', 1));
 				$this->config->set('mot_sudoku_reward_enable', $this->request->variable('mot_sudoku_reward_enable', 0));
@@ -198,8 +201,11 @@ class mot_sudoku_acp
 			'S_ACP_MOT_SUDOKU_VERSION_UP_TO_DATE'		=> !empty($ext_data) ? version_compare($ext_data['current'], $this->mot_sudoku_version, '<') : true,
 			'ACP_MOT_SUDOKU_CURRENT_VERSION'			=> $this->mot_sudoku_version,
 			'ACP_MOT_SUDOKU_LATEST_VERSION'				=> !empty($ext_data) ? $ext_data['current'] : '',
-			'ACP_MOT_SUDOKU_VERSION_CHECKER'			=> $this->config['mot_sudoku_version_checker'],
 			'ACP_MOT_SUDOKU_ENABLE'						=> $this->config['mot_sudoku_enable'],
+			'ACP_MOT_SUDOKU_VERSION_CHECKER'			=> $this->config['mot_sudoku_version_checker'],
+			'ACP_MOT_SUDOKU_ENABLE_RANK'				=> $this->config['mot_sudoku_enable_rank'],
+			'ACP_MOT_SUDOKU_ENABLE_FAME'				=> $this->config['mot_sudoku_enable_fame'],
+			'ACP_MOT_SUDOKU_FAME_LIMIT'					=> $this->config['mot_sudoku_fame_limit'],
 			'ACP_MOT_SUDOKU_TITLE_ENABLE'				=> $this->config['mot_sudoku_title_enable'],
 			'ACP_MOT_SUDOKU_CELL_POINTS'				=> $this->config['mot_sudoku_cell_points'],
 			'ACP_MOT_SUDOKU_CELL_COST'					=> $this->config['mot_sudoku_cell_cost'],
@@ -265,8 +271,7 @@ class mot_sudoku_acp
 					$sql = 'DELETE FROM ' . $this->sudoku_gamepacks_table . '
 							WHERE pack_id=' . (int) $pack_id;
 					$this->db->sql_query($sql);
-					foreach ([$this->classic_sudoku_table, $this->samurai_sudoku_table
-/*,$this->ninja_sudoku_table*/] as $table)
+					foreach ([$this->classic_sudoku_table, $this->samurai_sudoku_table, $this->ninja_sudoku_table] as $table)
 					{
 						$sql = 'DELETE FROM ' . $table . ' WHERE game_pack = ' . (int) $pack_number;
 						$this->db->sql_query($sql);
@@ -573,6 +578,7 @@ class mot_sudoku_acp
 			'U_ACTION_IMPORT_GAME_PACK'				=> $this->u_action . '&amp;action=import_gamepack',
 			'ACP_MOT_SUDOKU_SELECT_TYPE'			=> $selected_type,
 			'ACP_MOT_SUDOKU_FILE_UPLOAD'			=> ini_get('file_uploads'),
+			'ACP_MOT_SUDOKU_MAX_FILE_UPLOAD'		=> ini_get('max_file_uploads'),
 
 			'ACP_MOT_SUDOKU_VERSION_STRING'			=> $this->language->lang('ACP_MOT_SUDOKU_VERSION', $this->mot_sudoku_version, date('Y')),
 		]);

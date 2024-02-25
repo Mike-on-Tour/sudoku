@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.5.1
+* @package MoT Sudoku v0.6.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -32,6 +32,8 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_GENERAL_EXPL'			=> 'Here you can edit Sudoku´s general settings',
 
 	'ACP_MOT_SUDOKU_GENERAL_SETTINGS'		=> 'General settings',
+	'ACP_MOT_SUDOKU_ENABLE_EXPL'			=> 'Enable/disable Sudoku for authorised members, displays the link in the navigation bar depending on status.<br>
+												This settong does not affect founders, they always can see Sudoku.',
 	'ACP_MOT_SUDOKU_VERSION_CHECK'			=> 'Sudoku Version Check',
 	'ACP_MOT_SUDOKU_VERSION_CHECK_EXPL'		=> 'Checks if a new version of Sudoku is availavble',
 	'ACP_MOT_SUDOKU_VERSION_UP_TO_DATE'		=> 'Your version of Sudoku is up-to-date.',
@@ -42,7 +44,13 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_VERSION_CHECKER_EXPL'	=> 'If enabled it will be checked every time you call this page whether a newer version is available; the result will be displayed in
 												in a coloured box above `General settings`.',
 	'ACP_MOT_SUDOKU_ENABLE'					=> 'Activate Sudoku',
-	'ACP_MOT_SUDOKU_ENABLE_EXPL'			=> 'Enable/disable for authorised members, displays the link in the navigation bar depending on status.',
+	'ACP_MOT_SUDOKU_ENABLE_RANK'			=> 'Display highscore',
+	'ACP_MOT_SUDOKU_ENABLE_RANK_EXPL'		=> 'This setting enables or disables the highscore tab.',
+	'ACP_MOT_SUDOKU_ENABLE_FAME'			=> 'Display Hall of Fame',
+	'ACP_MOT_SUDOKU_ENABLE_FAME_EXPL'		=> 'This setting enables or disables the Hall of Fame tab.<br>
+												If enabled another setting will be displayed where you can choose the number of players to be displayed.',
+	'ACP_MOT_SUDOKU_FAME_LIMIT'				=> 'Number of players to be displayed in the »Hall of Fame«',
+	'ACP_MOT_SUDOKU_FAME_LIMIT_EXP'			=> 'You can select the number of players to be displayed in the tables of the »Hall of Fame«.',
 	'ACP_MOT_SUDOKU_PUZZLE_TITLE'			=> 'Display puzzle title',
 	'ACP_MOT_SUDOKU_PUZZLE_TITLE_EXPL'		=> 'Enables display of the current game`s title.',
 
@@ -137,14 +145,14 @@ $lang = array_merge($lang, [
 												This is a permanent action and can not be undone!',
 	'ACP_MOT_SUDOKU_DELETED_PACK'			=> 'The Sudoku pack with the number <strong>%1$d</strong> and all its puzzles removed from the database.',
 
-	'ACP_MOT_SUDOKU_UPLOAD_TITLE'			=> 'Upload Sudoku pack',
-	'ACP_MOT_SUDOKU_UPLOAD_XML'				=> 'Import a locally stored Sudoku pack (xml file)',
-	'ACP_MOT_SUDOKU_UPLOAD_XML_EXP'			=> 'Here you can import into the database one or more Sudoku packs stored locally on your PC in order to provide your players with
+	'ACP_MOT_SUDOKU_UPLOAD_TITLE'			=> 'Import Sudoku packs',
+	'ACP_MOT_SUDOKU_UPLOAD_XML'				=> 'Import locally stored Sudoku packs (xml file)',
+	'ACP_MOT_SUDOKU_UPLOAD_XML_EXP'			=> 'Here you can import into the database up to %1$d Sudoku packs stored locally on your PC in order to provide your players with
 												new puzzles.<br>Please note that you can import only such packs which adhere to the file schema defined on mike-on-tour.com!<br>
 												To prevent puzzles already in the database from being imported a second time the import function checks the numbers of the game
 												pack and the games against those already in the database.',
-	'ACP_MOT_SUDOKU_UPLOAD'					=> 'Import Sudoku pack',
-	'ACP_MOT_SUDOKU_UPLOAD_DISABLED'		=> 'File upload is disabled by a configuration setting (php.ini).',
+	'ACP_MOT_SUDOKU_UPLOAD'					=> 'Import',
+	'ACP_MOT_SUDOKU_UPLOAD_DISABLED'		=> 'File upload is disabled by a configuration setting in ´php.ini´, please set <strong>file_uploads</strong> to ´On´.',
 	'ACP_MOT_SUDOKU_NO_FILE'				=> 'No file selected.',
 	'ACP_MOT_SUDOKU_INVALID_FILE_EXT'		=> 'The file <strong>%1$s</strong> has an invalid file extension.',
 	'ACP_MOT_SUDOKU_INVALID_FILE_CONTENT'	=> 'File <strong>%1$s</strong> is corrupted, import aborted.',

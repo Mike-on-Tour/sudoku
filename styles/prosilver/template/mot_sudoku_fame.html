@@ -1,0 +1,128 @@
+<div>
+	<h2>{{ lang('MOT_SUDOKU_TAB_FAME') ~ ' ' ~ MOT_SUDOKU_SELECTED_TYPE }}</h2>
+</div>
+
+<form id="mot_sudoku_type_select" method="post" action="{{ MOT_SUDOKU_FAME_TAB }}">
+	<fieldset class="quick">
+		{{ lang('MOT_SUDOKU_SELECT_TYPE') ~ lang('COLON') }}
+		<select id="mot_sudoku_select_type" name="mot_sudoku_select_type" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">
+			{{ MOT_SUDOKU_TYPE_SELECTION }}
+		</select>
+		<input class="button2" type="submit" value="{{ lang('GO') }}">
+		{{ S_FORM_TOKEN }}
+	</fieldset>
+</form>
+
+<h3>{{ lang('MOT_SUDOKU_CURRENT_MONTH') }}</h3>
+
+<table class="table1 zebra-list">
+	<tbody>
+		<tr>
+			<th>{{ lang('USERNAME') }}</th>
+			<th>{{ lang('MOT_SUDOKU_TOTAL_GAMES') }}</th>
+			<th>{{ lang('MOT_SUDOKU_TOTAL_POINTS') }}</th>
+			<th>{{ lang('MOT_SUDOKU_MEAN_POINTS') }}</th>
+		</tr>
+		{% for current_month in current_months %}
+			<tr>
+				<td {% if current_month.USER_COLOUR %}style="color: #{{ current_month.USER_COLOUR }}; font-weight: bold;"{% endif %}>{{ current_month.USERNAME }}</td>
+				<td>{{ current_month.TOTAL_GAMES }}</td>
+				<td>{{ current_month.TOTAL_POINTS }}</td>
+				<td>{{ current_month.MEAN_POINTS }}</td>
+			</tr>
+		{% else %}
+			<tr>
+				<td colspan="4" style="text-align: center;">{{ lang('MOT_SUDOKU_NO_ENTRIES') }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<p>&nbsp;</p>
+
+<h3>{{ lang('MOT_SUDOKU_CURRENT_YEAR') }}</h3>
+
+<table class="table1 zebra-list">
+	<tbody>
+		<tr>
+			<th>{{ lang('USERNAME') }}</th>
+			<th>{{ lang('MOT_SUDOKU_TOTAL_GAMES') }}</th>
+			<th>{{ lang('MOT_SUDOKU_TOTAL_POINTS') }}</th>
+			<th>{{ lang('MOT_SUDOKU_MEAN_POINTS') }}</th>
+		</tr>
+		{% for current_year in current_years %}
+			<tr>
+				<td {% if current_year.USER_COLOUR %}style="color: #{{ current_year.USER_COLOUR }}; font-weight: bold;"{% endif %}>{{ current_year.USERNAME }}</td>
+				<td>{{ current_year.TOTAL_GAMES }}</td>
+				<td>{{ current_year.TOTAL_POINTS }}</td>
+				<td>{{ current_year.MEAN_POINTS }}</td>
+			</tr>
+		{% else %}
+			<tr>
+				<td colspan="4" style="text-align: center;">{{ lang('MOT_SUDOKU_NO_ENTRIES') }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% if MOT_SUDOKU_NUMBER_MONTHS %}
+	<p>&nbsp;</p>
+
+	<h3>{{ lang('MOT_SUDOKU_LAST_MONTHS', MOT_SUDOKU_NUMBER_MONTHS) }}</h3>
+
+	<table class="table1 zebra-list">
+		<tbody>
+			<tr>
+				<th>{{ lang('MONTH') }}</th>
+				<th>{{ lang('USERNAME') }}</th>
+				<th>{{ lang('MOT_SUDOKU_TOTAL_GAMES') }}</th>
+				<th>{{ lang('MOT_SUDOKU_TOTAL_POINTS') }}</th>
+				<th>{{ lang('MOT_SUDOKU_MEAN_POINTS') }}</th>
+			</tr>
+			{% for last_month in last_months %}
+				<tr>
+					<td>{{ last_month.MONTH }}</td>
+					<td {% if last_month.USER_COLOUR %}style="color: #{{ last_month.USER_COLOUR }}; font-weight: bold;"{% endif %}>{{ last_month.USERNAME }}</td>
+					<td>{{ last_month.TOTAL_GAMES }}</td>
+					<td>{{ last_month.TOTAL_POINTS }}</td>
+					<td>{{ last_month.MEAN_POINTS }}</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="5" style="text-align: center;">{{ lang('MOT_SUDOKU_NO_ENTRIES') }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endif %}
+
+{% if MOT_SUDOKU_NUMBER_MONTHS %}
+	<p>&nbsp;</p>
+
+	<h3>{{ lang('MOT_SUDOKU_LAST_YEARS', MOT_SUDOKU_NUMBER_YEARS) }}</h3>
+
+	<table class="table1 zebra-list">
+		<tbody>
+			<tr>
+				<th>{{ lang('YEAR') }}</th>
+				<th>{{ lang('USERNAME') }}</th>
+				<th>{{ lang('MOT_SUDOKU_TOTAL_GAMES') }}</th>
+				<th>{{ lang('MOT_SUDOKU_TOTAL_POINTS') }}</th>
+				<th>{{ lang('MOT_SUDOKU_MEAN_POINTS') }}</th>
+			</tr>
+			{% for last_year in last_years %}
+				<tr>
+					<td>{{ last_year.YEAR }}</td>
+					<td {% if last_year.USER_COLOUR %}style="color: #{{ last_year.USER_COLOUR }}; font-weight: bold;"{% endif %}>{{ last_year.USERNAME }}</td>
+					<td>{{ last_year.TOTAL_GAMES }}</td>
+					<td>{{ last_year.TOTAL_POINTS }}</td>
+					<td>{{ last_year.MEAN_POINTS }}</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="5" style="text-align: center;">{{ lang('MOT_SUDOKU_NO_ENTRIES') }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endif %}

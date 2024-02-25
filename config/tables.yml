@@ -1,5 +1,8 @@
 parameters:
     mot.sudoku.tables.mot_sudoku_classic: '%core.table_prefix%mot_sudoku_classic'
+    mot.sudoku.tables.mot_sudoku_fame: '%core.table_prefix%mot_sudoku_fame'
+    mot.sudoku.tables.mot_sudoku_fame_month: '%core.table_prefix%mot_sudoku_fame_month'
+    mot.sudoku.tables.mot_sudoku_fame_year: '%core.table_prefix%mot_sudoku_fame_year'
     mot.sudoku.tables.mot_sudoku_gamepacks: '%core.table_prefix%mot_sudoku_gamepacks'
     mot.sudoku.tables.mot_sudoku_games: '%core.table_prefix%mot_sudoku_games'
     mot.sudoku.tables.mot_sudoku_ninja: '%core.table_prefix%mot_sudoku_ninja'

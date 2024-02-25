@@ -44,14 +44,31 @@
 	<fieldset>
 		<legend>{{ lang('ACP_MOT_SUDOKU_GENERAL_SETTINGS') }}</legend>
 		<dl>
+			<dt><label for="mot_sudoku_enable">{{ lang('ACP_MOT_SUDOKU_ENABLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_ENABLE_EXPL') }}</p></dt>
+			<dd>{{ _self.switch('mot_sudoku_enable', ACP_MOT_SUDOKU_ENABLE, switch_type) }}</dd>
+		</dl>
+
+		<dl>
 			<dt><label for="mot_sudoku_version_checker">{{ lang('ACP_MOT_SUDOKU_VERSION_CHECKER_ON') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_VERSION_CHECKER_EXPL') }}</p></dt>
 			<dd>{{ _self.switch('mot_sudoku_version_checker', ACP_MOT_SUDOKU_VERSION_CHECKER, switch_type) }}</dd>
 		</dl>
 
 		<dl>
-			<dt><label for="mot_sudoku_enable">{{ lang('ACP_MOT_SUDOKU_ENABLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_ENABLE_EXPL') }}</p></dt>
-			<dd>{{ _self.switch('mot_sudoku_enable', ACP_MOT_SUDOKU_ENABLE, switch_type) }}</dd>
+			<dt><label for="mot_sudoku_enable_rank">{{ lang('ACP_MOT_SUDOKU_ENABLE_RANK') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_ENABLE_RANK_EXPL') }}</p></dt>
+			<dd>{{ _self.switch('mot_sudoku_enable_rank', ACP_MOT_SUDOKU_ENABLE_RANK, switch_type) }}</dd>
 		</dl>
+
+		<dl>
+			<dt><label for="mot_sudoku_enable_fame">{{ lang('ACP_MOT_SUDOKU_ENABLE_FAME') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_ENABLE_FAME_EXPL') }}</p></dt>
+			<dd>{{ _self.switch('mot_sudoku_enable_fame', ACP_MOT_SUDOKU_ENABLE_FAME, switch_type) }}</dd>
+		</dl>
+
+		<div id="mot_sudoku_fame_limit_field" hidden="true">
+			<dl>
+				<dt><label for="mot_sudoku_fame_limit">{{ lang('ACP_MOT_SUDOKU_FAME_LIMIT') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_FAME_LIMIT_EXP') }}</p></dt>
+				<dd><input id="mot_sudoku_fame_limit" type="number" min="1" max="10" name="mot_sudoku_fame_limit" value={{ ACP_MOT_SUDOKU_FAME_LIMIT }}></dd>
+			</dl>
+		</div>
 
 		<dl>
 			<dt><label for="mot_sudoku_title_enable">{{ lang('ACP_MOT_SUDOKU_PUZZLE_TITLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_PUZZLE_TITLE_EXPL') }}</p></dt>

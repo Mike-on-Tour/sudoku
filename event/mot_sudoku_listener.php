@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.3.0
+* @package MoT Sudoku v0.6.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -19,12 +19,16 @@ class mot_sudoku_listener implements EventSubscriberInterface
 			'core.user_setup'			=> 'load_language_on_setup',
 			'core.page_header'			=> 'add_page_header_link',
 			'core.page_footer'			=> 'get_visited_page',
+			'core.delete_user_after'	=> 'delete_user_after',
 			'core.permissions'			=> 'load_permissions'
 		);
 	}
 
 	/** @var \phpbb\auth\auth */
 	protected $auth;
+
+	/** @var \phpbb\config\config */
+	protected $config;
 
 	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
@@ -38,14 +42,45 @@ class mot_sudoku_listener implements EventSubscriberInterface
 	/* @var \phpbb\template\template */
 	protected $template;
 
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\language\language $language,
-								\phpbb\template\template $template)
+	/** @var \phpbb\user */
+	protected $user;
+
+	/** @var \mot\sudoku\includes\mot_sudoku_functions */
+	protected $mot_sudoku_functions;
+
+	/** @var string mot.sudoku.tables.mot_sudoku_fame */
+	protected $mot_sudoku_fame_table;
+
+	/** @var string mot.sudoku.tables.mot_sudoku_fame_month */
+	protected $mot_sudoku_fame_month_table;
+
+	/** @var string mot.sudoku.tables.mot_sudoku_fame_year */
+	protected $mot_sudoku_fame_year_table;
+
+	/** @var string mot.sudoku.tables.mot_sudoku_games */
+	protected $mot_sudoku_games_table;
+
+	/** @var string mot.sudoku.tables.mot_sudoku_stats */
+	protected $mot_sudoku_stats_table;
+
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper,
+								\phpbb\language\language $language, \phpbb\template\template $template, \phpbb\user $user, $mot_sudoku_functions, $mot_sudoku_fame_table,
+								$mot_sudoku_fame_month_table, $mot_sudoku_fame_year_table, $mot_sudoku_games_table, $mot_sudoku_stats_table)
 	{
 		$this->auth = $auth;
+		$this->config = $config;
 		$this->db = $db;
 		$this->helper = $helper;
 		$this->language = $language;
 		$this->template = $template;
+		$this->user = $user;
+		$this->mot_sudoku_functions = $mot_sudoku_functions;
+
+		$this->sudoku_fame_table = $mot_sudoku_fame_table;
+		$this->sudoku_fame_month_table = $mot_sudoku_fame_month_table;
+		$this->sudoku_fame_year_table = $mot_sudoku_fame_year_table;
+		$this->sudoku_games_table = $mot_sudoku_games_table;
+		$this->sudoku_stats_table = $mot_sudoku_stats_table;
 	}
 
 	/**
@@ -70,9 +105,12 @@ class mot_sudoku_listener implements EventSubscriberInterface
 	 */
 	public function add_page_header_link()
 	{
+		// Check first for a new month or year and update FAME_MONTH_TABLE  and FAME_YEAR_TABLE if applicable
+		$this->mot_sudoku_functions->check_month_year();
+
 		$this->template->assign_vars([
 			'U_MOT_SUDOKU' 			=> $this->helper->route('mot_sudoku_main'),
-			'U_MOT_SUDOKU_PLAY'		=> $this->auth->acl_get('u_play_mot_sudoku'),
+			'U_MOT_SUDOKU_PLAY'		=> ($this->config['mot_sudoku_enable'] && $this->auth->acl_get('u_play_mot_sudoku')) || $this->user->data['user_type'] == USER_FOUNDER,
 		]);
 	}
 
@@ -117,6 +155,28 @@ class mot_sudoku_listener implements EventSubscriberInterface
 		$this->template->assign_vars([
 			'MOT_SUDOKU_TOTAL_USERS_ONLINE'	=> $sudoku_users_count . $sudoku_user_list,
 		]);
+	}
+
+	/**
+	* Delete a user from mot_sudoku_games table, mot_sudoku_stats table and mot_sudoku_fame tables after he was deleted from the users table
+	*
+	* @params:	mode, retain_username, user_ids, user_rows
+	*/
+	public function delete_user_after($event)
+	{
+		$table_ary = [$this->sudoku_fame_table, $this->sudoku_fame_month_table, $this->sudoku_fame_year_table, $this->sudoku_games_table, $this->sudoku_stats_table];
+		// get the user_id's stored in an indexed array
+		$user_id_ary = $event['user_ids'];
+		// if user(s) got deleted we need to delete them from all tables in the a.m. array
+		foreach ($user_id_ary as $value)
+		{
+			foreach ($table_ary as $table)
+			{
+				$sql = 'DELETE FROM ' . $table . '
+						WHERE user_id = ' . (int) $value;
+				$this->db->sql_query($sql);
+			}
+		}
 	}
 
 	/**

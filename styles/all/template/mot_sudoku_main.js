@@ -1,6 +1,6 @@
 /**
 *
-* @package MoT Sudoku v0.4.1
+* @package MoT Sudoku v0.6.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -13,7 +13,7 @@
 /*
 * Select the tab as active and the corresponding content box after a tab was selected
 *
-* @params	integer	index		the numerical descriptor of the selected tab
+* @params	string	index		the descriptor of the selected tab
 *
 * @return	none
 */

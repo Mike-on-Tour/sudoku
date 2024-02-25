@@ -5,36 +5,41 @@
 <script>
 	let motSudoku = {};
 	motSudoku.tab = "{{ MOT_SUDOKU_SELECTED_TAB|e('js') }}";
-	motSudoku.CellId = '';
-	motSudoku.ajaxNumberCall = "{{ MOT_SUDOKU_AJAX_NUMBER|e('js') }}";
-	motSudoku.ajaxGameReset = "{{ MOT_SUDOKU_AJAX_RESET|e('js') }}";
-	motSudoku.ajaxBuyDigit = "{{ MOT_SUDOKU_AJAX_BUY|e('js') }}";
-	motSudoku.ajaxEnableHelper = "{{ MOT_SUDOKU_AJAX_HELPER|e('js') }}";
-	motSudoku.ajaxModalPos = "{{ MOT_SUDOKU_AJAX_MODAL|e('js') }}";
-	motSudoku.ajaxSelectLevel = "{{ MOT_SUDOKU_AJAX_LEVEL|e('js') }}";
-
-	motSudoku.updateHelper = "{{ lang('MOT_SUDOKU_HELPER_UPDATE')|e('js') }}";
-
-	motSudoku.gameEntryId = {{ MOT_SUDOKU_ENTRY_ID }};
-
-	motSudoku.congratulation = "{{ lang('MOT_SUDOKU_CONGRATULATIONS')|e('js') }}";
-	motSudoku.puzzleSolved = "{{ lang('MOT_SUDOKU_PUZZLE_SOLVED')|e('js') }}";
-	motSudoku.startNew = "{{ lang('MOT_SUDOKU_BACK_TO_START')|e('js') }}";
-	motSudoku.digitNoBuy = {{ MOT_SUDOKU_DIGIT_NO_BUY }};
-
-	motSudoku.errorErr = "{{ lang('MOT_SUDOKU_ERROR_TITLE')|e('js') }}";
-	motSudoku.errorReset = "{{ lang('MOT_SUDOKU_ERROR_RESET')|e('js') }}";
-	motSudoku.errorBuyDigit = "{{ lang('MOT_SUDOKU_ERROR_BUY_NOW')|e('js') }}";
-	motSudoku.errorBuyLastDigit = "{{ lang('MOT_SUDOKU_BUY_LAST_DIGIT')|e('js') }}";
-	motSudoku.errorHelper = "{{ lang('MOT_SUDOKU_ERROR_HELPER')|e('js') }}";
-	motSudoku.errorLevel = "{{ lang('MOT_SUDOKU_ERROR_LEVEL')|e('js') }}";
-	motSudoku.errorSolution = "{{ lang('MOT_SUDOKU_INCORRECT_END')|e('js') }}";
-
-	motSudoku.modalSwitch = {{ MOT_SUDOKU_MODAL_SWITCH }};
-	motSudoku.gameLevel = {{ MOT_SUDOKU_GAME_LEVEL }};
-	motSudoku.helper = {{ MOT_SUDOKU_GAME_HELPER }};
-	motSudoku.reset = {{ MOT_SUDOKU_GAME_RESET }};
 </script>
+
+{% if MOT_SUDOKU_SELECTED_TAB in ['classic', 'samurai', 'ninja'] %}
+	<script>
+		motSudoku.CellId = '';
+		motSudoku.ajaxNumberCall = "{{ MOT_SUDOKU_AJAX_NUMBER|e('js') }}";
+		motSudoku.ajaxGameReset = "{{ MOT_SUDOKU_AJAX_RESET|e('js') }}";
+		motSudoku.ajaxBuyDigit = "{{ MOT_SUDOKU_AJAX_BUY|e('js') }}";
+		motSudoku.ajaxEnableHelper = "{{ MOT_SUDOKU_AJAX_HELPER|e('js') }}";
+		motSudoku.ajaxModalPos = "{{ MOT_SUDOKU_AJAX_MODAL|e('js') }}";
+		motSudoku.ajaxSelectLevel = "{{ MOT_SUDOKU_AJAX_LEVEL|e('js') }}";
+
+		motSudoku.updateHelper = "{{ lang('MOT_SUDOKU_HELPER_UPDATE')|e('js') }}";
+
+		motSudoku.gameEntryId = {{ MOT_SUDOKU_ENTRY_ID }};
+
+		motSudoku.congratulation = "{{ lang('MOT_SUDOKU_CONGRATULATIONS')|e('js') }}";
+		motSudoku.puzzleSolved = "{{ lang('MOT_SUDOKU_PUZZLE_SOLVED')|e('js') }}";
+		motSudoku.startNew = "{{ lang('MOT_SUDOKU_BACK_TO_START')|e('js') }}";
+		motSudoku.digitNoBuy = {{ MOT_SUDOKU_DIGIT_NO_BUY }};
+
+		motSudoku.errorErr = "{{ lang('MOT_SUDOKU_ERROR_TITLE')|e('js') }}";
+		motSudoku.errorReset = "{{ lang('MOT_SUDOKU_ERROR_RESET')|e('js') }}";
+		motSudoku.errorBuyDigit = "{{ lang('MOT_SUDOKU_ERROR_BUY_NOW')|e('js') }}";
+		motSudoku.errorBuyLastDigit = "{{ lang('MOT_SUDOKU_BUY_LAST_DIGIT')|e('js') }}";
+		motSudoku.errorHelper = "{{ lang('MOT_SUDOKU_ERROR_HELPER')|e('js') }}";
+		motSudoku.errorLevel = "{{ lang('MOT_SUDOKU_ERROR_LEVEL')|e('js') }}";
+		motSudoku.errorSolution = "{{ lang('MOT_SUDOKU_INCORRECT_END')|e('js') }}";
+
+		motSudoku.modalSwitch = {{ MOT_SUDOKU_MODAL_SWITCH }};
+		motSudoku.gameLevel = {{ MOT_SUDOKU_GAME_LEVEL }};
+		motSudoku.helper = {{ MOT_SUDOKU_GAME_HELPER }};
+		motSudoku.reset = {{ MOT_SUDOKU_GAME_RESET }};
+	</script>
+{% endif %}
 
 {% if not S_IS_BOT and S_USER_LOGGED_IN %}
 	<div id="page-body" class="page-body">
@@ -61,6 +66,14 @@
 						<li id="mot_sudoku_tab_samurai" class="tab"><a href="{{ MOT_SUDOKU_SAMURAI_TAB }}">{{ lang('MOT_SUDOKU_TAB_SAMURAI') }}</a></li>
 
 						<li id="mot_sudoku_tab_ninja" class="tab"><a href="{{ MOT_SUDOKU_NINJA_TAB }}">{{ lang('MOT_SUDOKU_TAB_NINJA') }}</a></li>
+
+						{% if MOT_SUDOKU_ENABLE_RANK %}
+							<li id="mot_sudoku_tab_rank" class="tab"><a href="{{ MOT_SUDOKU_RANK_TAB }}">{{ lang('MOT_SUDOKU_TAB_RANK') }}</a></li>
+						{% endif %}
+
+						{% if MOT_SUDOKU_ENABLE_FAME %}
+							<li id="mot_sudoku_tab_fame" class="tab"><a href="{{ MOT_SUDOKU_FAME_TAB }}">{{ lang('MOT_SUDOKU_TAB_FAME') }}</a></li>
+						{% endif %}
 					</ul>
 				</div>
 
@@ -75,6 +88,14 @@
 
 					<div id="mot_sudoku_box_ninja" class="inner" hidden="true">
 						{% include 'mot_sudoku_ninja.html' %}
+					</div>
+
+					<div id="mot_sudoku_box_rank" class="inner" hidden="true">
+						{% include 'mot_sudoku_rank.html' %}
+					</div>
+
+					<div id="mot_sudoku_box_fame" class="inner" hidden="true">
+						{% include 'mot_sudoku_fame.html' %}
 					</div>
 				</div>
 

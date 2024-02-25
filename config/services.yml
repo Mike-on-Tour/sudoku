@@ -29,12 +29,16 @@ services:
             - '@dbal.conn'
             - '@controller.helper'
             - '@language'
+            - '@pagination'
             - '@ext.manager'
             - '@request'
             - '@template'
             - '@user'
             - '%core.root_path%'
             - '%mot.sudoku.tables.mot_sudoku_classic%'
+            - '%mot.sudoku.tables.mot_sudoku_fame%'
+            - '%mot.sudoku.tables.mot_sudoku_fame_month%'
+            - '%mot.sudoku.tables.mot_sudoku_fame_year%'
             - '%mot.sudoku.tables.mot_sudoku_games%'
             - '%mot.sudoku.tables.mot_sudoku_ninja%'
             - '%mot.sudoku.tables.mot_sudoku_samurai%'
@@ -44,9 +48,26 @@ services:
         class: mot\sudoku\event\mot_sudoku_listener
         arguments:
             - '@auth'
+            - '@config'
             - '@dbal.conn'
             - '@controller.helper'
             - '@language'
             - '@template'
+            - '@user'
+            - '@mot.sudoku.functions'
+            - '%mot.sudoku.tables.mot_sudoku_fame%'
+            - '%mot.sudoku.tables.mot_sudoku_fame_month%'
+            - '%mot.sudoku.tables.mot_sudoku_fame_year%'
+            - '%mot.sudoku.tables.mot_sudoku_games%'
+            - '%mot.sudoku.tables.mot_sudoku_stats%'
         tags:
             - { name: event.listener }
+
+    mot.sudoku.functions:
+        class: mot\sudoku\includes\mot_sudoku_functions
+        arguments:
+            - '@config'
+            - '@dbal.conn'
+            - '%mot.sudoku.tables.mot_sudoku_fame%'
+            - '%mot.sudoku.tables.mot_sudoku_fame_month%'
+            - '%mot.sudoku.tables.mot_sudoku_fame_year%'

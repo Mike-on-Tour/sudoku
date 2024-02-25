@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.5.1
+* @package MoT Sudoku v0.6.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -26,6 +26,9 @@ class mot_sudoku_main
 	/** @var \phpbb\language\language $language */
 	protected $language;
 
+	/** @var \phpbb\pagination  */
+	protected $pagination;
+
 	/** @var \phpbb\extension\manager */
 	protected $phpbb_extension_manager;
 
@@ -44,7 +47,16 @@ class mot_sudoku_main
 	/** @var string mot.sudoku.tables.mot_sudoku_classic */
 	protected $mot_sudoku_classic_table;
 
-	/** @var string mot.sudoku.tables.mot_sudoku_classic */
+	/** @var string mot.sudoku.tables.mot_sudoku_fame */
+	protected $mot_sudoku_fame_table;
+
+	/** @var string mot.sudoku.tables.mot_sudoku_fame_month */
+	protected $mot_sudoku_fame_month_table;
+
+	/** @var string mot.sudoku.tables.mot_sudoku_fame_year */
+	protected $mot_sudoku_fame_year_table;
+
+	/** @var string mot.sudoku.tables.mot_sudoku_games */
 	protected $mot_sudoku_games_table;
 
 	/** @var string mot.sudoku.tables.mot_sudoku_ninja */
@@ -53,12 +65,13 @@ class mot_sudoku_main
 	/** @var string mot.sudoku.tables.mot_sudoku_samurai */
 	protected $mot_sudoku_samurai_table;
 
-	/** @var string mot.sudoku.tables.mot_sudoku_classic */
+	/** @var string mot.sudoku.tables.mot_sudoku_stats */
 	protected $mot_sudoku_stats_table;
 
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper,
-								\phpbb\language\language $language, \phpbb\extension\manager $phpbb_extension_manager, \phpbb\request\request_interface $request,
-								\phpbb\template\template $template, \phpbb\user $user, $root_path, $mot_sudoku_classic_table, $mot_sudoku_games_table, $mot_sudoku_ninja_table,
+								\phpbb\language\language $language, \phpbb\pagination $pagination, \phpbb\extension\manager $phpbb_extension_manager,
+								\phpbb\request\request_interface $request, \phpbb\template\template $template, \phpbb\user $user, $root_path, $mot_sudoku_classic_table,
+								$mot_sudoku_fame_table, $mot_sudoku_fame_month_table, $mot_sudoku_fame_year_table, $mot_sudoku_games_table, $mot_sudoku_ninja_table,
 								$mot_sudoku_samurai_table, $mot_sudoku_stats_table)
 	{
 		$this->auth = $auth;
@@ -66,6 +79,7 @@ class mot_sudoku_main
 		$this->db = $db;
 		$this->helper = $helper;
 		$this->language = $language;
+		$this->pagination = $pagination;
 		$this->phpbb_extension_manager 	= $phpbb_extension_manager;
 		$this->request = $request;
 		$this->template = $template;
@@ -73,6 +87,9 @@ class mot_sudoku_main
 		$this->root_path = $root_path;
 
 		$this->classic_sudoku_table = $mot_sudoku_classic_table;
+		$this->sudoku_fame_table = $mot_sudoku_fame_table;
+		$this->sudoku_fame_month_table = $mot_sudoku_fame_month_table;
+		$this->sudoku_fame_year_table = $mot_sudoku_fame_year_table;
 		$this->sudoku_games_table = $mot_sudoku_games_table;
 		$this->ninja_sudoku_table = $mot_sudoku_ninja_table;
 		$this->samurai_sudoku_table = $mot_sudoku_samurai_table;
@@ -182,460 +199,740 @@ class mot_sudoku_main
 
 	public function handle()
 	{
-		//If user is a bot.... redirect to the index.
-		if ($this->user->data['is_bot'])
+		if ($this->config['mot_sudoku_enable'] || $this->user->data['user_type'] == USER_FOUNDER)
 		{
-			redirect(append_sid("{$this->root_path}index." . $this->php_ext));
-		}
+			//If user is a bot.... redirect to the index.
+			if ($this->user->data['is_bot'])
+			{
+				redirect(append_sid("{$this->root_path}index." . $this->php_ext));
+			}
 
-		// Check if the user ist logged in.
-		if (!$this->user->data['is_registered'])
-		{
-			// Not logged in ? Redirect to the loginbox.
-			login_box('', $this->language->lang('NO_AUTH_OPERATION'));
-		}
+			// Check if the user ist logged in.
+			if (!$this->user->data['is_registered'])
+			{
+				// Not logged in ? Redirect to the loginbox.
+				login_box('', $this->language->lang('NO_AUTH_OPERATION'));
+			}
 
-		// Check permission
-		if (!$this->auth->acl_get('u_play_mot_sudoku'))
+			// Check permission
+			if (!$this->auth->acl_get('u_play_mot_sudoku'))
+			{
+				trigger_error($this->language->lang('NO_AUTH_OPERATION'));
+			}
+
+			$this->classic_action = $this->helper->route('mot_sudoku_main', ['tab' => 'classic']);
+			$this->samurai_action = $this->helper->route('mot_sudoku_main', ['tab' => 'samurai']);
+			$this->ninja_action = $this->helper->route('mot_sudoku_main', ['tab' => 'ninja']);
+			$this->rank_action = $this->helper->route('mot_sudoku_main', ['tab' => 'rank']);
+			$this->fame_action = $this->helper->route('mot_sudoku_main', ['tab' => 'fame']);
+
+			$this->difficulty = ['', $this->language->lang('MOT_SUDOKU_EASY'), $this->language->lang('MOT_SUDOKU_MEDIUM'), $this->language->lang('MOT_SUDOKU_HARD')];
+
+			$type_array = [
+				'classic'	=> $this->language->lang('MOT_SUDOKU_TAB_CLASSIC'),
+				'samurai'	=> $this->language->lang('MOT_SUDOKU_TAB_SAMURAI'),
+				'ninja'		=> $this->language->lang('MOT_SUDOKU_TAB_NINJA'),
+			];
+
+			$short_type_array = [
+				'classic'	=> 'c',
+				'samurai'	=> 's',
+				'ninja'		=> 'n',
+			];
+
+			$tab = $this->request->variable('tab', 'classic');
+			$tab = (($tab == 'rank' && !$this->config['mot_sudoku_enable_rank']) || ($tab == 'fame' && !$this->config['mot_sudoku_enable_fame'])) ? 'classic' : $tab;
+
+			// First check whether this user is already in the SUDOKU_STATS_TABLE
+			$sql = 'SELECT * FROM ' . $this->sudoku_stats_table . '
+					WHERE user_id = ' . (int) $this->user->data['user_id'];
+			$result = $this->db->sql_query($sql);
+			$user_stats = $this->db->sql_fetchrow($result);
+			$this->db->sql_freeresult($result);
+
+			if (!$user_stats)
+			{
+				// No entry for this user, we have to store a new entry
+				$sql_arr = [
+					'user_id'		=> $this->user->data['user_id'],
+					'classic_ids'	=> '',
+					'samurai_ids'	=> '',
+					'ninja_ids'		=> '',
+				];
+				$sql = 'INSERT INTO ' . $this->sudoku_stats_table . ' ' . $this->db->sql_build_array('INSERT', $sql_arr);
+				$this->db->sql_query($sql);
+			}
+
+			switch ($tab)
+			{
+				case 'classic':
+					if ($user_stats)
+					{
+						$modal_position = $user_stats['modal_position'];
+						$games_solved = $user_stats['classic_played'];
+						$total_points = $user_stats['classic_points'];
+						$classic_ids = json_decode($user_stats['classic_ids']);
+					}
+					else
+					{
+						$modal_position = 0;
+						$games_solved = 0;
+						$total_points = 0;
+						$classic_ids = [];
+					}
+
+					$puzzle_exists = true;
+					// Then check whether there is an unsolved puzzle for this user
+					$sql = "SELECT * FROM " . $this->sudoku_games_table . "
+							WHERE game_type = 'c'
+							AND user_id = " . (int) $this->user->data['user_id'];
+					$result = $this->db->sql_query($sql);
+					$classic_puzzle = $this->db->sql_fetchrow($result);
+					$this->db->sql_freeresult($result);
+
+					if (empty($classic_puzzle))
+					{
+						// No unsolved puzzle so we can choose a new one which has not been played so far by this user
+						$in_set = !empty($classic_ids) ? ' WHERE ' . $this->db->sql_in_set('classic_id', $classic_ids, true) : '';
+						$sql = 'SELECT * FROM ' . $this->classic_sudoku_table . $in_set;
+						$result = $this->db->sql_query($sql);
+						$classic_puzzles = $this->db->sql_fetchrowset($result);
+						$this->db->sql_freeresult($result);
+
+						$classic_count = count($classic_puzzles);
+						// Check whether we do have at least one puzzle to work with
+						$puzzle_exists = $classic_count == 0 ? false : true;
+
+						$game_level = 0;
+						if ($puzzle_exists)
+						{
+							$puzzle_number = rand(0, $classic_count - 1);
+
+							$classic_puzzle = $classic_puzzles[$puzzle_number];
+							$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $classic_puzzle['game_pack'], $classic_puzzle['game_number'], $this->difficulty[$classic_puzzle['game_level']]);
+							$title = ($this->config['mot_sudoku_title_enable'] && $classic_puzzle['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $classic_puzzle['game_name'] . '</strong>' : '';
+							$puzzle_id = $classic_puzzle['classic_id'];
+							$entry_id = 0;
+							$player_line = json_encode($this->classic_array);
+							$current_points = 0;
+							$game_buy_digit = 0;
+							$game_reset = 0;
+							$game_helper = 0;
+						}
+					}
+					else
+					{
+						// We have an unsolved puzzle, so we have to get its data and send it to the game
+						$puzzle_id = $classic_puzzle['game_id'];
+						$entry_id = $classic_puzzle['entry_id'];
+						// Get some data from the original puzzle itself
+						$sql = 'SELECT game_pack, game_number, game_level, game_name FROM ' . $this->classic_sudoku_table . '
+								WHERE classic_id = ' . (int) $classic_puzzle['game_id'];
+						$result = $this->db->sql_query($sql);
+						$data_row = $this->db->sql_fetchrow($result);
+						$this->db->sql_freeresult($result);
+						$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $data_row['game_pack'], $data_row['game_number'], $this->difficulty[$data_row['game_level']]);
+						$title = ($this->config['mot_sudoku_title_enable'] && $data_row['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $data_row['game_name'] . '</strong>' : '';
+						$player_line = $classic_puzzle['player_line'];
+						$current_points = (int) $classic_puzzle['points'];
+						$game_reset = (int) $classic_puzzle['reset'];
+						$game_buy_digit = (int) $classic_puzzle['buy_digit'];
+						$game_helper = (int) $classic_puzzle['helper'];
+						$game_level = (int) $classic_puzzle['level'];
+					}
+
+					if ($puzzle_exists)
+					{
+						$puzzle_line = json_decode($classic_puzzle['puzzle_line']);
+						$pre_cells_arr = [];
+						for ($i = 0; $i < 9; $i++)
+						{
+							for ($j = 0; $j < 9; $j++)
+							{
+								if ($puzzle_line[$i][$j])
+								{
+									$this->template->assign_var('MOT_SUDOKU_CELL_' . ($i + 1) . ($j + 1), $puzzle_line[$i][$j]);
+									$pre_cells_arr[] = 'mot_sudoku_c_cell_id_' . ($i + 1) . ($j + 1);
+								}
+							}
+						}
+						$gainable_points = (81 - count($pre_cells_arr)) * $this->config['mot_sudoku_cell_points'];
+						$empty_cells = $this->array_count_recursive($puzzle_line)[0];
+
+						$this->template->assign_vars([
+							'MOT_SUDOKU_PRE_CELLS_ARR'		=> json_encode($pre_cells_arr),
+							'MOT_SUDOKU_CLASSIC_ID'			=> $puzzle_id,
+							'MOT_SUDOKU_PUZZLE_LINE'		=> json_encode($puzzle_line),
+							'MOT_SUDOKU_PLAYER_LINE_C'		=> $player_line,
+						]);
+
+						$helper_title = $this->language->lang('MOT_SUDOKU_HELPER_TITLE', $this->config['mot_sudoku_helper_cost']);
+						$note_text = $this->language->lang('MOT_SUDOKU_NOTE_TEXT', $this->config['mot_sudoku_cell_points'], $this->config['mot_sudoku_cell_cost'],
+										$this->config['mot_sudoku_number_cost'], $this->config['mot_sudoku_reset_cost'], $this->config['mot_sudoku_helper_cost'],
+										$this->config['mot_sudoku_level_cost']
+						);
+						$helper_cost = $this->config['mot_sudoku_helper_cost'];
+					}
+					break;
+
+				case 'samurai':
+					if ($user_stats)		// Since a new user never can get here (classic is default) it seems we do not need this if statement and can do with the 'true' block - same for ninja
+					{
+						$modal_position = $user_stats['modal_position'];
+						$games_solved = $user_stats['samurai_played'];
+						$total_points = $user_stats['samurai_points'];
+						$samurai_ids = json_decode($user_stats['samurai_ids']);
+					}
+					else
+					{
+						$modal_position = 0;
+						$games_solved = 0;
+						$total_points = 0;
+						$samurai_ids = [];
+					}
+
+					$puzzle_exists = true;
+					// Then check whether there is an unsolved puzzle for this user
+					$sql = "SELECT * FROM " . $this->sudoku_games_table . "
+							WHERE game_type = 's'
+							AND user_id = " . (int) $this->user->data['user_id'];
+					$result = $this->db->sql_query($sql);
+					$samurai_puzzle = $this->db->sql_fetchrow($result);
+					$this->db->sql_freeresult($result);
+
+					if (empty($samurai_puzzle))
+					{
+						// No unsolved puzzle so we can choose a new one which has not been played so far by this user
+						$in_set = !empty($samurai_ids) ? ' WHERE ' . $this->db->sql_in_set('samurai_id', $samurai_ids, true) : '';
+						$sql = 'SELECT * FROM ' . $this->samurai_sudoku_table . $in_set;
+						$result = $this->db->sql_query($sql);
+						$samurai_puzzles = $this->db->sql_fetchrowset($result);
+						$this->db->sql_freeresult($result);
+
+						$samurai_count = count($samurai_puzzles);
+						// Check whether we do have at least one puzzle to work with
+						$puzzle_exists = $samurai_count == 0 ? false : true;
+
+						$game_level = 0;
+						if ($puzzle_exists)
+						{
+							$puzzle_number = rand(0, $samurai_count - 1);
+
+							$samurai_puzzle = $samurai_puzzles[$puzzle_number];
+							$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $samurai_puzzle['game_pack'], $samurai_puzzle['game_number'], $this->difficulty[$samurai_puzzle['game_level']]);
+							$title = ($this->config['mot_sudoku_title_enable'] && $samurai_puzzle['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $samurai_puzzle['game_name'] . '</strong>' : '';
+							$puzzle_id = $samurai_puzzle['samurai_id'];
+							$entry_id = 0;
+							$player_line = json_encode($this->samurai_array);
+							$current_points = 0;
+							$game_buy_digit = 0;
+							$game_reset = 0;
+							$game_helper = 0;
+						}
+					}
+					else
+					{
+						// We have an unsolved puzzle, so we have to get its data and send it to the game
+						$puzzle_id = $samurai_puzzle['game_id'];
+						$entry_id = $samurai_puzzle['entry_id'];
+						// Get some data from the original puzzle itself
+						$sql = 'SELECT game_pack, game_number, game_level, game_name FROM ' . $this->samurai_sudoku_table . '
+								WHERE samurai_id = ' . (int) $samurai_puzzle['game_id'];
+						$result = $this->db->sql_query($sql);
+						$data_row = $this->db->sql_fetchrow($result);
+						$this->db->sql_freeresult($result);
+						$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $data_row['game_pack'], $data_row['game_number'], $this->difficulty[$data_row['game_level']]);
+						$title = ($this->config['mot_sudoku_title_enable'] && $data_row['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $data_row['game_name'] . '</strong>' : '';
+						$player_line = $samurai_puzzle['player_line'];
+						$current_points = (int) $samurai_puzzle['points'];
+						$game_reset = (int) $samurai_puzzle['reset'];
+						$game_buy_digit = (int) $samurai_puzzle['buy_digit'];
+						$game_helper = (int) $samurai_puzzle['helper'];
+						$game_level = (int) $samurai_puzzle['level'];
+					}
+
+					if ($puzzle_exists)
+					{
+						$puzzle_line = json_decode($samurai_puzzle['puzzle_line']);
+						$pre_cells_arr = [];
+						for ($grid = 0; $grid < 5; $grid++)
+						{
+							for ($i = 0; $i < 9; $i++)
+							{
+								for ($j = 0; $j < 9; $j++)
+								{
+									if ($puzzle_line[$grid][$i][$j] > 0)
+									{
+										$this->template->assign_var('MOT_SUDOKU_S_CELL_' . ($grid + 1) . '_' . ($i + 1) . ($j + 1), $puzzle_line[$grid][$i][$j]);
+										$pre_cells_arr[] = 'mot_sudoku_s_cell_id_' . ($grid + 1) . '_' . ($i + 1) . ($j + 1);
+									}
+								}
+							}
+						}
+						$gainable_points = (369 - count($pre_cells_arr)) * $this->config['mot_sudoku_cell_points'];
+						$empty_cells = $this->array_count_recursive($puzzle_line)[0];
+
+						$this->template->assign_vars([
+							'MOT_SUDOKU_PRE_CELLS_ARR'		=> json_encode($pre_cells_arr),
+							'MOT_SUDOKU_SAMURAI_ID'			=> $puzzle_id,
+							'MOT_SUDOKU_PUZZLE_LINE'		=> json_encode($puzzle_line),
+							'MOT_SUDOKU_PLAYER_LINE_S'		=> $player_line,
+						]);
+
+						$helper_title = $this->language->lang('MOT_SUDOKU_HELPER_TITLE', $this->config['mot_sudoku_helper_samurai_cost']);
+						$note_text = $this->language->lang('MOT_SUDOKU_NOTE_TEXT', $this->config['mot_sudoku_cell_points'], $this->config['mot_sudoku_cell_cost'],
+										$this->config['mot_sudoku_number_cost'], $this->config['mot_sudoku_reset_cost'], $this->config['mot_sudoku_helper_samurai_cost'],
+										$this->config['mot_sudoku_level_cost']
+						);
+						$helper_cost = $this->config['mot_sudoku_helper_samurai_cost'];
+					}
+					break;
+
+				case 'ninja':
+					if ($user_stats)
+					{
+						$modal_position = $user_stats['modal_position'];
+						$games_solved = $user_stats['ninja_played'];
+						$total_points = $user_stats['ninja_points'];
+						$ninja_ids = json_decode($user_stats['ninja_ids']);
+					}
+					else
+					{
+						$modal_position = 0;
+						$games_solved = 0;
+						$total_points = 0;
+						$ninja_ids = [];
+					}
+
+					$puzzle_exists = true;
+					// Then check whether there is an unsolved puzzle for this user
+					$sql = "SELECT * FROM " . $this->sudoku_games_table . "
+							WHERE game_type = 'n'
+							AND user_id = " . (int) $this->user->data['user_id'];
+					$result = $this->db->sql_query($sql);
+					$ninja_puzzle = $this->db->sql_fetchrow($result);
+					$this->db->sql_freeresult($result);
+
+					if (empty($ninja_puzzle))
+					{
+						// No unsolved puzzle so we can choose a new one which has not been played so far by this user
+						$in_set = !empty($ninja_ids) ? ' WHERE ' . $this->db->sql_in_set('ninja_id', $ninja_ids, true) : '';
+						$sql = 'SELECT * FROM ' . $this->ninja_sudoku_table . $in_set;
+						$result = $this->db->sql_query($sql);
+						$ninja_puzzles = $this->db->sql_fetchrowset($result);
+						$this->db->sql_freeresult($result);
+
+						$ninja_count = count($ninja_puzzles);
+						// Check whether we do have at least one puzzle to work with
+						$puzzle_exists = $ninja_count == 0 ? false : true;
+
+						$game_level = 0;
+						if ($puzzle_exists)
+						{
+							$puzzle_number = rand(0, $ninja_count - 1);
+
+							$ninja_puzzle = $ninja_puzzles[$puzzle_number];
+							$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $ninja_puzzle['game_pack'], $ninja_puzzle['game_number'], $this->difficulty[$ninja_puzzle['game_level']]);
+							$title = ($this->config['mot_sudoku_title_enable'] && $ninja_puzzle['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $ninja_puzzle['game_name'] . '</strong>' : '';
+							$puzzle_id = $ninja_puzzle['ninja_id'];
+							$entry_id = 0;
+							$player_line = json_encode($this->ninja_array);
+							$current_points = 0;
+							$game_buy_digit = 0;
+							$game_reset = 0;
+							$game_helper = 0;
+						}
+					}
+					else
+					{
+						// We have an unsolved puzzle, so we have to get its data and send it to the game
+						$puzzle_id = $ninja_puzzle['game_id'];
+						$entry_id = $ninja_puzzle['entry_id'];
+						// Get some data from the original puzzle itself
+						$sql = 'SELECT game_pack, game_number, game_level, game_name FROM ' . $this->ninja_sudoku_table . '
+								WHERE ninja_id = ' . (int) $ninja_puzzle['game_id'];
+						$result = $this->db->sql_query($sql);
+						$data_row = $this->db->sql_fetchrow($result);
+						$this->db->sql_freeresult($result);
+						$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $data_row['game_pack'], $data_row['game_number'], $this->difficulty[$data_row['game_level']]);
+						$title = ($this->config['mot_sudoku_title_enable'] && $data_row['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $data_row['game_name'] . '</strong>' : '';
+						$player_line = $ninja_puzzle['player_line'];
+						$current_points = (int) $ninja_puzzle['points'];
+						$game_reset = (int) $ninja_puzzle['reset'];
+						$game_buy_digit = (int) $ninja_puzzle['buy_digit'];
+						$game_helper = (int) $ninja_puzzle['helper'];
+						$game_level = (int) $ninja_puzzle['level'];
+					}
+
+					if ($puzzle_exists)
+					{
+						$puzzle_line = json_decode($ninja_puzzle['puzzle_line']);
+						$pre_cells_arr = [];
+						for ($grid = 0; $grid < 9; $grid++)
+						{
+							for ($i = 0; $i < 9; $i++)
+							{
+								for ($j = 0; $j < 9; $j++)
+								{
+									if ($puzzle_line[$grid][$i][$j] > 0)
+									{
+										$this->template->assign_var('MOT_SUDOKU_N_CELL_' . ($grid + 1) . '_' . ($i + 1) . ($j + 1), $puzzle_line[$grid][$i][$j]);
+										$pre_cells_arr[] = 'mot_sudoku_n_cell_id_' . ($grid + 1) . '_' . ($i + 1) . ($j + 1);
+									}
+								}
+							}
+						}
+						$gainable_points = (621 - count($pre_cells_arr)) * $this->config['mot_sudoku_cell_points'];
+						$empty_cells = $this->array_count_recursive($puzzle_line)[0];
+
+						$this->template->assign_vars([
+							'MOT_SUDOKU_PRE_CELLS_ARR'		=> json_encode($pre_cells_arr),
+							'MOT_SUDOKU_NINJA_ID'			=> $puzzle_id,
+							'MOT_SUDOKU_PUZZLE_LINE'		=> json_encode($puzzle_line),
+							'MOT_SUDOKU_PLAYER_LINE_N'		=> $player_line,
+						]);
+
+						$helper_title = $this->language->lang('MOT_SUDOKU_HELPER_TITLE', $this->config['mot_sudoku_helper_ninja_cost']);
+						$note_text = $this->language->lang('MOT_SUDOKU_NOTE_TEXT', $this->config['mot_sudoku_cell_points'], $this->config['mot_sudoku_cell_cost'],
+										$this->config['mot_sudoku_number_cost'], $this->config['mot_sudoku_reset_cost'], $this->config['mot_sudoku_helper_ninja_cost'],
+										$this->config['mot_sudoku_level_cost']
+						);
+						$helper_cost = $this->config['mot_sudoku_helper_ninja_cost'];
+					}
+					break;
+
+				case 'rank':
+					// set parameter for pagination
+					$start = $this->request->is_set('start') ? $this->request->variable('start', 0) : 0;
+					$limit = $this->config['posts_per_page'];	// max lines per page
+
+					$selected_type = $this->request->is_set('mot_sudoku_select_type') ? $this->request->variable('mot_sudoku_select_type', '') : 'classic';
+
+					// Get total numbers of players in score table
+					$count_query = "SELECT COUNT(user_id) AS 'user_count' FROM " . $this->sudoku_stats_table . "
+									WHERE " . $selected_type . "_played > 0";
+					$result = $this->db->sql_query($count_query);
+					$row = $this->db->sql_fetchrow($result);
+					$count_rankings = $row['user_count'];
+					$this->db->sql_freeresult($result);
+
+					// Get data from tables
+					$sql_arr = [
+						'SELECT'    => 'u.user_id, u.username, u.user_colour, s.*',
+						'FROM'		=> [
+							USERS_TABLE    		    	=> 'u',
+							$this->sudoku_stats_table	=> 's',
+						],
+						'WHERE'		=> 'u.user_id = s.user_id
+										AND ' . $selected_type . '_played > 0',
+					];
+					$sql = $this->db->sql_build_query('SELECT', $sql_arr);
+					$sql .= ' ORDER BY s.' . $selected_type . '_points DESC';
+					$result = $this->db->sql_query_limit( $sql, $limit, $start );
+					$user_ranking = $this->db->sql_fetchrowset($result);
+					$this->db->sql_freeresult($result);
+
+					$i = $start;
+					foreach ($user_ranking as $row)
+					{
+						$i++;
+						$this->template->assign_block_vars('rankings', [
+							'RANK'					=> $i,
+							'USERNAME'				=> $row['username'],
+							'USER_COLOUR'			=> $row['user_colour'],
+							'RANK_GAMES'			=> $row[$selected_type . '_played'],
+							'RANK_POINTS'			=> $row[$selected_type . '_points'],
+							'RANK_AVG_POINTS'		=> number_format($row[$selected_type . '_points'] / $row[$selected_type . '_played'], 0, ',', ''),
+						]);
+					}
+
+					//base url for pagination, filtering and sorting
+					$base_url = $this->rank_action;
+
+					// Load pagination
+					$start = $this->pagination->validate_start($start, $limit, $count_rankings);
+					$this->pagination->generate_template_pagination($base_url, 'pagination', 'start', $count_rankings, $limit, $start);
+
+					// Create type selection
+					$type_selection = '';
+					$selected_name = '';
+					foreach ($type_array as $key => $value)
+					{
+						$selected = '';
+						if ($selected_type == $key)
+						{
+							$selected =  ' selected';
+							$selected_name = $value;
+						}
+						$type_selection .= '<option value="' . $key . '"' . $selected . '>' . $value . '</option>';
+					}
+
+					$this->template->assign_vars([
+						'MOT_SUDOKU_TYPE_SELECTION'		=> $type_selection,
+						'MOT_SUDOKU_SELECTED_TYPE'		=> $selected_name,
+					]);
+					break;
+
+				case 'fame':
+					// Get local date variables first
+					$date_arr = getdate();
+					$number_of_rows = $this->config['mot_sudoku_fame_limit'];
+					$months_arr = ['', 'JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+
+					$selected_type = $this->request->is_set('mot_sudoku_select_type') ? $this->request->variable('mot_sudoku_select_type', '') : 'classic';
+
+					// Get best players of current month
+					$sql_arr = [
+						'SELECT'	=> 'f.*, u.username, u.user_colour',
+						'FROM'		=> [$this->sudoku_fame_table	=> 'f'],
+						'LEFT_JOIN'	=> [
+							[
+								'FROM'	=> [USERS_TABLE	=> 'u'],
+								'ON'	=> 'u.user_id = f.user_id',
+							],
+						],
+						'WHERE'		=> 'f.year = ' . (int) $date_arr['year'] . '
+										AND f.month = ' . (int) $date_arr['mon'] . '
+										AND game_type = "' . (string) $short_type_array[$selected_type] . '"',
+						'ORDER_BY'	=> 'f.total_points DESC',
+					];
+					$sql = $this->db->sql_build_query('SELECT', $sql_arr);
+					$result = $this->db->sql_query($sql);
+					$players = $this->db->sql_fetchrowset($result);
+					$this->db->sql_freeresult($result);
+
+					$i = 0;
+					foreach ($players as $row)
+					{
+						$this->template->assign_block_vars('current_months', [
+							'USERNAME'		=> $row['username'],
+							'USER_COLOUR'	=> $row['user_colour'],
+							'TOTAL_GAMES'	=> $row['games_played'],
+							'TOTAL_POINTS'	=> $row['total_points'],
+							'MEAN_POINTS'	=> number_format($row['total_points'] / $row['games_played'], 0, ',', '')
+						]);
+						$i++;
+						if ($i == $number_of_rows)
+						{
+							break;
+						}
+					}
+
+					// Get best players of current year
+					$sql_arr = [
+						'SELECT'	=> 'f.*, u.username, u.user_colour',
+						'FROM'		=> [$this->sudoku_fame_table	=> 'f'],
+						'LEFT_JOIN'	=> [
+							[
+								'FROM'	=> [USERS_TABLE	=> 'u'],
+								'ON'	=> 'u.user_id = f.user_id',
+							],
+						],
+						'WHERE'		=> 'f.year = ' . (int) $date_arr['year'] . '
+						AND game_type = "' . (string) $short_type_array[$selected_type] . '"',
+					];
+					$sql = $this->db->sql_build_query('SELECT', $sql_arr);
+					$result = $this->db->sql_query($sql);
+					$players = $this->db->sql_fetchrowset($result);
+					$this->db->sql_freeresult($result);
+
+					$year_arr = [];
+					foreach ($players as $row)
+					{
+						if (array_key_exists($row['user_id'], $year_arr))
+						{
+							$year_arr[$row['user_id']]['points'] += $row['total_points'];
+							$year_arr[$row['user_id']]['games'] += $row['games_played'];
+						}
+						else
+						{
+							$year_arr[$row['user_id']] = [
+								'username'		=> $row['username'],
+								'user_colour'	=> $row['user_colour'],
+								'games'			=> $row['games_played'],
+								'points'		=> $row['total_points'],
+							];
+						}
+					}
+					usort($year_arr,
+						function ($item1, $item2)
+						{
+							return $item2['points'] <=> $item1['points'];
+						}
+					);
+
+					$i = 0;
+					foreach ($year_arr as $row)
+					{
+						$this->template->assign_block_vars('current_years', [
+							'USERNAME'		=> $row['username'],
+							'USER_COLOUR'	=> $row['user_colour'],
+							'TOTAL_GAMES'	=> $row['games'],
+							'TOTAL_POINTS'	=> $row['points'],
+							'MEAN_POINTS'	=> number_format($row['points'] / $row['games'], 0, ',', '')
+						]);
+						$i++;
+						if ($i == $number_of_rows)
+						{
+							break;
+						}
+					}
+
+					// Get the best payers of the last months
+					$sql_arr = [
+						'SELECT'	=> 'f.*, u.username, u.user_colour',
+						'FROM'		=> [$this->sudoku_fame_month_table	=> 'f'],
+						'LEFT_JOIN'	=> [
+							[
+								'FROM'	=> [USERS_TABLE	=> 'u'],
+								'ON'	=> 'u.user_id = f.user_id',
+							],
+						],
+						'WHERE'		=> 'game_type = "' . (string) $short_type_array[$selected_type] . '"',
+						'ORDER_BY'	=> 'f.month_id DESC',
+					];
+					$sql = $this->db->sql_build_query('SELECT', $sql_arr);
+					$sql .= ' LIMIT ' . $number_of_rows;
+					$result = $this->db->sql_query($sql);
+					$months = $this->db->sql_fetchrowset($result);
+					$this->db->sql_freeresult($result);
+
+					// Now we can loop through this array and get the player with the most points for the respective months
+					foreach ($months as $row)
+					{
+						$this->template->assign_block_vars('last_months', [
+							'MONTH'			=> $this->language->lang($months_arr[$row['month']]) . ' ' . $row['year'],
+							'USERNAME'		=> $row['username'],
+							'USER_COLOUR'	=> $row['user_colour'],
+							'TOTAL_GAMES'	=> $row['games'],
+							'TOTAL_POINTS'	=> $row['points'],
+							'MEAN_POINTS'	=> number_format($row['points'] / $row['games'], 0, ',', '')
+						]);
+					}
+
+					// Get data for last years
+					$sql_arr = [
+						'SELECT'	=> 'f.*, u.username, u.user_colour',
+						'FROM'		=> [$this->sudoku_fame_year_table	=> 'f'],
+						'LEFT_JOIN'	=> [
+							[
+								'FROM'	=> [USERS_TABLE	=> 'u'],
+								'ON'	=> 'u.user_id = f.user_id',
+							],
+						],
+						'WHERE'		=> 'game_type = "' . (string) $short_type_array[$selected_type] . '"',
+						'ORDER_BY'	=> 'f.year DESC',
+					];
+					$sql = $this->db->sql_build_query('SELECT', $sql_arr);
+					$result = $this->db->sql_query($sql);
+					$years = $this->db->sql_fetchrowset($result);
+					$this->db->sql_freeresult($result);
+
+					foreach ($years as $row)
+					{
+						$this->template->assign_block_vars('last_years', [
+							'YEAR'			=> $row['year'],
+							'USERNAME'		=> $row['username'],
+							'USER_COLOUR'	=> $row['user_colour'],
+							'TOTAL_GAMES'	=> $row['games'],
+							'TOTAL_POINTS'	=> $row['points'],
+							'MEAN_POINTS'	=> number_format($row['points'] / $row['games'], 0, ',', '')
+						]);
+					}
+
+					// Create type selection
+					$type_selection = '';
+					$selected_name = '';
+					foreach ($type_array as $key => $value)
+					{
+						$selected = '';
+						if ($selected_type == $key)
+						{
+							$selected =  ' selected';
+							$selected_name = $value;
+						}
+						$type_selection .= '<option value="' . $key . '"' . $selected . '>' . $value . '</option>';
+					}
+
+					$this->template->assign_vars([
+						'MOT_SUDOKU_TYPE_SELECTION'		=> $type_selection,
+						'MOT_SUDOKU_SELECTED_TYPE'		=> $selected_name,
+						'MOT_SUDOKU_NUMBER_MONTHS'		=> count($months),
+						'MOT_SUDOKU_NUMBER_YEARS'		=> count($years),
+					]);
+					break;
+			}
+
+			// Prepare the level select field and tables
+			$level_select = '';
+			for ($i = 0; $i < 7; $i++)
+			{
+				$selected = $game_level == $i ? ' selected' : '';
+				$level_select .= '<option value="' . $i . '"' . $selected . '>' . $this->language->lang('MOT_SUDOKU_LEVEL_' . $i) . '</option>';
+				$this->template->assign_block_vars('levels', [
+					'NAME'		=> $this->language->lang('MOT_SUDOKU_LEVEL_' . $i),
+					'DIGIT'		=> $this->level_array[$tab] * $i,
+					'DEDUCT'	=> $this->level_array[$tab] * $i * $this->config['mot_sudoku_level_cost'],
+				]);
+			}
+
+			$this->template->assign_vars([
+				'MOT_SUDOKU_SELECTED_TAB'		=> $tab,
+				'MOT_SUDOKU_CLASSIC_TAB'		=> $this->classic_action,
+				'MOT_SUDOKU_SAMURAI_TAB'		=> $this->samurai_action,
+				'MOT_SUDOKU_NINJA_TAB'			=> $this->ninja_action,
+				'MOT_SUDOKU_RANK_TAB'			=> $this->rank_action,
+				'MOT_SUDOKU_FAME_TAB'			=> $this->fame_action,
+				'MOT_SUDOKU_ENABLE_RANK'		=> $this->config['mot_sudoku_enable_rank'],
+				'MOT_SUDOKU_ENABLE_FAME'		=> $this->config['mot_sudoku_enable_fame'],
+				'MOT_SUDOKU_PUZZLE_EXISTS'		=> $puzzle_exists,
+				'MOT_SUDOKU_ACTIVE'				=> true,								// signal the footer copyright notice that Sudoku is running
+				'MOT_SUDOKU_AJAX_NUMBER'		=> $this->helper->route('mot_sudoku_ajax_number'),
+				'MOT_SUDOKU_AJAX_RESET'			=> $this->helper->route('mot_sudoku_ajax_reset'),
+				'MOT_SUDOKU_AJAX_BUY'			=> $this->helper->route('mot_sudoku_ajax_buy'),
+				'MOT_SUDOKU_AJAX_HELPER'		=> $this->helper->route('mot_sudoku_ajax_helper'),
+				'MOT_SUDOKU_AJAX_MODAL'			=> $this->helper->route('mot_sudoku_ajax_modal'),
+				'MOT_SUDOKU_AJAX_LEVEL'			=> $this->helper->route('mot_sudoku_ajax_level'),
+				'MOT_SUDOKU_COPYRIGHT'			=> $this->ext_data['extra']['display-name'] . ' ' . $this->ext_data['version'] . ' &copy; Mike-on-Tour (<a href="' . $this->ext_data['homepage'] . '">' . $this->ext_data['homepage'] . '</a>)',
+				'MOT_SUDOKU_NOTE_TEXT'			=> $puzzle_exists ? $note_text : '',
+				'MOT_SUDOKU_GAME_RESET_TITLE'	=> $this->language->lang('MOT_SUDOKU_GAME_RESET_TITLE', $this->config['mot_sudoku_reset_cost']),
+				'MOT_SUDOKU_BUY_NUMBER_TITLE'	=> $this->language->lang('MOT_SUDOKU_BUY_NUMBER_TITLE', $this->config['mot_sudoku_number_cost']),
+				'MOT_SUDOKU_GAME_INFO'			=> $puzzle_exists ? $game_info . $title : '',
+				'MOT_SUDOKU_DIGIT_NO_BUY'		=> $puzzle_exists ? ($empty_cells == 1 ? 1 : 0) : 0,
+				'MOT_SUDOKU_HELPER_TITLE'		=> $puzzle_exists ? $helper_title : '',
+				'MOT_SUDOKU_SELECT_LEVEL'		=> $level_select,
+				'MOT_SUDOKU_MODAL_SWITCH'		=> $modal_position,
+				'MOT_SUDOKU_TOTAL_GAMES'		=> $games_solved,
+				'MOT_SUDOKU_TOTAL_POINTS'		=> $total_points,
+				'MOT_SUDOKU_MEAN_POINTS'		=> $games_solved ? number_format($total_points / $games_solved, 0, ',', '') : 0,
+				'MOT_SUDOKU_GAINABLE_POINTS'	=> $puzzle_exists ? $gainable_points : 0,
+				'MOT_SUDOKU_CURRENT_POINTS'		=> $puzzle_exists ? $current_points : 0,
+				'MOT_SUDOKU_GAME_RESET'			=> $puzzle_exists ? $game_reset : 0,
+				'MOT_SUDOKU_HELPER_ENABLED'		=> $this->config['mot_sudoku_helper_enable'],
+				'MOT_SUDOKU_S_HELPER_ENABLED'	=> $this->config['mot_sudoku_helper_samurai_enable'],
+				'MOT_SUDOKU_N_HELPER_ENABLED'	=> $this->config['mot_sudoku_helper_ninja_enable'],
+				'MOT_SUDOKU_GAME_BUY_DIGIT'		=> $puzzle_exists ? $game_buy_digit : 0,
+				'MOT_SUDOKU_GAME_HELPER'		=> $puzzle_exists ? $game_helper : 0,
+				'MOT_SUDOKU_GAME_LEVEL'			=> $puzzle_exists ? $game_level : 0,
+				'MOT_SUDOKU_ENTRY_ID'			=> $puzzle_exists ? $entry_id : 0,						// SUDOKU_PLAYERS_TABLE entry_id if loading an unsolved puzzle, 0 if new puzzle
+				'MOT_SUDOKU_NEGATIVE_POINTS'	=> $puzzle_exists ?
+													-1 * (($game_reset * $this->config['mot_sudoku_reset_cost']) + ($game_buy_digit * $this->config['mot_sudoku_number_cost']) +
+													($game_helper * $helper_cost) + ($game_level * $this->level_array[$tab] * $this->config['mot_sudoku_level_cost']))
+													: 0,
+			]);
+
+			// Add breadcrumbs link
+			$this->template->assign_block_vars('navlinks', [
+				'FORUM_NAME'	=> $this->language->lang('MOT_SUDOKU_TITLE'),
+				'U_VIEW_FORUM'	=> $this->helper->route('mot_sudoku_main'),
+			]);
+
+			return $this->helper->render('@mot_sudoku/mot_sudoku_main.html', $this->language->lang('MOT_SUDOKU_TITLE'));
+		}
+		else
 		{
 			trigger_error($this->language->lang('NO_AUTH_OPERATION'));
 		}
-
-		$this->classic_action = $this->helper->route('mot_sudoku_main', ['tab' => 'classic']);
-		$this->samurai_action = $this->helper->route('mot_sudoku_main', ['tab' => 'samurai']);
-		$this->ninja_action = $this->helper->route('mot_sudoku_main', ['tab' => 'ninja']);
-
-		$this->difficulty = ['', $this->language->lang('MOT_SUDOKU_EASY'), $this->language->lang('MOT_SUDOKU_MEDIUM'), $this->language->lang('MOT_SUDOKU_HARD')];
-
-		$tab = $this->request->variable('tab', '');
-
-		// First check whether this user is already in the SUDOKU_STATS_TABLE
-		$sql = 'SELECT * FROM ' . $this->sudoku_stats_table . '
-				WHERE user_id = ' . (int) $this->user->data['user_id'];
-		$result = $this->db->sql_query($sql);
-		$user_stats = $this->db->sql_fetchrow($result);
-		$this->db->sql_freeresult($result);
-
-		if (!$user_stats)
-		{
-			// No entry for this user, we have to store a new entry
-			$sql_arr = [
-				'user_id'		=> $this->user->data['user_id'],
-				'classic_ids'	=> '',
-				'samurai_ids'	=> '',
-				'ninja_ids'		=> '',
-			];
-			$sql = 'INSERT INTO ' . $this->sudoku_stats_table . ' ' . $this->db->sql_build_array('INSERT', $sql_arr);
-			$this->db->sql_query($sql);
-		}
-
-		switch ($tab)
-		{
-			default:
-			case 'classic':
-				if ($user_stats)
-				{
-					$modal_position = $user_stats['modal_position'];
-					$games_solved = $user_stats['classic_played'];
-					$total_points = $user_stats['classic_points'];
-					$classic_ids = json_decode($user_stats['classic_ids']);
-				}
-				else
-				{
-					$modal_position = 0;
-					$games_solved = 0;
-					$total_points = 0;
-					$classic_ids = [];
-				}
-
-				$puzzle_exists = true;
-				// Then check whether there is an unsolved puzzle for this user
-				$sql = "SELECT * FROM " . $this->sudoku_games_table . "
-						WHERE game_type = 'c'
-						AND user_id = " . (int) $this->user->data['user_id'];
-				$result = $this->db->sql_query($sql);
-				$classic_puzzle = $this->db->sql_fetchrow($result);
-				$this->db->sql_freeresult($result);
-
-				if (empty($classic_puzzle))
-				{
-					// No unsolved puzzle so we can choose a new one which has not been played so far by this user
-					$in_set = !empty($classic_ids) ? ' WHERE ' . $this->db->sql_in_set('classic_id', $classic_ids, true) : '';
-					$sql = 'SELECT * FROM ' . $this->classic_sudoku_table . $in_set;
-					$result = $this->db->sql_query($sql);
-					$classic_puzzles = $this->db->sql_fetchrowset($result);
-					$this->db->sql_freeresult($result);
-
-					$classic_count = count($classic_puzzles);
-					// Check whether we do have at least one puzzle to work with
-					$puzzle_exists = $classic_count == 0 ? false : true;
-
-					$game_level = 0;
-					if ($puzzle_exists)
-					{
-						$puzzle_number = rand(0, $classic_count - 1);
-
-						$classic_puzzle = $classic_puzzles[$puzzle_number];
-						$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $classic_puzzle['game_pack'], $classic_puzzle['game_number'], $this->difficulty[$classic_puzzle['game_level']]);
-						$title = ($this->config['mot_sudoku_title_enable'] && $classic_puzzle['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $classic_puzzle['game_name'] . '</strong>' : '';
-						$puzzle_id = $classic_puzzle['classic_id'];
-						$entry_id = 0;
-						$player_line = json_encode($this->classic_array);
-						$current_points = 0;
-						$game_buy_digit = 0;
-						$game_reset = 0;
-						$game_helper = 0;
-					}
-				}
-				else
-				{
-					// We have an unsolved puzzle, so we have to get its data and send it to the game
-					$puzzle_id = $classic_puzzle['game_id'];
-					$entry_id = $classic_puzzle['entry_id'];
-					// Get some data from the original puzzle itself
-					$sql = 'SELECT game_pack, game_number, game_level, game_name FROM ' . $this->classic_sudoku_table . '
-							WHERE classic_id = ' . (int) $classic_puzzle['game_id'];
-					$result = $this->db->sql_query($sql);
-					$data_row = $this->db->sql_fetchrow($result);
-					$this->db->sql_freeresult($result);
-					$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $data_row['game_pack'], $data_row['game_number'], $this->difficulty[$data_row['game_level']]);
-					$title = ($this->config['mot_sudoku_title_enable'] && $data_row['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $data_row['game_name'] . '</strong>' : '';
-					$player_line = $classic_puzzle['player_line'];
-					$current_points = (int) $classic_puzzle['points'];
-					$game_reset = (int) $classic_puzzle['reset'];
-					$game_buy_digit = (int) $classic_puzzle['buy_digit'];
-					$game_helper = (int) $classic_puzzle['helper'];
-					$game_level = (int) $classic_puzzle['level'];
-				}
-
-				if ($puzzle_exists)
-				{
-					$puzzle_line = json_decode($classic_puzzle['puzzle_line']);
-					$pre_cells_arr = [];
-					for ($i = 0; $i < 9; $i++)
-					{
-						for ($j = 0; $j < 9; $j++)
-						{
-							if ($puzzle_line[$i][$j])
-							{
-								$this->template->assign_var('MOT_SUDOKU_CELL_' . ($i + 1) . ($j + 1), $puzzle_line[$i][$j]);
-								$pre_cells_arr[] = 'mot_sudoku_c_cell_id_' . ($i + 1) . ($j + 1);
-							}
-						}
-					}
-					$gainable_points = (81 - count($pre_cells_arr)) * $this->config['mot_sudoku_cell_points'];
-					$empty_cells = $this->array_count_recursive($puzzle_line)[0];
-
-					$this->template->assign_vars([
-						'MOT_SUDOKU_PRE_CELLS_ARR'		=> json_encode($pre_cells_arr),
-						'MOT_SUDOKU_CLASSIC_ID'			=> $puzzle_id,
-						'MOT_SUDOKU_PUZZLE_LINE'		=> json_encode($puzzle_line),
-						'MOT_SUDOKU_PLAYER_LINE_C'		=> $player_line,
-					]);
-
-					$helper_title = $this->language->lang('MOT_SUDOKU_HELPER_TITLE', $this->config['mot_sudoku_helper_cost']);
-					$note_text = $this->language->lang('MOT_SUDOKU_NOTE_TEXT', $this->config['mot_sudoku_cell_points'], $this->config['mot_sudoku_cell_cost'],
-									$this->config['mot_sudoku_number_cost'], $this->config['mot_sudoku_reset_cost'], $this->config['mot_sudoku_helper_cost'],
-									$this->config['mot_sudoku_level_cost']
-					);
-					$helper_cost = $this->config['mot_sudoku_helper_cost'];
-				}
-
-				$selected_tab = 'classic';
-				break;
-
-			case 'samurai':
-				if ($user_stats)		// Since a new user never can get here (classic is default) it seems we do not need this if statement and can do with the 'true' block - same for ninja
-				{
-					$modal_position = $user_stats['modal_position'];
-					$games_solved = $user_stats['samurai_played'];
-					$total_points = $user_stats['samurai_points'];
-					$samurai_ids = json_decode($user_stats['samurai_ids']);
-				}
-				else
-				{
-					$modal_position = 0;
-					$games_solved = 0;
-					$total_points = 0;
-					$samurai_ids = [];
-				}
-
-				$puzzle_exists = true;
-				// Then check whether there is an unsolved puzzle for this user
-				$sql = "SELECT * FROM " . $this->sudoku_games_table . "
-						WHERE game_type = 's'
-						AND user_id = " . (int) $this->user->data['user_id'];
-				$result = $this->db->sql_query($sql);
-				$samurai_puzzle = $this->db->sql_fetchrow($result);
-				$this->db->sql_freeresult($result);
-
-				if (empty($samurai_puzzle))
-				{
-					// No unsolved puzzle so we can choose a new one which has not been played so far by this user
-					$in_set = !empty($samurai_ids) ? ' WHERE ' . $this->db->sql_in_set('samurai_id', $samurai_ids, true) : '';
-					$sql = 'SELECT * FROM ' . $this->samurai_sudoku_table . $in_set;
-					$result = $this->db->sql_query($sql);
-					$samurai_puzzles = $this->db->sql_fetchrowset($result);
-					$this->db->sql_freeresult($result);
-
-					$samurai_count = count($samurai_puzzles);
-					// Check whether we do have at least one puzzle to work with
-					$puzzle_exists = $samurai_count == 0 ? false : true;
-
-					$game_level = 0;
-					if ($puzzle_exists)
-					{
-						$puzzle_number = rand(0, $samurai_count - 1);
-
-						$samurai_puzzle = $samurai_puzzles[$puzzle_number];
-						$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $samurai_puzzle['game_pack'], $samurai_puzzle['game_number'], $this->difficulty[$samurai_puzzle['game_level']]);
-						$title = ($this->config['mot_sudoku_title_enable'] && $samurai_puzzle['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $samurai_puzzle['game_name'] . '</strong>' : '';
-						$puzzle_id = $samurai_puzzle['samurai_id'];
-						$entry_id = 0;
-						$player_line = json_encode($this->samurai_array);
-						$current_points = 0;
-						$game_buy_digit = 0;
-						$game_reset = 0;
-						$game_helper = 0;
-					}
-				}
-				else
-				{
-					// We have an unsolved puzzle, so we have to get its data and send it to the game
-					$puzzle_id = $samurai_puzzle['game_id'];
-					$entry_id = $samurai_puzzle['entry_id'];
-					// Get some data from the original puzzle itself
-					$sql = 'SELECT game_pack, game_number, game_level, game_name FROM ' . $this->samurai_sudoku_table . '
-							WHERE samurai_id = ' . (int) $samurai_puzzle['game_id'];
-					$result = $this->db->sql_query($sql);
-					$data_row = $this->db->sql_fetchrow($result);
-					$this->db->sql_freeresult($result);
-					$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $data_row['game_pack'], $data_row['game_number'], $this->difficulty[$data_row['game_level']]);
-					$title = ($this->config['mot_sudoku_title_enable'] && $data_row['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $data_row['game_name'] . '</strong>' : '';
-					$player_line = $samurai_puzzle['player_line'];
-					$current_points = (int) $samurai_puzzle['points'];
-					$game_reset = (int) $samurai_puzzle['reset'];
-					$game_buy_digit = (int) $samurai_puzzle['buy_digit'];
-					$game_helper = (int) $samurai_puzzle['helper'];
-					$game_level = (int) $samurai_puzzle['level'];
-				}
-
-				if ($puzzle_exists)
-				{
-					$puzzle_line = json_decode($samurai_puzzle['puzzle_line']);
-					$pre_cells_arr = [];
-					for ($grid = 0; $grid < 5; $grid++)
-					{
-						for ($i = 0; $i < 9; $i++)
-						{
-							for ($j = 0; $j < 9; $j++)
-							{
-								if ($puzzle_line[$grid][$i][$j] > 0)
-								{
-									$this->template->assign_var('MOT_SUDOKU_S_CELL_' . ($grid + 1) . '_' . ($i + 1) . ($j + 1), $puzzle_line[$grid][$i][$j]);
-									$pre_cells_arr[] = 'mot_sudoku_s_cell_id_' . ($grid + 1) . '_' . ($i + 1) . ($j + 1);
-								}
-							}
-						}
-					}
-					$gainable_points = (369 - count($pre_cells_arr)) * $this->config['mot_sudoku_cell_points'];
-					$empty_cells = $this->array_count_recursive($puzzle_line)[0];
-
-					$this->template->assign_vars([
-						'MOT_SUDOKU_PRE_CELLS_ARR'		=> json_encode($pre_cells_arr),
-						'MOT_SUDOKU_SAMURAI_ID'			=> $puzzle_id,
-						'MOT_SUDOKU_PUZZLE_LINE'		=> json_encode($puzzle_line),
-						'MOT_SUDOKU_PLAYER_LINE_S'		=> $player_line,
-					]);
-
-					$helper_title = $this->language->lang('MOT_SUDOKU_HELPER_TITLE', $this->config['mot_sudoku_helper_samurai_cost']);
-					$note_text = $this->language->lang('MOT_SUDOKU_NOTE_TEXT', $this->config['mot_sudoku_cell_points'], $this->config['mot_sudoku_cell_cost'],
-									$this->config['mot_sudoku_number_cost'], $this->config['mot_sudoku_reset_cost'], $this->config['mot_sudoku_helper_samurai_cost'],
-									$this->config['mot_sudoku_level_cost']
-					);
-					$helper_cost = $this->config['mot_sudoku_helper_samurai_cost'];
-				}
-
-				$selected_tab = 'samurai';
-				break;
-
-			case 'ninja':
-				if ($user_stats)
-				{
-					$modal_position = $user_stats['modal_position'];
-					$games_solved = $user_stats['ninja_played'];
-					$total_points = $user_stats['ninja_points'];
-					$ninja_ids = json_decode($user_stats['ninja_ids']);
-				}
-				else
-				{
-					$modal_position = 0;
-					$games_solved = 0;
-					$total_points = 0;
-					$ninja_ids = [];
-				}
-
-				$puzzle_exists = true;
-				// Then check whether there is an unsolved puzzle for this user
-				$sql = "SELECT * FROM " . $this->sudoku_games_table . "
-						WHERE game_type = 'n'
-						AND user_id = " . (int) $this->user->data['user_id'];
-				$result = $this->db->sql_query($sql);
-				$ninja_puzzle = $this->db->sql_fetchrow($result);
-				$this->db->sql_freeresult($result);
-
-				if (empty($ninja_puzzle))
-				{
-					// No unsolved puzzle so we can choose a new one which has not been played so far by this user
-					$in_set = !empty($ninja_ids) ? ' WHERE ' . $this->db->sql_in_set('ninja_id', $ninja_ids, true) : '';
-					$sql = 'SELECT * FROM ' . $this->ninja_sudoku_table . $in_set;
-					$result = $this->db->sql_query($sql);
-					$ninja_puzzles = $this->db->sql_fetchrowset($result);
-					$this->db->sql_freeresult($result);
-
-					$ninja_count = count($ninja_puzzles);
-					// Check whether we do have at least one puzzle to work with
-					$puzzle_exists = $ninja_count == 0 ? false : true;
-
-					$game_level = 0;
-					if ($puzzle_exists)
-					{
-						$puzzle_number = rand(0, $ninja_count - 1);
-
-						$ninja_puzzle = $ninja_puzzles[$puzzle_number];
-						$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $ninja_puzzle['game_pack'], $ninja_puzzle['game_number'], $this->difficulty[$ninja_puzzle['game_level']]);
-						$title = ($this->config['mot_sudoku_title_enable'] && $ninja_puzzle['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $ninja_puzzle['game_name'] . '</strong>' : '';
-						$puzzle_id = $ninja_puzzle['ninja_id'];
-						$entry_id = 0;
-						$player_line = json_encode($this->ninja_array);
-						$current_points = 0;
-						$game_buy_digit = 0;
-						$game_reset = 0;
-						$game_helper = 0;
-					}
-				}
-				else
-				{
-					// We have an unsolved puzzle, so we have to get its data and send it to the game
-					$puzzle_id = $ninja_puzzle['game_id'];
-					$entry_id = $ninja_puzzle['entry_id'];
-					// Get some data from the original puzzle itself
-					$sql = 'SELECT game_pack, game_number, game_level, game_name FROM ' . $this->ninja_sudoku_table . '
-							WHERE ninja_id = ' . (int) $ninja_puzzle['game_id'];
-					$result = $this->db->sql_query($sql);
-					$data_row = $this->db->sql_fetchrow($result);
-					$this->db->sql_freeresult($result);
-					$game_info = $this->language->lang('MOT_SUDOKU_GAME_INFO', $data_row['game_pack'], $data_row['game_number'], $this->difficulty[$data_row['game_level']]);
-					$title = ($this->config['mot_sudoku_title_enable'] && $data_row['game_name'] != '') ? '&nbsp;||&nbsp;<strong>' . $data_row['game_name'] . '</strong>' : '';
-					$player_line = $ninja_puzzle['player_line'];
-					$current_points = (int) $ninja_puzzle['points'];
-					$game_reset = (int) $ninja_puzzle['reset'];
-					$game_buy_digit = (int) $ninja_puzzle['buy_digit'];
-					$game_helper = (int) $ninja_puzzle['helper'];
-					$game_level = (int) $ninja_puzzle['level'];
-				}
-
-				if ($puzzle_exists)
-				{
-					$puzzle_line = json_decode($ninja_puzzle['puzzle_line']);
-					$pre_cells_arr = [];
-					for ($grid = 0; $grid < 9; $grid++)
-					{
-						for ($i = 0; $i < 9; $i++)
-						{
-							for ($j = 0; $j < 9; $j++)
-							{
-								if ($puzzle_line[$grid][$i][$j] > 0)
-								{
-									$this->template->assign_var('MOT_SUDOKU_N_CELL_' . ($grid + 1) . '_' . ($i + 1) . ($j + 1), $puzzle_line[$grid][$i][$j]);
-									$pre_cells_arr[] = 'mot_sudoku_n_cell_id_' . ($grid + 1) . '_' . ($i + 1) . ($j + 1);
-								}
-							}
-						}
-					}
-					$gainable_points = (621 - count($pre_cells_arr)) * $this->config['mot_sudoku_cell_points'];
-					$empty_cells = $this->array_count_recursive($puzzle_line)[0];
-
-					$this->template->assign_vars([
-						'MOT_SUDOKU_PRE_CELLS_ARR'		=> json_encode($pre_cells_arr),
-						'MOT_SUDOKU_NINJA_ID'			=> $puzzle_id,
-						'MOT_SUDOKU_PUZZLE_LINE'		=> json_encode($puzzle_line),
-						'MOT_SUDOKU_PLAYER_LINE_N'		=> $player_line,
-					]);
-
-					$helper_title = $this->language->lang('MOT_SUDOKU_HELPER_TITLE', $this->config['mot_sudoku_helper_ninja_cost']);
-					$note_text = $this->language->lang('MOT_SUDOKU_NOTE_TEXT', $this->config['mot_sudoku_cell_points'], $this->config['mot_sudoku_cell_cost'],
-									$this->config['mot_sudoku_number_cost'], $this->config['mot_sudoku_reset_cost'], $this->config['mot_sudoku_helper_ninja_cost'],
-									$this->config['mot_sudoku_level_cost']
-					);
-					$helper_cost = $this->config['mot_sudoku_helper_ninja_cost'];
-				}
-
-				$selected_tab = 'ninja';
-				break;
-		}
-
-		// Prepare the level select field and tables
-		$level_select = '';
-		for ($i = 0; $i < 7; $i++)
-		{
-			$selected = $game_level == $i ? ' selected' : '';
-			$level_select .= '<option value="' . $i . '"' . $selected . '>' . $this->language->lang('MOT_SUDOKU_LEVEL_' . $i) . '</option>';
-			$this->template->assign_block_vars('levels', [
-				'NAME'		=> $this->language->lang('MOT_SUDOKU_LEVEL_' . $i),
-				'DIGIT'		=> $this->level_array[$tab] * $i,
-				'DEDUCT'	=> $this->level_array[$tab] * $i * $this->config['mot_sudoku_level_cost'],
-			]);
-		}
-
-		$this->template->assign_vars([
-			'MOT_SUDOKU_SELECTED_TAB'		=> $selected_tab,
-			'MOT_SUDOKU_CLASSIC_TAB'		=> $this->classic_action,
-			'MOT_SUDOKU_SAMURAI_TAB'		=> $this->samurai_action,
-			'MOT_SUDOKU_NINJA_TAB'			=> $this->ninja_action,
-			'MOT_SUDOKU_PUZZLE_EXISTS'		=> $puzzle_exists,
-			'MOT_SUDOKU_ACTIVE'				=> true,								// signal the footer copyright notice that Sudoku is running
-			'MOT_SUDOKU_AJAX_NUMBER'		=> $this->helper->route('mot_sudoku_ajax_number'),
-			'MOT_SUDOKU_AJAX_RESET'			=> $this->helper->route('mot_sudoku_ajax_reset'),
-			'MOT_SUDOKU_AJAX_BUY'			=> $this->helper->route('mot_sudoku_ajax_buy'),
-			'MOT_SUDOKU_AJAX_HELPER'		=> $this->helper->route('mot_sudoku_ajax_helper'),
-			'MOT_SUDOKU_AJAX_MODAL'			=> $this->helper->route('mot_sudoku_ajax_modal'),
-			'MOT_SUDOKU_AJAX_LEVEL'			=> $this->helper->route('mot_sudoku_ajax_level'),
-			'MOT_SUDOKU_COPYRIGHT'			=> $this->ext_data['extra']['display-name'] . ' ' . $this->ext_data['version'] . ' &copy; Mike-on-Tour (<a href="' . $this->ext_data['homepage'] . '">' . $this->ext_data['homepage'] . '</a>)',
-			'MOT_SUDOKU_NOTE_TEXT'			=> $puzzle_exists ? $note_text : '',
-			'MOT_SUDOKU_GAME_RESET_TITLE'	=> $this->language->lang('MOT_SUDOKU_GAME_RESET_TITLE', $this->config['mot_sudoku_reset_cost']),
-			'MOT_SUDOKU_BUY_NUMBER_TITLE'	=> $this->language->lang('MOT_SUDOKU_BUY_NUMBER_TITLE', $this->config['mot_sudoku_number_cost']),
-			'MOT_SUDOKU_GAME_INFO'			=> $puzzle_exists ? $game_info . $title : '',
-			'MOT_SUDOKU_DIGIT_NO_BUY'		=> $puzzle_exists ? ($empty_cells == 1 ? 1 : 0) : 0,
-			'MOT_SUDOKU_HELPER_TITLE'		=> $puzzle_exists ? $helper_title : '',
-			'MOT_SUDOKU_SELECT_LEVEL'		=> $level_select,
-			'MOT_SUDOKU_MODAL_SWITCH'		=> $modal_position,
-			'MOT_SUDOKU_TOTAL_GAMES'		=> $games_solved,
-			'MOT_SUDOKU_TOTAL_POINTS'		=> $total_points,
-			'MOT_SUDOKU_MEAN_POINTS'		=> $games_solved ? number_format($total_points / $games_solved, 0, ',', '') : 0,
-			'MOT_SUDOKU_GAINABLE_POINTS'	=> $puzzle_exists ? $gainable_points : 0,
-			'MOT_SUDOKU_CURRENT_POINTS'		=> $puzzle_exists ? $current_points : 0,
-			'MOT_SUDOKU_GAME_RESET'			=> $puzzle_exists ? $game_reset : 0,
-			'MOT_SUDOKU_HELPER_ENABLED'		=> $this->config['mot_sudoku_helper_enable'],
-			'MOT_SUDOKU_S_HELPER_ENABLED'	=> $this->config['mot_sudoku_helper_samurai_enable'],
-			'MOT_SUDOKU_N_HELPER_ENABLED'	=> $this->config['mot_sudoku_helper_ninja_enable'],
-			'MOT_SUDOKU_GAME_BUY_DIGIT'		=> $puzzle_exists ? $game_buy_digit : 0,
-			'MOT_SUDOKU_GAME_HELPER'		=> $puzzle_exists ? $game_helper : 0,
-			'MOT_SUDOKU_GAME_LEVEL'			=> $puzzle_exists ? $game_level : 0,
-			'MOT_SUDOKU_ENTRY_ID'			=> $puzzle_exists ? $entry_id : 0,						// SUDOKU_PLAYERS_TABLE entry_id if loading an unsolved puzzle, 0 if new puzzle
-			'MOT_SUDOKU_NEGATIVE_POINTS'	=> $puzzle_exists ?
-												-1 * (($game_reset * $this->config['mot_sudoku_reset_cost']) + ($game_buy_digit * $this->config['mot_sudoku_number_cost']) +
-												($game_helper * $helper_cost) + ($game_level * $this->level_array[$tab] * $this->config['mot_sudoku_level_cost']))
-												: 0,
-		]);
-
-		// Add breadcrumbs link
-		$this->template->assign_block_vars('navlinks', [
-			'FORUM_NAME'	=> $this->language->lang('MOT_SUDOKU_TITLE'),
-			'U_VIEW_FORUM'	=> $this->helper->route('mot_sudoku_main'),
-		]);
-
-		return $this->helper->render('@mot_sudoku/mot_sudoku_main.html', $this->language->lang('MOT_SUDOKU_TITLE'));
 	}
 
 	/**
@@ -926,6 +1223,9 @@ class mot_sudoku_main
 									WHERE user_id = ' . (int) $this->user->data['user_id'];
 							$this->db->sql_query($sql);
 
+							// Add the points gained to the fame table
+							$this->save_to_fame($this->user->data['user_id'], $sudoku_type, $sql_arr['points']);
+
 							// Since this game is finished we delete it from the SUDOKU_GAMES_TABLE
 							$sql = 'DELETE FROM ' . $this->sudoku_games_table . '
 									WHERE entry_id = ' . (int) $sudoku_entry;
@@ -1023,6 +1323,9 @@ class mot_sudoku_main
 									WHERE user_id = ' . (int) $this->user->data['user_id'];
 							$this->db->sql_query($sql);
 
+							// Add the points gained to the fame table
+							$this->save_to_fame($this->user->data['user_id'], $sudoku_type, $sql_arr['points']);
+
 							// Since this game is finished we delete it from the SUDOKU_GAMES_TABLE
 							$sql = 'DELETE FROM ' . $this->sudoku_games_table . '
 									WHERE entry_id = ' . (int) $sudoku_entry;
@@ -1119,6 +1422,9 @@ class mot_sudoku_main
 									SET ' . $this->db->sql_build_array('UPDATE', $stats) . '
 									WHERE user_id = ' . (int) $this->user->data['user_id'];
 							$this->db->sql_query($sql);
+
+							// Add the points gained to the fame table
+							$this->save_to_fame($this->user->data['user_id'], $sudoku_type, $sql_arr['points']);
 
 							// Since this game is finished we delete it from the SUDOKU_GAMES_TABLE
 							$sql = 'DELETE FROM ' . $this->sudoku_games_table . '
@@ -1705,5 +2011,55 @@ class mot_sudoku_main
 		}
 
 		return $return;
+	}
+
+	/**
+	* Add points to the players account of the current month
+	*
+	* @param	integer	$user_id		current user
+	*		string		$game_type		Sudoku puzzle type
+	*		integer 	$points		points to add
+	*
+	*/
+	private function save_to_fame($user_id, $game_type, $points)
+	{
+		// Get local date variables and user id first
+		$date_arr = getdate();
+
+		// Update or Insert this user's score
+		$sql_arr = [
+			'year'		=> $date_arr['year'],
+			'month'		=> $date_arr['mon'],
+			'user_id'	=> $user_id,
+			'game_type'	=> $game_type,
+		];
+		$sql = 'SELECT * FROM ' . $this->sudoku_fame_table . '
+				WHERE ' . $this->db->sql_build_array('SELECT', $sql_arr);
+		$result = $this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+
+		if (!empty ($row))
+		{
+			$sql_arr = [
+				'games_played'		=> $row['games_played']++,
+				'total_points'		=> $row['total_points'] + $points,
+			];
+			$sql = 'UPDATE ' . $this->sudoku_fame_table . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_arr) . '
+					WHERE fame_id = ' . (int) $row['fame_id'];
+		}
+		else
+		{
+			$sql_arr = [
+				'year'				=> $date_arr['year'],
+				'month'				=> $date_arr['mon'],
+				'user_id'			=> $user_id,
+				'game_type'			=> $game_type,
+				'games_played'		=> 1,
+				'total_points'		=> $points,
+			];
+			$sql = 'INSERT INTO ' . $this->sudoku_fame_table . ' ' . $this->db->sql_build_array('INSERT', $sql_arr);
+		}
+		$this->db->sql_query($sql);
 	}
 }
