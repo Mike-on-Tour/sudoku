@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.6.0
+* @package MoT Sudoku v0.6.1
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -624,7 +624,7 @@ class mot_sudoku_main
 							$this->sudoku_stats_table	=> 's',
 						],
 						'WHERE'		=> 'u.user_id = s.user_id
-										AND ' . $selected_type . '_played > 0',
+										AND ' . (string) $selected_type . '_played > 0',
 					];
 					$sql = $this->db->sql_build_query('SELECT', $sql_arr);
 					$sql .= ' ORDER BY s.' . $selected_type . '_points DESC';
@@ -864,15 +864,42 @@ class mot_sudoku_main
 			}
 
 			// Prepare the level select field and tables
-			$level_select = '';
-			for ($i = 0; $i < 7; $i++)
+			if (in_array($tab, ['classic', 'samurai', 'ninja']))				// To prevent warnings due to undefined $game_level if highscore or hall of fame are selected
 			{
-				$selected = $game_level == $i ? ' selected' : '';
-				$level_select .= '<option value="' . $i . '"' . $selected . '>' . $this->language->lang('MOT_SUDOKU_LEVEL_' . $i) . '</option>';
-				$this->template->assign_block_vars('levels', [
-					'NAME'		=> $this->language->lang('MOT_SUDOKU_LEVEL_' . $i),
-					'DIGIT'		=> $this->level_array[$tab] * $i,
-					'DEDUCT'	=> $this->level_array[$tab] * $i * $this->config['mot_sudoku_level_cost'],
+				$level_select = '';
+				for ($i = 0; $i < 7; $i++)
+				{
+					$selected = $game_level == $i ? ' selected' : '';
+					$level_select .= '<option value="' . $i . '"' . $selected . '>' . $this->language->lang('MOT_SUDOKU_LEVEL_' . $i) . '</option>';
+					$this->template->assign_block_vars('levels', [
+						'NAME'		=> $this->language->lang('MOT_SUDOKU_LEVEL_' . $i),
+						'DIGIT'		=> $this->level_array[$tab] * $i,
+						'DEDUCT'	=> $this->level_array[$tab] * $i * $this->config['mot_sudoku_level_cost'],
+					]);
+				}
+
+				$this->template->assign_vars([
+					'MOT_SUDOKU_PUZZLE_EXISTS'		=> $puzzle_exists,
+					'MOT_SUDOKU_NOTE_TEXT'			=> $puzzle_exists ? $note_text : '',
+					'MOT_SUDOKU_GAME_INFO'			=> $puzzle_exists ? $game_info . $title : '',
+					'MOT_SUDOKU_DIGIT_NO_BUY'		=> $puzzle_exists ? ($empty_cells == 1 ? 1 : 0) : 0,
+					'MOT_SUDOKU_HELPER_TITLE'		=> $puzzle_exists ? $helper_title : '',
+					'MOT_SUDOKU_SELECT_LEVEL'		=> $level_select,
+					'MOT_SUDOKU_MODAL_SWITCH'		=> $modal_position,
+					'MOT_SUDOKU_TOTAL_GAMES'		=> $games_solved,
+					'MOT_SUDOKU_TOTAL_POINTS'		=> $total_points,
+					'MOT_SUDOKU_MEAN_POINTS'		=> $games_solved ? number_format($total_points / $games_solved, 0, ',', '') : 0,
+					'MOT_SUDOKU_GAINABLE_POINTS'	=> $puzzle_exists ? $gainable_points : 0,
+					'MOT_SUDOKU_CURRENT_POINTS'		=> $puzzle_exists ? $current_points : 0,
+					'MOT_SUDOKU_GAME_RESET'			=> $puzzle_exists ? $game_reset : 0,
+					'MOT_SUDOKU_GAME_BUY_DIGIT'		=> $puzzle_exists ? $game_buy_digit : 0,
+					'MOT_SUDOKU_GAME_HELPER'		=> $puzzle_exists ? $game_helper : 0,
+					'MOT_SUDOKU_GAME_LEVEL'			=> $puzzle_exists ? $game_level : 0,
+					'MOT_SUDOKU_ENTRY_ID'			=> $puzzle_exists ? $entry_id : 0,						// SUDOKU_PLAYERS_TABLE entry_id if loading an unsolved puzzle, 0 if new puzzle
+					'MOT_SUDOKU_NEGATIVE_POINTS'	=> $puzzle_exists ?
+														-1 * (($game_reset * $this->config['mot_sudoku_reset_cost']) + ($game_buy_digit * $this->config['mot_sudoku_number_cost']) +
+														($game_helper * $helper_cost) + ($game_level * $this->level_array[$tab] * $this->config['mot_sudoku_level_cost']))
+														: 0,
 				]);
 			}
 
@@ -885,7 +912,6 @@ class mot_sudoku_main
 				'MOT_SUDOKU_FAME_TAB'			=> $this->fame_action,
 				'MOT_SUDOKU_ENABLE_RANK'		=> $this->config['mot_sudoku_enable_rank'],
 				'MOT_SUDOKU_ENABLE_FAME'		=> $this->config['mot_sudoku_enable_fame'],
-				'MOT_SUDOKU_PUZZLE_EXISTS'		=> $puzzle_exists,
 				'MOT_SUDOKU_ACTIVE'				=> true,								// signal the footer copyright notice that Sudoku is running
 				'MOT_SUDOKU_AJAX_NUMBER'		=> $this->helper->route('mot_sudoku_ajax_number'),
 				'MOT_SUDOKU_AJAX_RESET'			=> $this->helper->route('mot_sudoku_ajax_reset'),
@@ -894,31 +920,11 @@ class mot_sudoku_main
 				'MOT_SUDOKU_AJAX_MODAL'			=> $this->helper->route('mot_sudoku_ajax_modal'),
 				'MOT_SUDOKU_AJAX_LEVEL'			=> $this->helper->route('mot_sudoku_ajax_level'),
 				'MOT_SUDOKU_COPYRIGHT'			=> $this->ext_data['extra']['display-name'] . ' ' . $this->ext_data['version'] . ' &copy; Mike-on-Tour (<a href="' . $this->ext_data['homepage'] . '">' . $this->ext_data['homepage'] . '</a>)',
-				'MOT_SUDOKU_NOTE_TEXT'			=> $puzzle_exists ? $note_text : '',
 				'MOT_SUDOKU_GAME_RESET_TITLE'	=> $this->language->lang('MOT_SUDOKU_GAME_RESET_TITLE', $this->config['mot_sudoku_reset_cost']),
 				'MOT_SUDOKU_BUY_NUMBER_TITLE'	=> $this->language->lang('MOT_SUDOKU_BUY_NUMBER_TITLE', $this->config['mot_sudoku_number_cost']),
-				'MOT_SUDOKU_GAME_INFO'			=> $puzzle_exists ? $game_info . $title : '',
-				'MOT_SUDOKU_DIGIT_NO_BUY'		=> $puzzle_exists ? ($empty_cells == 1 ? 1 : 0) : 0,
-				'MOT_SUDOKU_HELPER_TITLE'		=> $puzzle_exists ? $helper_title : '',
-				'MOT_SUDOKU_SELECT_LEVEL'		=> $level_select,
-				'MOT_SUDOKU_MODAL_SWITCH'		=> $modal_position,
-				'MOT_SUDOKU_TOTAL_GAMES'		=> $games_solved,
-				'MOT_SUDOKU_TOTAL_POINTS'		=> $total_points,
-				'MOT_SUDOKU_MEAN_POINTS'		=> $games_solved ? number_format($total_points / $games_solved, 0, ',', '') : 0,
-				'MOT_SUDOKU_GAINABLE_POINTS'	=> $puzzle_exists ? $gainable_points : 0,
-				'MOT_SUDOKU_CURRENT_POINTS'		=> $puzzle_exists ? $current_points : 0,
-				'MOT_SUDOKU_GAME_RESET'			=> $puzzle_exists ? $game_reset : 0,
 				'MOT_SUDOKU_HELPER_ENABLED'		=> $this->config['mot_sudoku_helper_enable'],
 				'MOT_SUDOKU_S_HELPER_ENABLED'	=> $this->config['mot_sudoku_helper_samurai_enable'],
 				'MOT_SUDOKU_N_HELPER_ENABLED'	=> $this->config['mot_sudoku_helper_ninja_enable'],
-				'MOT_SUDOKU_GAME_BUY_DIGIT'		=> $puzzle_exists ? $game_buy_digit : 0,
-				'MOT_SUDOKU_GAME_HELPER'		=> $puzzle_exists ? $game_helper : 0,
-				'MOT_SUDOKU_GAME_LEVEL'			=> $puzzle_exists ? $game_level : 0,
-				'MOT_SUDOKU_ENTRY_ID'			=> $puzzle_exists ? $entry_id : 0,						// SUDOKU_PLAYERS_TABLE entry_id if loading an unsolved puzzle, 0 if new puzzle
-				'MOT_SUDOKU_NEGATIVE_POINTS'	=> $puzzle_exists ?
-													-1 * (($game_reset * $this->config['mot_sudoku_reset_cost']) + ($game_buy_digit * $this->config['mot_sudoku_number_cost']) +
-													($game_helper * $helper_cost) + ($game_level * $this->level_array[$tab] * $this->config['mot_sudoku_level_cost']))
-													: 0,
 			]);
 
 			// Add breadcrumbs link

@@ -1,16 +1,12 @@
-<div>
-	<h2>{{ lang('MOT_SUDOKU_TAB_FAME') ~ ' ' ~ MOT_SUDOKU_SELECTED_TYPE }}</h2>
-</div>
-
 <form id="mot_sudoku_type_select" method="post" action="{{ MOT_SUDOKU_FAME_TAB }}">
-	<fieldset class="quick">
-		{{ lang('MOT_SUDOKU_SELECT_TYPE') ~ lang('COLON') }}
+	<h2>
+		{{ lang('MOT_SUDOKU_TAB_FAME') }}&nbsp;
+
 		<select id="mot_sudoku_select_type" name="mot_sudoku_select_type" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">
 			{{ MOT_SUDOKU_TYPE_SELECTION }}
 		</select>
-		<input class="button2" type="submit" value="{{ lang('GO') }}">
-		{{ S_FORM_TOKEN }}
-	</fieldset>
+	</h2>
+	{{ S_FORM_TOKEN }}
 </form>
 
 <h3>{{ lang('MOT_SUDOKU_CURRENT_MONTH') }}</h3>

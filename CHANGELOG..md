@@ -4,6 +4,20 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.6.1] - 2024-02-26
+
+### Added
+
+### Changed
+-	The template event files shifted from the `prosilver` directory to the `all` directory
+-	Shifted the dropdown select field on the Highscore and Hall of Fame tabs from the right side into the header for improved recognisability
+
+### Fixed
+-	Some PHP warnings due to undefined variables when using the Highscore and Hall of Fame tabs
+
+### Removed
+  
+  
 ## [0.6.0] - 2024-02-25
 
 ### Added
