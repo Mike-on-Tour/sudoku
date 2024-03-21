@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.6.2
+* @package MoT Sudoku v0.7.2
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -609,7 +609,7 @@ class mot_sudoku_main
 					$selected_type = $this->request->is_set('mot_sudoku_select_type') ? $this->request->variable('mot_sudoku_select_type', '') : 'classic';
 
 					// Get total numbers of players in score table
-					$count_query = "SELECT COUNT(user_id) AS 'user_count' FROM " . $this->sudoku_stats_table . "
+					$count_query = "SELECT COUNT(user_id) AS user_count FROM " . $this->sudoku_stats_table . "
 									WHERE " . $selected_type . "_played > 0";
 					$result = $this->db->sql_query($count_query);
 					$row = $this->db->sql_fetchrow($result);
@@ -692,8 +692,8 @@ class mot_sudoku_main
 							],
 						],
 						'WHERE'		=> 'f.year = ' . (int) $date_arr['year'] . '
-										AND f.month = ' . (int) $date_arr['mon'] . '
-										AND game_type = "' . (string) $short_type_array[$selected_type] . '"',
+										AND f.month = ' . (int) $date_arr['mon'] . "
+										AND game_type = '" . (string) $short_type_array[$selected_type] . "'",
 						'ORDER_BY'	=> 'f.total_points DESC',
 					];
 					$sql = $this->db->sql_build_query('SELECT', $sql_arr);
@@ -728,8 +728,8 @@ class mot_sudoku_main
 								'ON'	=> 'u.user_id = f.user_id',
 							],
 						],
-						'WHERE'		=> 'f.year = ' . (int) $date_arr['year'] . '
-						AND game_type = "' . (string) $short_type_array[$selected_type] . '"',
+						'WHERE'		=> 'f.year = ' . (int) $date_arr['year'] . "
+						AND game_type = '" . (string) $short_type_array[$selected_type] . "'",
 					];
 					$sql = $this->db->sql_build_query('SELECT', $sql_arr);
 					$result = $this->db->sql_query($sql);
@@ -788,7 +788,7 @@ class mot_sudoku_main
 								'ON'	=> 'u.user_id = f.user_id',
 							],
 						],
-						'WHERE'		=> 'game_type = "' . (string) $short_type_array[$selected_type] . '"',
+						'WHERE'		=> "game_type = '" . (string) $short_type_array[$selected_type] . "'",
 						'ORDER_BY'	=> 'f.month_id DESC',
 					];
 					$sql = $this->db->sql_build_query('SELECT', $sql_arr);
@@ -820,7 +820,7 @@ class mot_sudoku_main
 								'ON'	=> 'u.user_id = f.user_id',
 							],
 						],
-						'WHERE'		=> 'game_type = "' . (string) $short_type_array[$selected_type] . '"',
+						'WHERE'		=> "game_type = '" . (string) $short_type_array[$selected_type] . "'",
 						'ORDER_BY'	=> 'f.year DESC',
 					];
 					$sql = $this->db->sql_build_query('SELECT', $sql_arr);

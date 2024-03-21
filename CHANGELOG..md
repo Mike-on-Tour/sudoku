@@ -4,6 +4,18 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.7.2] - 2024-03-16
+
+### Added
+
+### Changed
+
+### Fixed
+-	Problems with Postgres databases in `controller/mot_sudoku_acp.php` and `controller/mot_sudoku_main.php`
+
+### Removed
+  
+  
 ## [0.7.1] - 2024-03-15
 
 ### Added

@@ -1,7 +1,7 @@
 <?php
 /*
 *
-* @package MoT Sudoku v0.7.1
+* @package MoT Sudoku v0.7.2
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -177,7 +177,7 @@ class mot_sudoku_acp
 
 		$up_enabled = $this->phpbb_extension_manager->is_enabled('dmzx/ultimatepoints');
 
-		if ($up_enabled)
+		if ($up_enabled && $this->config['mot_sudoku_points_enable'])
 		{
 			// Correctly handle this for different layers
 			switch ($this->db->get_sql_layer())
@@ -561,7 +561,7 @@ class mot_sudoku_acp
 		}
 
 		// get the total number of gamepacks
-		$count_query = "SELECT COUNT(pack_id) AS 'pack_count' FROM " . $this->sudoku_gamepacks_table . $where;
+		$count_query = "SELECT COUNT(pack_id) AS pack_count FROM " . $this->sudoku_gamepacks_table . $where;
 		$result = $this->db->sql_query($count_query);
 		$row = $this->db->sql_fetchrow($result);
 		$pack_count = $row['pack_count'];
