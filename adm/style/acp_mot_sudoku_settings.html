@@ -74,6 +74,11 @@
 			<dt><label for="mot_sudoku_title_enable">{{ lang('ACP_MOT_SUDOKU_PUZZLE_TITLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_PUZZLE_TITLE_EXPL') }}</p></dt>
 			<dd>{{ _self.switch('mot_sudoku_title_enable', ACP_MOT_SUDOKU_TITLE_ENABLE, switch_type) }}</dd>
 		</dl>
+
+		<dl>
+			<dt><label for="mot_sudoku_rows_per_page">{{ lang('ACP_MOT_SUDOKU_ROWS_PER_PAGE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_ROWS_PER_PAGE_EXP') }}</p></dt>
+			<dd><input id="mot_sudoku_rows_per_page" type="number" min="5" max="150" name="mot_sudoku_rows_per_page" value={{ ACP_MOT_SUDOKU_ROWS_PER_PAGE }}></dd>
+		</dl>
 	</fieldset>
 
 	<fieldset>

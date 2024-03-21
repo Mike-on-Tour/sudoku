@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.6.0
+* @package MoT Sudoku v0.7.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -53,6 +53,8 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_FAME_LIMIT_EXP'			=> 'You can select the number of players to be displayed in the tables of the »Hall of Fame«.',
 	'ACP_MOT_SUDOKU_PUZZLE_TITLE'			=> 'Display puzzle title',
 	'ACP_MOT_SUDOKU_PUZZLE_TITLE_EXPL'		=> 'Enables display of the current game`s title.',
+	'ACP_MOT_SUDOKU_ROWS_PER_PAGE'			=> 'Rows per table page for Sudoku packs',
+	'ACP_MOT_SUDOKU_ROWS_PER_PAGE_EXP'		=> 'Choose the number of rows to be displayed per table page when displaying the Sudoku packs.',
 
 	'ACP_MOT_SUDOKU_POINTS_SETTINGS'		=> 'Points settings',
 	'ACP_MOT_SUDOKU_CELL_POINTS'			=> 'Input points',
@@ -141,9 +143,18 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_SAMURAI'				=> 'Samurai pack',
 	'ACP_MOT_SUDOKU_NINJA'					=> 'Ninja pack',
 
-	'ACP_MOT_SUDOKU_PACK_DELETE'			=> 'Do you really want to remove the Sudoku pack with the number <strong>%1$d</strong> and all its puzzles vrom the database?<br>
-												This is a permanent action and can not be undone!',
-	'ACP_MOT_SUDOKU_DELETED_PACK'			=> 'The Sudoku pack with the number <strong>%1$d</strong> and all its puzzles removed from the database.',
+	'ACP_MOT_SUDOKU_DEL_MARKED'				=> 'Delete marked',
+	'ACP_MOT_SUDOKU_NO_PACK_SELECTED'		=> 'You have not selected any packs for this action, please mark at least one pack.',
+	'ACP_MOT_SUDOKU_PACK_DELETE'			=> [
+		1	=> 'Do you really want to remove the Sudoku pack with the number <strong>%2$s</strong> and all its puzzles from the database?<br>
+				This is a permanent action and can not be undone!',
+		2	=> 'Do you really want to remove the %1$d Sudoku packs with the numbers <strong>%2$s</strong> and all their puzzles from the database?<br>
+				This is a permanent action and can not be undone!',
+	],
+	'ACP_MOT_SUDOKU_DELETED_PACK'			=> [
+		1	=> 'The Sudoku pack with the number <strong>%2$s</strong> and all its puzzles were removed from the database.',
+		2	=> 'The %1$d Sudoku packs with the numbers <strong>%2$s</strong> and all their puzzles were removed from the database.',
+	],
 
 	'ACP_MOT_SUDOKU_UPLOAD_TITLE'			=> 'Import Sudoku packs',
 	'ACP_MOT_SUDOKU_UPLOAD_XML'				=> 'Import locally stored Sudoku packs (xml file)',

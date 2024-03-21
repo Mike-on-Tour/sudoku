@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.6.0
+* @package MoT Sudoku v0.7.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -53,6 +53,8 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_FAME_LIMIT_EXP'			=> 'Hier kannst du auswählen wie viele Spieler in den Tabellen der Ruhmeshalle angezeigt werden sollen.',
 	'ACP_MOT_SUDOKU_PUZZLE_TITLE'			=> 'Zeige Puzzle Titel',
 	'ACP_MOT_SUDOKU_PUZZLE_TITLE_EXPL'		=> 'Zeigt den Namen des aktuellen Spiels an.',
+	'ACP_MOT_SUDOKU_ROWS_PER_PAGE'			=> 'Zeilen pro Tabellenseite für Spielepakete',
+	'ACP_MOT_SUDOKU_ROWS_PER_PAGE_EXP'		=> 'Wähle hier die Anzahl der Zeilen, die bei der Anzeige der Spielepakete pro Tabellenseite angezeigt werden soll.',
 
 	'ACP_MOT_SUDOKU_POINTS_SETTINGS'		=> 'Einstellungen für Punktevergabe',
 	'ACP_MOT_SUDOKU_CELL_POINTS'			=> 'Punkte für Eingabe',
@@ -142,9 +144,18 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_SAMURAI'				=> 'Samurai-Rätsel',
 	'ACP_MOT_SUDOKU_NINJA'					=> 'Ninja-Rätsel',
 
-	'ACP_MOT_SUDOKU_PACK_DELETE'			=> 'Willst du wirklich das Spiele-Paket mit der Nr. <strong>%1$d</strong> und die dazugehörigen Rätsel aus der Datenbank löschen?<br>
-												Dieser Vorgang kann nicht rückgängig gemacht werden!',
-	'ACP_MOT_SUDOKU_DELETED_PACK'			=> 'Das Spiele-Paket mit der Nr. <strong>%1$d</strong> und die dazugehörigen Rätsel wurden aus der Datenbank gelöscht.',
+	'ACP_MOT_SUDOKU_DEL_MARKED'				=> 'Markierte löschen',
+	'ACP_MOT_SUDOKU_NO_PACK_SELECTED'		=> 'Du musst erst mindestens ein Paket zum Löschen auswählen.',
+	'ACP_MOT_SUDOKU_PACK_DELETE'			=> [
+		1	=> 'Willst du wirklich das Spiele-Paket mit der Nr. <strong>%2$s</strong> und die dazugehörigen Rätsel aus der Datenbank löschen?<br>
+				Dieser Vorgang kann nicht rückgängig gemacht werden!',
+		2	=> 'Willst du wirklich die %1$d Spiele-Pakete mit den Nr. <strong>%2$s</strong> und die dazugehörigen Rätsel aus der Datenbank löschen?<br>
+				Dieser Vorgang kann nicht rückgängig gemacht werden!',
+	],
+	'ACP_MOT_SUDOKU_DELETED_PACK'			=> [
+		1	=> 'Das Spiele-Paket mit der Nr. <strong>%2$s</strong> und die dazugehörigen Rätsel wurden aus der Datenbank gelöscht.',
+		2	=> 'Die %1$d Spiele-Pakete mit den Nr. <strong>%2$s</strong> und die dazugehörigen Rätsel wurden aus der Datenbank gelöscht.',
+	],
 
 	'ACP_MOT_SUDOKU_UPLOAD_TITLE'			=> 'Sudoku-Packs importieren',
 	'ACP_MOT_SUDOKU_UPLOAD_XML'				=> 'Lokale Sudoku-Packs (xml-Datei) importieren',

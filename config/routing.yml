@@ -1,5 +1,5 @@
 mot_sudoku_main:
-    path: /sudoku
+    path: /msudoku
     defaults: { _controller: mot.sudoku.mot_sudoku_main:handle }
 
 mot_sudoku_ajax_number:

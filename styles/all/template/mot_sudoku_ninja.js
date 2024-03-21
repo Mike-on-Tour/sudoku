@@ -1,6 +1,6 @@
 /**
 *
-* @package MoT Sudoku v0.5.0
+* @package MoT Sudoku v0.7.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -10,6 +10,10 @@
 
 'use strict';
 
+let ninjaTriggerBoxWidth = 1830;
+if ($("#mot_sudoku_box_ninja").width() >= ninjaTriggerBoxWidth) {
+	$(".sudoku-sub-table td").css({"width": "38px", "height": "38px", "font-size": "2.4em"});
+}
 /*
 * Add the filled cells to the Samurai Sudoku puzzle at game start
 *
@@ -189,7 +193,7 @@ motSudoku.resetNinja = function(puzzle) {
 */
 motSudoku.ninjaHelper = function(puzzleLine, playerLine) {
 	// Get the css variables
-	let fontSizeSmall = $("#mot_sudoku_n_cell_id_1_11").css('--fontSizeSmall');
+	let fontSizeSmall = $("#mot_sudoku_box_ninja").width() >= ninjaTriggerBoxWidth ? "0.9em" : $("#mot_sudoku_n_cell_id_1_11").css('--fontSizeSmall');
 	let fontWeightNormal = $("#mot_sudoku_n_cell_id_1_11").css('--fontWeightNormal');
 	let textColorPlayer = $("#mot_sudoku_n_cell_id_1_11").css('--textColorPlayer');
 	let textAlignLeft = $("#mot_sudoku_n_cell_id_1_11").css('--textAlignLeft');

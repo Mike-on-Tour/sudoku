@@ -109,6 +109,7 @@ class mot_sudoku_acp
 				$this->config->set('mot_sudoku_enable_fame', $this->request->variable('mot_sudoku_enable_fame', 0));
 				$this->config->set('mot_sudoku_fame_limit', $this->request->variable('mot_sudoku_fame_limit', 0));
 				$this->config->set('mot_sudoku_title_enable', $this->request->variable('mot_sudoku_title_enable', 0));
+				$this->config->set('mot_sudoku_rows_per_page', $this->request->variable('mot_sudoku_rows_per_page', 0));
 				$this->config->set('mot_sudoku_cell_points', $this->request->variable('mot_sudoku_cell_points', 5));
 				$this->config->set('mot_sudoku_cell_cost', $this->request->variable('mot_sudoku_cell_cost', 15));
 				$this->config->set('mot_sudoku_number_cost', $this->request->variable('mot_sudoku_number_cost', 40));
@@ -207,6 +208,7 @@ class mot_sudoku_acp
 			'ACP_MOT_SUDOKU_ENABLE_FAME'				=> $this->config['mot_sudoku_enable_fame'],
 			'ACP_MOT_SUDOKU_FAME_LIMIT'					=> $this->config['mot_sudoku_fame_limit'],
 			'ACP_MOT_SUDOKU_TITLE_ENABLE'				=> $this->config['mot_sudoku_title_enable'],
+			'ACP_MOT_SUDOKU_ROWS_PER_PAGE'				=> $this->config['mot_sudoku_rows_per_page'],
 			'ACP_MOT_SUDOKU_CELL_POINTS'				=> $this->config['mot_sudoku_cell_points'],
 			'ACP_MOT_SUDOKU_CELL_COST'					=> $this->config['mot_sudoku_cell_cost'],
 			'ACP_MOT_SUDOKU_NUMBER_COST'				=> $this->config['mot_sudoku_number_cost'],
@@ -250,7 +252,7 @@ class mot_sudoku_acp
 
 		// set parameters for pagination
 		$start = $this->request->variable('start', 0);
-		$limit = (int) $this->config['posts_per_page'];
+		$limit = (int) $this->config['mot_sudoku_rows_per_page'];
 
 		$game_types = [
 			'c'			=> $this->language->lang('MOT_SUDOKU_TAB_CLASSIC'),
@@ -261,29 +263,48 @@ class mot_sudoku_acp
 		$selected_type = $this->request->variable('acp_mot_sudoku_select_type', 'all');
 
 		$action = $this->request->variable('action', '');
+		$action = $action == '' && $this->request->is_set('mot_sudoku_del_marked') ? 'mot_sudoku_del_marked' : $action;
+
 		switch ($action)
 		{
-			case 'delete_gamepack':
-				$pack_id = $this->request->variable('pack_id', 0);
-				$pack_number = $this->request->variable('pack_number', 0);
+			case 'mot_sudoku_del_marked':
+				$pack_id = $this->request->variable('mot_sudoku_mark_del', [0]);
+				if (empty($pack_id))
+				{
+					trigger_error($this->language->lang('ACP_MOT_SUDOKU_NO_PACK_SELECTED') . adm_back_link($this->u_action), E_USER_WARNING);
+				}
+
+				$sql = 'SELECT game_pack FROM ' . $this->sudoku_gamepacks_table . '
+						WHERE ' . $this->db->sql_in_set('pack_id', $pack_id);
+				$result = $this->db->sql_query($sql);
+				$pack_number = $this->db->sql_fetchrowset($result);
+				$this->db->sql_freeresult($result);
+
+				$game_packs = [];
+				foreach ($pack_number as $row)
+				{
+					$game_packs[] = $row['game_pack'];
+				}
+
 				if (confirm_box(true))
 				{
 					$sql = 'DELETE FROM ' . $this->sudoku_gamepacks_table . '
-							WHERE pack_id=' . (int) $pack_id;
+							WHERE ' . $this->db->sql_in_set('pack_id', $pack_id);
 					$this->db->sql_query($sql);
+
 					foreach ([$this->classic_sudoku_table, $this->samurai_sudoku_table, $this->ninja_sudoku_table] as $table)
 					{
-						$sql = 'DELETE FROM ' . $table . ' WHERE game_pack = ' . (int) $pack_number;
+						$sql = 'DELETE FROM ' . $table . ' WHERE ' . $this->db->sql_in_set('game_pack', $game_packs);
 						$this->db->sql_query($sql);
 					}
-					trigger_error($this->language->lang('ACP_MOT_SUDOKU_DELETED_PACK', $pack_number) . adm_back_link($this->u_action . '&amp;acp_mot_sudoku_select_type=' . $selected_type), E_USER_NOTICE);
+					trigger_error($this->language->lang('ACP_MOT_SUDOKU_DELETED_PACK', count($pack_id), implode(', ', $game_packs)) . adm_back_link($this->u_action . '&amp;acp_mot_sudoku_select_type=' . $selected_type), E_USER_NOTICE);
 				}
 				else
 				{
-					confirm_box(false, '<p>' . $this->language->lang('ACP_MOT_SUDOKU_PACK_DELETE', $pack_number) . '</p>', build_hidden_fields([
-						'u_action'						=> $this->u_action . '&amp;action=delete_gamepack',
-						'pack_id'						=> $pack_id,
-						'pack_number'					=> $pack_number,
+					confirm_box(false, '<p>' . $this->language->lang('ACP_MOT_SUDOKU_PACK_DELETE', count($pack_id), implode(', ', $game_packs)) . '</p>', build_hidden_fields([
+						'u_action'						=> $this->u_action,
+						'mot_sudoku_del_marked'			=> true,
+						'mot_sudoku_mark_del'			=> $pack_id,
 						'acp_mot_sudoku_select_type'	=> $selected_type,
 					]));
 				}
@@ -568,12 +589,12 @@ class mot_sudoku_acp
 				'PACK_TYPE'			=> $game_type_name,
 				'GAME_COUNT'		=> $game_count,
 				'INSTALL_DATE'		=> $this->user->format_date($row['install_date']),
-				'U_DELETE'			=> $this->u_action . '&amp;action=delete_gamepack&amp;pack_id=' . $row['pack_id'] . '&amp;pack_number=' . $row['game_pack'] .
-										'&amp;acp_mot_sudoku_select_type=' . $selected_type,
+				'PACK_ID'			=> $row['pack_id'],
 			]);
 		}
 
 		$this->template->assign_vars([
+			'U_ACTION'								=> $this->u_action,
 			'U_ACP_MS_SELECT_ACTION'				=> $this->u_action . '&amp;action=select_type',
 			'U_ACTION_IMPORT_GAME_PACK'				=> $this->u_action . '&amp;action=import_gamepack',
 			'ACP_MOT_SUDOKU_SELECT_TYPE'			=> $selected_type,

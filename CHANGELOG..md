@@ -4,6 +4,21 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.7.0] - 2024-03-11
+
+### Added
+-	A setting to choose the number of lines in the ACP game packs table added to the settings tab
+-	An `if` statement to the `styles/all/template/mot_sudoku_ninja.js` file which enlarges the cell width and height as well as the font sizes for the digits and the helper
+	digits if the Ninja box is wider than 1830 pixels
+
+### Changed
+-	Deleting game packs has been changed from a single pack affair to a single or multiple pack choice by marking the pack(s) to be removed
+
+### Fixed
+
+### Removed
+  
+  
 ## [0.6.2] - 2024-03-07
 
 ### Added
@@ -11,7 +26,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 	`controller/mot_sudoku_main.php` file including handing back a result to `styles/all/template/mot_sudoku_main.js` to indicate this state 
 
 ### Changed
--	The SQL query in `event/mot_sudoku_listener.php` from SELECT to SELECT DISTINCT to limit the number of usernames displayed as being actively playing Sudoku to one per user
+-	The SQL query in `event/mot_sudoku_listener.php` from `SELECT` to `SELECT DISTINCT` to limit the number of usernames displayed as being actively playing Sudoku to one per user
 
 ### Fixed
 -	Some PHP warnings and errors in the `controller/mot_sudoku_main.php` and `includes/mot_sudoku_functions.php` files when using the Hall of Fame tab

@@ -2,22 +2,22 @@
 {% INCLUDECSS '@mot_sudoku/mot_sudoku_acp.css' %}
 
 <h1>{{ lang('ACP_MOT_SUDOKU') ~ ' - ' ~ lang('ACP_MOT_SUDOKU_GAMEPACKS') }}</h1>
+
 <p>{{ lang('ACP_MOT_SUDOKU_GAMEPACKS_EXPL') }}</p>
+
 <br>
 
-{#<form id="acp_mot_sudoku_gamepacks" method="post" enctype="application/x-www-form-urlencoded" action="{{ U_ACTION }}">#}
-	<form id="acp_mot_sudoku_type_select" method="post" action="{{ U_ACP_MS_SELECT_ACTION }}">
-		<fieldset class="quick">
-			{{ lang('ACP_MOT_SUDOKU_SELECT_TYPE') ~ lang('COLON') }}
-			<select id="acp_mot_sudoku_select_type" name="acp_mot_sudoku_select_type" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">
-				{% for type_selection in type_selections %}
-					<option value="{{ type_selection.VALUE }}" {% if ACP_MOT_SUDOKU_SELECT_TYPE == type_selection.VALUE %} selected {% endif %}>{{ type_selection.NAME }}</option>
-				{% endfor %}
-			</select>
-			<input class="button2" type="submit" value="{{ lang('GO') }}">
-			{{ S_FORM_TOKEN }}
-		</fieldset>
-	</form>
+<form id="acp_mot_sudoku_gamepacks" method="post" enctype="application/x-www-form-urlencoded" action="{{ U_ACTION }}">
+	<fieldset class="quick">
+		{{ lang('ACP_MOT_SUDOKU_SELECT_TYPE') ~ lang('COLON') }}
+		<select id="acp_mot_sudoku_select_type" name="acp_mot_sudoku_select_type" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">
+			{% for type_selection in type_selections %}
+				<option value="{{ type_selection.VALUE }}" {% if ACP_MOT_SUDOKU_SELECT_TYPE == type_selection.VALUE %} selected {% endif %}>{{ type_selection.NAME }}</option>
+			{% endfor %}
+		</select>
+
+		<input class="button2" type="submit" value="{{ lang('GO') }}">
+	</fieldset>
 
 	{% if pagination %}
 	<div class="pagination top-pagination">
@@ -32,7 +32,7 @@
 				<th>{{ lang('ACP_MOT_SUDOKU_GAME_PACK_TYPE') }}</th>
 				<th>{{ lang('ACP_MOT_SUDOKU_GAME_COUNT') }}</th>
 				<th>{{ lang('ACP_MOT_SUDOKU_PACK_INSTALL_DATE') }}</th>
-				<th style="text-align: center;">{{ lang('OPTIONS') }}</th>
+				<th style="text-align: center;">{{ lang('MARK') }}</th>
 			</tr>
 		</thead>
 
@@ -43,7 +43,7 @@
 					<td>{{ gamepack.PACK_TYPE }}</td>
 					<td>{{ gamepack.GAME_COUNT }}</td>
 					<td>{{ gamepack.INSTALL_DATE }}</td>
-					<td style="text-align: center;"><a href="{{ gamepack.U_DELETE }}">{{ ICON_DELETE }}</a></td>
+					<td style="text-align: center;"><input type="checkbox" class="radio" name="mot_sudoku_mark_del[]" value="{{ gamepack.PACK_ID }}"></td>
 				</tr>
 			{% else %}
 				<tr>
@@ -59,8 +59,15 @@
 	</div>
 	{% endif %}
 
+	<br>
+
+	<fieldset class="quick">
+		<input class="button2" type="submit" name="mot_sudoku_del_marked" value="{{ lang('ACP_MOT_SUDOKU_DEL_MARKED') }}"><br>
+		<p class="small"><a href="#" onclick="marklist('acp_mot_sudoku_gamepacks', 'mot_sudoku_mark_del', true); return false;">{{ lang('MARK_ALL') }}</a> &bull; <a href="#" onclick="marklist('acp_mot_sudoku_gamepacks', 'mot_sudoku_mark_del', false); return false;">{{ lang('UNMARK_ALL') }}</a></p>
+	</fieldset>
+
 	{{ S_FORM_TOKEN }}
-{#</form>#}
+</form>
 
 <br><br>
 
