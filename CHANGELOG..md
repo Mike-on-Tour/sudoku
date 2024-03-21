@@ -4,6 +4,19 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.7.1] - 2024-03-15
+
+### Added
+
+### Changed
+
+### Fixed
+-	A problem with Postgres databases in `controller/mot_sudoku_acp.php`
+
+### Removed
+-	A still existing template variable concerning purging the Sudoku cache (removed in ver 0.4.0) in `controller/mot_sudoku_acp.php`
+  
+  
 ## [0.7.0] - 2024-03-11
 
 ### Added

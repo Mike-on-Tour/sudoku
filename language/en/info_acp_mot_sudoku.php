@@ -32,6 +32,7 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_GENERAL_EXPL'			=> 'Here you can edit Sudoku´s general settings',
 
 	'ACP_MOT_SUDOKU_GENERAL_SETTINGS'		=> 'General settings',
+	'ACP_MOT_SUDOKU_ENABLE'					=> 'Enable Sudoku',
 	'ACP_MOT_SUDOKU_ENABLE_EXPL'			=> 'Enable/disable Sudoku for authorised members, displays the link in the navigation bar depending on status.<br>
 												This settong does not affect founders, they always can see Sudoku.',
 	'ACP_MOT_SUDOKU_VERSION_CHECK'			=> 'Sudoku Version Check',
@@ -43,7 +44,6 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_VERSION_CHECKER_ON'		=> 'Automatic version check',
 	'ACP_MOT_SUDOKU_VERSION_CHECKER_EXPL'	=> 'If enabled it will be checked every time you call this page whether a newer version is available; the result will be displayed in
 												in a coloured box above `General settings`.',
-	'ACP_MOT_SUDOKU_ENABLE'					=> 'Activate Sudoku',
 	'ACP_MOT_SUDOKU_ENABLE_RANK'			=> 'Display highscore',
 	'ACP_MOT_SUDOKU_ENABLE_RANK_EXPL'		=> 'This setting enables or disables the highscore tab.',
 	'ACP_MOT_SUDOKU_ENABLE_FAME'			=> 'Display Hall of Fame',
