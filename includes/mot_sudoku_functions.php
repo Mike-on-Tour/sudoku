@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.6.0
+* @package MoT Sudoku v0.6.2
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -58,12 +58,12 @@ class mot_sudoku_functions
 
 			foreach ($type_arr as $type)
 			{
-				// It is a new month so we can get the best player of the previous month and store the data into
-				$sql = 'SELECT user_id, points FROM ' . $this->sudoku_fame_table . '
+				// It is a new month so we can get the best player of the previous month and store the data into the FAME_MONTH_TABLE
+				$sql = 'SELECT user_id, game_type, games_played, total_points FROM ' . $this->sudoku_fame_table . '
 						WHERE year = ' . (int) $year . '
 						AND month = ' . (int) $month . '
-						AND game_type = ' . (string) $type . '
-						ORDER BY points DESC
+						AND game_type = "' . (string) $type . '"
+						ORDER BY total_points DESC
 						LIMIT 1';
 				$result = $this->db->sql_query($sql);
 				$player = $this->db->sql_fetchrow($result);
@@ -91,9 +91,9 @@ class mot_sudoku_functions
 				$this->config->set('mot_sudoku_current_year', $date_arr['year']);
 
 				// Get best players of last year
-				$sql = 'SELECT * FROM ' . $this->sudoku_fame_table . '
+				$sql = 'SELECT user_id, game_type, games_played, total_points FROM ' . $this->sudoku_fame_table . '
 						WHERE year = ' . (int) $current_year . '
-						AND game_type = ' . (string) $type;
+						AND game_type = "' . (string) $type . '"';
 				$result = $this->db->sql_query($sql);
 				$players = $this->db->sql_fetchrowset($result);
 				$this->db->sql_freeresult($result);
@@ -106,14 +106,15 @@ class mot_sudoku_functions
 					{
 						if (array_key_exists($row['user_id'], $year_arr))
 						{
-							$year_arr[$row['user_id']]['points'] += $row['points'];
+							$year_arr[$row['user_id']]['games_played'] += $row['games_played'];
+							$year_arr[$row['user_id']]['total_points'] += $row['total_points'];
 						}
 						else
 						{
 							$year_arr[$row['user_id']] = [
-								'user_id'		=> $row['user_id'],
-								'games_played'	=> $row['games_played'],
-								'points'		=> $row['points'],
+								'user_id'			=> $row['user_id'],
+								'games_played'		=> $row['games_played'],
+								'total_points'		=> $row['total_points'],
 							];
 						}
 					}

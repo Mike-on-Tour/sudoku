@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.6.1
+* @package MoT Sudoku v0.6.2
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -207,7 +207,7 @@ class mot_sudoku_main
 				redirect(append_sid("{$this->root_path}index." . $this->php_ext));
 			}
 
-			// Check if the user ist logged in.
+			// Check if the user is logged in.
 			if (!$this->user->data['is_registered'])
 			{
 				// Not logged in ? Redirect to the loginbox.
@@ -804,9 +804,9 @@ class mot_sudoku_main
 							'MONTH'			=> $this->language->lang($months_arr[$row['month']]) . ' ' . $row['year'],
 							'USERNAME'		=> $row['username'],
 							'USER_COLOUR'	=> $row['user_colour'],
-							'TOTAL_GAMES'	=> $row['games'],
-							'TOTAL_POINTS'	=> $row['points'],
-							'MEAN_POINTS'	=> number_format($row['points'] / $row['games'], 0, ',', '')
+							'TOTAL_GAMES'	=> $row['games_played'],
+							'TOTAL_POINTS'	=> $row['total_points'],
+							'MEAN_POINTS'	=> number_format($row['total_points'] / $row['games_played'], 0, ',', '')
 						]);
 					}
 
@@ -824,6 +824,7 @@ class mot_sudoku_main
 						'ORDER_BY'	=> 'f.year DESC',
 					];
 					$sql = $this->db->sql_build_query('SELECT', $sql_arr);
+					$sql .= ' LIMIT ' . $number_of_rows;
 					$result = $this->db->sql_query($sql);
 					$years = $this->db->sql_fetchrowset($result);
 					$this->db->sql_freeresult($result);
@@ -834,9 +835,9 @@ class mot_sudoku_main
 							'YEAR'			=> $row['year'],
 							'USERNAME'		=> $row['username'],
 							'USER_COLOUR'	=> $row['user_colour'],
-							'TOTAL_GAMES'	=> $row['games'],
-							'TOTAL_POINTS'	=> $row['points'],
-							'MEAN_POINTS'	=> number_format($row['points'] / $row['games'], 0, ',', '')
+							'TOTAL_GAMES'	=> $row['games_played'],
+							'TOTAL_POINTS'	=> $row['total_points'],
+							'MEAN_POINTS'	=> number_format($row['total_points'] / $row['games_played'], 0, ',', '')
 						]);
 					}
 
@@ -955,6 +956,27 @@ class mot_sudoku_main
 			$sudoku_number = $this->request->variable('number', 0);
 			$sudoku_cell = $this->request->variable('cell', '');
 
+			// Get the existing data from the database if we have a valid entry_id
+			if ($sudoku_entry)
+			{
+				$sql = 'SELECT * FROM ' . $this->sudoku_games_table . '
+						WHERE entry_id = ' . (int) $sudoku_entry;
+				$result = $this->db->sql_query($sql);
+				$sql_arr = $this->db->sql_fetchrow($result);
+				$this->db->sql_freeresult($result);
+
+				// Now we check whether the user to whom this id belongs is logged in
+				if ($sql_arr['user_id'] != $this->user->data['user_id'])
+				{
+					// Now we can send back the needed data
+					$result = [
+						'logged_in'		=> false,
+					];
+
+					return new \Symfony\Component\HttpFoundation\JsonResponse($result);
+				}
+			}
+
 			// Check whether we already have this game in the database
 			if (!$sudoku_entry)
 			{
@@ -1053,13 +1075,7 @@ class mot_sudoku_main
 			}
 			else
 			{
-				// Existing game, we have to get the data which needs changing  and checking from the database
-				$sql = 'SELECT * FROM ' . $this->sudoku_games_table . '
-						WHERE entry_id = ' . (int) $sudoku_entry;
-				$result = $this->db->sql_query($sql);
-				$sql_arr = $this->db->sql_fetchrow($result);
-				$this->db->sql_freeresult($result);
-
+				// Existing game, we have to change  the existing data
 				switch ($sudoku_type)
 				{
 					case 'c':
@@ -1200,9 +1216,9 @@ class mot_sudoku_main
 													($sql_arr['helper'] * $this->config['mot_sudoku_helper_cost']) +
 													($sql_arr['level'] * $this->level_array[$sudoku_type] * $this->config['mot_sudoku_level_cost']));
 
-							// Now we can store this solved game to the SUDOKU_STATS_TABLE
+							// Now we can store this solved game into the SUDOKU_STATS_TABLE
 							$sql = 'SELECT * FROM ' . $this->sudoku_stats_table . '
-									WHERE user_id = ' . (int) $this->user->data['user_id'];
+									WHERE user_id = ' . (int) $sql_arr['user_id'];
 							$result = $this->db->sql_query($sql);
 							$stats = $this->db->sql_fetchrow($result);
 							$this->db->sql_freeresult($result);
@@ -1226,11 +1242,11 @@ class mot_sudoku_main
 
 							$sql = 'UPDATE ' . $this->sudoku_stats_table . '
 									SET ' . $this->db->sql_build_array('UPDATE', $stats) . '
-									WHERE user_id = ' . (int) $this->user->data['user_id'];
+									WHERE user_id = ' . (int) $sql_arr['user_id'];
 							$this->db->sql_query($sql);
 
 							// Add the points gained to the fame table
-							$this->save_to_fame($this->user->data['user_id'], $sudoku_type, $sql_arr['points']);
+							$this->save_to_fame($sql_arr['user_id'], $sudoku_type, $sql_arr['points']);
 
 							// Since this game is finished we delete it from the SUDOKU_GAMES_TABLE
 							$sql = 'DELETE FROM ' . $this->sudoku_games_table . '
@@ -1302,7 +1318,7 @@ class mot_sudoku_main
 
 							// Now we can store this solved game to the SUDOKU_STATS_TABLE
 							$sql = 'SELECT * FROM ' . $this->sudoku_stats_table . '
-									WHERE user_id = ' . (int) $this->user->data['user_id'];
+									WHERE user_id = ' . (int) $sql_arr['user_id'];
 							$result = $this->db->sql_query($sql);
 							$stats = $this->db->sql_fetchrow($result);
 							$this->db->sql_freeresult($result);
@@ -1326,11 +1342,11 @@ class mot_sudoku_main
 
 							$sql = 'UPDATE ' . $this->sudoku_stats_table . '
 									SET ' . $this->db->sql_build_array('UPDATE', $stats) . '
-									WHERE user_id = ' . (int) $this->user->data['user_id'];
+									WHERE user_id = ' . (int) $sql_arr['user_id'];
 							$this->db->sql_query($sql);
 
 							// Add the points gained to the fame table
-							$this->save_to_fame($this->user->data['user_id'], $sudoku_type, $sql_arr['points']);
+							$this->save_to_fame($sql_arr['user_id'], $sudoku_type, $sql_arr['points']);
 
 							// Since this game is finished we delete it from the SUDOKU_GAMES_TABLE
 							$sql = 'DELETE FROM ' . $this->sudoku_games_table . '
@@ -1402,7 +1418,7 @@ class mot_sudoku_main
 
 							// Now we can store this solved game to the SUDOKU_STATS_TABLE
 							$sql = 'SELECT * FROM ' . $this->sudoku_stats_table . '
-									WHERE user_id = ' . (int) $this->user->data['user_id'];
+									WHERE user_id = ' . (int) $sql_arr['user_id'];
 							$result = $this->db->sql_query($sql);
 							$stats = $this->db->sql_fetchrow($result);
 							$this->db->sql_freeresult($result);
@@ -1426,11 +1442,11 @@ class mot_sudoku_main
 
 							$sql = 'UPDATE ' . $this->sudoku_stats_table . '
 									SET ' . $this->db->sql_build_array('UPDATE', $stats) . '
-									WHERE user_id = ' . (int) $this->user->data['user_id'];
+									WHERE user_id = ' . (int) $sql_arr['user_id'];
 							$this->db->sql_query($sql);
 
 							// Add the points gained to the fame table
-							$this->save_to_fame($this->user->data['user_id'], $sudoku_type, $sql_arr['points']);
+							$this->save_to_fame($sql_arr['user_id'], $sudoku_type, $sql_arr['points']);
 
 							// Since this game is finished we delete it from the SUDOKU_GAMES_TABLE
 							$sql = 'DELETE FROM ' . $this->sudoku_games_table . '
@@ -1452,6 +1468,7 @@ class mot_sudoku_main
 
 			// Now we can send back the needed data
 			$result = [
+				'logged_in'		=> true,
 				'entry_id'		=> $sudoku_entry,
 				'points'		=> $sql_arr['points'],
 				'player_line'	=> $player_line,
@@ -1501,6 +1518,18 @@ class mot_sudoku_main
 				}
 				else
 				{
+					// Now we check whether the user is still logged in
+					if ($sql_arr['user_id'] != $this->user->data['user_id'])
+					{
+						// Now we can send back the needed data
+						$result = [
+							'success'		=> true,		// We have to set this to true to prevent the error messge from being displayed
+							'logged_in'		=> false,
+						];
+
+						return new \Symfony\Component\HttpFoundation\JsonResponse($result);
+					}
+
 					// Increment the reset count
 					$sql_arr['reset']++;
 					// Reset the points
@@ -1535,6 +1564,7 @@ class mot_sudoku_main
 					// Now we can send back the needed data
 					$result = [
 						'success'			=> true,
+						'logged_in'			=> true,
 						'type'				=> $sql_arr['game_type'],
 						'puzzle_line'		=> json_decode($sql_arr['puzzle_line']),			// do not send a json encoded array, for some reason unknown to me this does not work
 						'player_line'		=> $player_line,
@@ -1586,6 +1616,18 @@ class mot_sudoku_main
 				}
 				else
 				{
+					// Now we check whether the user is still logged in
+					if ($sql_arr['user_id'] != $this->user->data['user_id'])
+					{
+						// Now we can send back the needed data
+						$result = [
+							'success'		=> true,		// We have to set this to true to prevent the error messge from being displayed
+							'logged_in'		=> false,
+						];
+
+						return new \Symfony\Component\HttpFoundation\JsonResponse($result);
+					}
+
 					// Decode the needed arrays
 					$player_line = json_decode($sql_arr['player_line']);
 					$puzzle_line = json_decode($sql_arr['puzzle_line']);
@@ -1650,6 +1692,7 @@ class mot_sudoku_main
 					// Now we can send back the needed data
 					$result = [
 						'success'			=> true,
+						'logged_in'			=> true,
 						'type'				=> $sql_arr['game_type'],
 						'g'					=> $g,
 						'i'					=> $i,
@@ -2032,7 +2075,7 @@ class mot_sudoku_main
 		// Get local date variables and user id first
 		$date_arr = getdate();
 
-		// Update or Insert this user's score
+		// Check whether there already is an entry with the users data for the current month
 		$sql_arr = [
 			'year'		=> $date_arr['year'],
 			'month'		=> $date_arr['mon'],
@@ -2045,10 +2088,11 @@ class mot_sudoku_main
 		$row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 
+		// Update or Insert this user's score
 		if (!empty ($row))
 		{
 			$sql_arr = [
-				'games_played'		=> $row['games_played']++,
+				'games_played'		=> ++$row['games_played'],
 				'total_points'		=> $row['total_points'] + $points,
 			];
 			$sql = 'UPDATE ' . $this->sudoku_fame_table . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_arr) . '

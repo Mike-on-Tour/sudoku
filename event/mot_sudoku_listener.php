@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.6.0
+* @package MoT Sudoku v0.6.2
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -139,7 +139,7 @@ class mot_sudoku_listener implements EventSubscriberInterface
 
 			'ORDER_BY'	=> 's.session_user_id ASC',
 		];
-		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
+		$sql = $this->db->sql_build_query('SELECT_DISTINCT', $sql_ary);
 		$result = $this->db->sql_query($sql);
 		$sudoku_users = $this->db->sql_fetchrowset($result);
 		$this->db->sql_freeresult($result);
