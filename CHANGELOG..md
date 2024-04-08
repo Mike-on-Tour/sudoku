@@ -4,6 +4,24 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.8.0] - 2024-04-04
+
+### Added
+-	A new `styles/xxx/theme/mot_sudoku_colours.css` file to all styles which holds all colour settings for the respective style in order to make style changes easier
+	(Many thanks to DrDeath for this suggestion)
+
+### Changed
+-	The method to increment array keys in the `controller/mot_sudoku_main.php` file's `array_count_recursive` function
+-	Font size within paragraphs which are childs of dt in fieldsets
+-	The layout of ACP legends
+
+### Fixed
+-	Missing English translations in `language/en/mot_sudoku_common.php`
+
+### Removed
+-	All colour settings from the `styles/xxx/theme/mot_sudoku_main.css` files
+  
+  
 ## [0.7.2] - 2024-03-16
 
 ### Added

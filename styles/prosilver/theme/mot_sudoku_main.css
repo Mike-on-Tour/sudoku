@@ -1,6 +1,7 @@
 /**
 *
-* @package MoT Sudoku v0.5.1
+* General style settings for prosilver
+* @package MoT Sudoku v0.8.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -12,7 +13,6 @@
 
 .classic-table {
 	border-collapse: collapse;
-	border: 2px solid grey;
 }
 
 .samurai-table, .ninja-table {
@@ -20,7 +20,6 @@
 }
 
 .classic-table td, .samurai-table td, .ninja-table td {
-	border: 2px solid grey;
 	border-collapse: collapse;
 }
 
@@ -44,13 +43,6 @@
 	--fontWeightBold: bold;
 	--fontWeightNormal: normal;
 	font-weight: var(--fontWeightBold);
-
-	border: 1px solid grey;
-
-	--textColorPlayer: blue;
-	--textColorBuy: grey;
-
-	--backgroundColorActive: yellow;
 }
 
 .samurai-table .sudoku-sub-table td {
@@ -347,8 +339,6 @@ fieldset.quick {
 	top: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgb(0, 0, 0);
-	background-color: rgba(0, 0, 0, 0.4);
 }
 
 /* modal content  window */
@@ -367,10 +357,6 @@ fieldset.quick {
 
 .mot-sudoku-modal-button {
 	width: 1.2em;
-}
-
-.mot-sudoku-modal-button:hover {
-	background-color: #3f3f8f24;
 }
 
 .mot-sudoku-modal-button span {
@@ -404,7 +390,6 @@ fieldset.quick {
 	position: absolute;
 	width: 14px;
 	height: 13px;
-	background-color: #ffffff;
 	top: 2px;
 	border-radius: 50%;
 	display: flex;
@@ -418,17 +403,7 @@ fieldset.quick {
 .toggle,
 .toggle:hover,
 .toggle:focus {
-	background-color: #cccccc;
-/*	background-color: #c0c0c0;*/
-/*	background-color: #aa0000;*/
 	border: none;
-	color: #000000;
-}
-
-.toggle:checked {
-	background-color: #3b87ab;
-/*	background-color: #494999;*/
-/*	background-color: #3fa651;*/
 }
 
 .toggle:checked:before {

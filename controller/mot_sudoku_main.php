@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.7.2
+* @package MoT Sudoku v0.8.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -1986,11 +1986,10 @@ class mot_sudoku_main
 	*/
 	private function array_count_recursive(array $arr): array
 	{
-		$occurrences = [] ;
-		array_walk_recursive( $arr, function($value, $key) use (&$occurrences) {
-		   @ $occurrences[$value]++;
-		   // @ to surpress warnings "Undefined array key". In php8 you can also use
-		   // $occurrences[$value] = ($occurrences[$value] ?? 0) + 1
+		$occurrences = [];
+		array_walk_recursive($arr, function($value, $key) use (&$occurrences) {
+		   // @ $occurrences[$value]++;		   // @ to surpress warnings "Undefined array key".
+		   $occurrences[$value] = ($occurrences[$value] ?? 0) + 1;
 		});
 		return $occurrences;
 	}

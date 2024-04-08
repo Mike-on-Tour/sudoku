@@ -1,0 +1,68 @@
+/**
+*
+* Colour settings for prosilver
+* @package MoT Sudoku v0.8.0
+* @copyright (c) 2023 - 2024 Mike-on-Tour
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+*
+*/
+
+/* -------------------------------------------------------------------------------------------------------------------------
+* General style settings
+*/
+
+.classic-table {
+	border: 2px solid grey;
+}
+
+.classic-table td, .samurai-table td, .ninja-table td {
+	border: 2px solid grey;
+}
+
+.sudoku-sub-table td {
+	border: 1px solid grey;
+
+	--textColorPlayer: blue;
+	--textColorBuy: grey;
+
+	--backgroundColorActive: yellow;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------------
+* Modal window
+*
+*/
+
+/* Background */
+.mot-sudoku-modal {
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.mot-sudoku-modal-button:hover {
+	background-color: #3f3f8f24;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------------
+* phpBB ACP Toggles - A CSS class that makes it easy to display checkboxes as toggles.
+   Source     : https://danklammer.com/articles/simple-css-toggle-switch/
+   Reworked by: Kirk (adapted and optimized for phpBB), LukeWCS (optimized) */
+
+.toggle:before {
+	background-color: #ffffff;
+}
+
+.toggle,
+.toggle:hover,
+.toggle:focus {
+	background-color: #cccccc;
+/*	background-color: #c0c0c0;*/
+/*	background-color: #aa0000;*/
+	color: #000000;
+}
+
+.toggle:checked {
+	background-color: #3b87ab;
+/*	background-color: #494999;*/
+/*	background-color: #3fa651;*/
+}

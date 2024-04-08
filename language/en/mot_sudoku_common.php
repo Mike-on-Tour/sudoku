@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.6.0
+* @package MoT Sudoku v0.8.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -45,30 +45,30 @@ $lang = array_merge($lang, [
 	// Classic Sudoku
 	'MOT_SUDOKU_NO_CLASSIC_PUZZLES'	=> 'Currently there are no Classic Sudoku puzzles avaiable, a game pack must be imported by the administrator!',
 	'MOT_SUDOKU_HISTORY_TITLE'		=> 'History of this game',
-	'MOT_SUDOKU_HISTORY'			=> 'Die frühesten Vorläufer des Sudoku waren die lateinischen Quadrate des Schweizer Mathematikers Leonhard Euler, der solche bereits im 18.
-										Jahrhundert verfasste.<br><br>Anders als die modernen Sudoku-Rätsel waren diese noch nicht in Blöcke (Unterquadrate) unterteilt. Der
-										Neuseeländer Wayne Gould lernte Sudoku auf einer Japanreise kennen und brauchte sechs Jahre, um eine Software zu entwickeln, die neue
-										Sudokus per Knopfdruck entwickeln konnte. Anschließend bot er seine Rätsel der Times in London an. Die Tageszeitung druckte die ersten
-										Sudoku-Rätsel und trat auf diese Weise in der westlichen Welt eine Sudoku-Lawine los.',
+	'MOT_SUDOKU_HISTORY'			=> 'The early ancestors of todays Sudoku were the Latin squares of Leonhard Euler, a Swiss mahtematician, who drafted these puzzles in
+										the 18. century. Unlike our modern Sudoku puzzles they did not contain subgrids and contained double-digit numbers.<br><br>
+										New Zealander Wayne Gould saw Sudoku on a voyage to Japan and over six years, he developed a computer program to produce unique puzzles
+										rapidly. He offered his puzzles to the London Times and through publishing the first puzzles set off an Sudoku avalanche in the western
+										world.',
 	'MOT_SUDOKU_INSTRUCTIONS_TITLE'	=> 'Rules and instruction',
-	'MOT_SUDOKU_INSTRUCTIONS'		=> 'Platziere eine Ziffer von 1-9 in jede leere Zelle so dass:<br><br>
-										1. Jede Ziffer genau einmal pro Zeile auftaucht<br>
-										2. Jede Ziffer genau einmal pro Spalte auftaucht<br>
-										3. Jede Ziffer genau einmal in dem 3x3 Unterquadrat auftaucht.<br><br>
-										Einige Startziffern wurden bereits gesetzt, um dir beim Einstieg zu helfen, sie werden <strong>fett</strong> angezeigt. Klicke einfach
-										in eine leere Zelle, um eine Ziffer einzufügen. Wenn Du einen Fehler gemacht hast, einfach nochmal auf das Feld klicken, um eine neue
-										Ziffer einzufügen.',
+	'MOT_SUDOKU_INSTRUCTIONS'		=> 'Place a digit from 1 - 9 into each empty cell in manner that:<br><br>
+										1. Every digit shows up exactly once in each line,<br>
+										2. Every digit shows up exactly once in each column,<br>
+										3. Every digit shows up exactly once in each 3 x 3 subgrid.<br><br>
+										Some digits already have been laced in order to help you, they are dislayed in <strong>bold</strong> script. Just click
+										into an empty cell to place a new digit. If you made a mistake just click into that cell again in order to delete that
+										digit or just select another one.',
 
 	// Samurai Sudoku
 	'MOT_SUDOKU_NO_SAMURAI_PUZZLES'	=> 'Currently there are no Samurai Sudoku puzzles avaiable, a game pack must be imported by the administrator!',
-	'MOT_SUDOKU_SAMURAI_TEXT'		=> 'Wem die klassischen Sudoku-Rätsel zu einfach sind, kann sich an dem deutlich komplexeren Samurai-Sudoku versuchen. Hier überschneiden sich
-										5 klassische Rätsel jeweils an den Ecken. Du denkst, das ist das Gleiche wie 5 klassische Rätsel? Dann versuche es und zeige, dass du ein
-										wahrer Samurai bist!',
+	'MOT_SUDOKU_SAMURAI_TEXT'		=> 'If you find the Classic Sudoku puzzles easy you may want to try solving the more intricate Samurai Sudoku puzzles. These are 5 Classic
+										Sudoku puzzles which overlap at their corners. You do think that this is the same as solving just five Classic Sudoku puzzles? Then try it
+										and show us that you are a real Samurai!',
 
 	// Ninja Sudoku
 	'MOT_SUDOKU_NO_NINJA_PUZZLES'	=> 'Currently there are no Ninja Sudoku puzzles avaiable, a game pack must be imported by the administrator!',
-	'MOT_SUDOKU_NINJA_TEXT'			=> 'Ninja-Sudoku sind eine echte Herausforderung, weil sie aus insgesamt 9 klassischen Rätseln bestehen, die sich natürlich öfter überschneiden,
-										nämlich zwischen zwei- bis viermal. Sie sind damit äußerst schwierig, aber für einen echten Ninja sicher ein Klacks!',
+	'MOT_SUDOKU_NINJA_TEXT'			=> 'Ninja Sudoku puzzles are a real challenge because they consist of  a total of 9 Classic Sudoku puzzles, which overlap between two and four
+										times. This makes them highly difficult, but for a real Ninja they surely are just a piece of cake!',
 
 	// Options box
 	'MOT_SUDOKU_OPTIONS_TITLE'		=> 'Options',
@@ -91,7 +91,7 @@ $lang = array_merge($lang, [
 										%2$d points!<br><br>
 										If you really happen to be at the end of one`s rope you can buy a digit at the cost of %3$d points, the (empty) cell it will be placed in
 										is chosen by chance.<br>
-										Resetting the puzzel (start from scratch) will cost you %4$d negative points. You will keep digits already bought.<br>
+										Resetting the puzzle (start from scratch) will cost you %4$d negative points. You will keep digits already bought.<br>
 										Enabling the helper will cost you %5$d negative points per puzzle and is valid until the puzzle is solved.<br>
 										Prior to starting the game by placing the first digit you may select an easier level, depending on this level you will get additional
 										digits placed into the puzzle, however the optainable points will be reduced by %6$d for each digit.',
