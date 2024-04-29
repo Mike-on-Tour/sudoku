@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.8.0
+* @package MoT Sudoku v0.9.1
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -253,14 +253,23 @@ class mot_sudoku_main
 			if (!$user_stats)
 			{
 				// No entry for this user, we have to store a new entry
-				$sql_arr = [
-					'user_id'		=> $this->user->data['user_id'],
-					'classic_ids'	=> '',
-					'samurai_ids'	=> '',
-					'ninja_ids'		=> '',
-				];
-				$sql = 'INSERT INTO ' . $this->sudoku_stats_table . ' ' . $this->db->sql_build_array('INSERT', $sql_arr);
-				$this->db->sql_query($sql);
+				// Check user_id to prevent guest account to register into this table
+				if ($this->user->data['is_registered'] && !$this->user->data['is_bot'])
+				{
+					$sql_arr = [
+						'user_id'		=> $this->user->data['user_id'],
+						'classic_ids'	=> '',
+						'samurai_ids'	=> '',
+						'ninja_ids'		=> '',
+					];
+					$sql = 'INSERT INTO ' . $this->sudoku_stats_table . ' ' . $this->db->sql_build_array('INSERT', $sql_arr);
+					$this->db->sql_query($sql);
+				}
+				else
+				{
+					// Not logged in? Redirect to the loginbox.
+					login_box('', $this->language->lang('NO_AUTH_OPERATION'));
+				}
 			}
 
 			switch ($tab)
@@ -926,6 +935,7 @@ class mot_sudoku_main
 				'MOT_SUDOKU_HELPER_ENABLED'		=> $this->config['mot_sudoku_helper_enable'],
 				'MOT_SUDOKU_S_HELPER_ENABLED'	=> $this->config['mot_sudoku_helper_samurai_enable'],
 				'MOT_SUDOKU_N_HELPER_ENABLED'	=> $this->config['mot_sudoku_helper_ninja_enable'],
+				'MOT_SUDOKU_USER_ID'			=> $this->user->data['user_id'],
 			]);
 
 			// Add breadcrumbs link
@@ -955,6 +965,18 @@ class mot_sudoku_main
 			$sudoku_type = $this->request->variable('type', '');
 			$sudoku_number = $this->request->variable('number', 0);
 			$sudoku_cell = $this->request->variable('cell', '');
+			$user_id = $this->request->variable('user_id', 0);
+
+			// First we check whether the user is logged in
+			if ((int) $user_id != $this->user->data['user_id'])
+			{
+				// Now we can send back the needed data
+				$result = [
+					'logged_in'		=> false,
+				];
+
+				return new \Symfony\Component\HttpFoundation\JsonResponse($result);
+			}
 
 			// Get the existing data from the database if we have a valid entry_id
 			if ($sudoku_entry)
@@ -964,17 +986,6 @@ class mot_sudoku_main
 				$result = $this->db->sql_query($sql);
 				$sql_arr = $this->db->sql_fetchrow($result);
 				$this->db->sql_freeresult($result);
-
-				// Now we check whether the user to whom this id belongs is logged in
-				if ($sql_arr['user_id'] != $this->user->data['user_id'])
-				{
-					// Now we can send back the needed data
-					$result = [
-						'logged_in'		=> false,
-					];
-
-					return new \Symfony\Component\HttpFoundation\JsonResponse($result);
-				}
 			}
 
 			// Check whether we already have this game in the database
@@ -1000,7 +1011,7 @@ class mot_sudoku_main
 
 						// Store all data as a new item
 						$sql_arr = [
-							'user_id'			=> $this->user->data['user_id'],
+							'user_id'			=> $user_id,
 							'game_type'			=> $sudoku_type,
 							'game_id'			=> $sudoku_id,
 							'points'			=> $sudoku_number ? $this->config['mot_sudoku_cell_points'] : $sudoku_number, // give points only if a real number was selected
@@ -1028,7 +1039,7 @@ class mot_sudoku_main
 
 						// Store all data as a new item
 						$sql_arr = [
-							'user_id'			=> $this->user->data['user_id'],
+							'user_id'			=> $user_id,
 							'game_type'			=> $sudoku_type,
 							'game_id'			=> $sudoku_id,
 							'points'			=> $sudoku_number ? $this->config['mot_sudoku_cell_points'] : $sudoku_number, // give points only if a real number was selected
@@ -1056,7 +1067,7 @@ class mot_sudoku_main
 
 						// Store all data as a new item
 						$sql_arr = [
-							'user_id'			=> $this->user->data['user_id'],
+							'user_id'			=> $user_id,
 							'game_type'			=> $sudoku_type,
 							'game_id'			=> $sudoku_id,
 							'points'			=> $sudoku_number ? $this->config['mot_sudoku_cell_points'] : $sudoku_number, // give points only if a real number was selected
@@ -1785,6 +1796,18 @@ class mot_sudoku_main
 			$sudoku_id = $this->request->variable('id', 0);
 			$sudoku_type = $this->request->variable('type', '');
 			$sudoku_level = $this->request->variable('level', 0);
+			$user_id = $this->request->variable('user_id', 0);
+
+			// First we check whether the user is logged in
+			if ((int) $user_id != $this->user->data['user_id'])
+			{
+				// Now we can send back the needed data
+				$result = [
+					'logged_in'		=> false,
+				];
+
+				return new \Symfony\Component\HttpFoundation\JsonResponse($result);
+			}
 
 			// Check whether we already have this game in the database
 			if (!$sudoku_entry) 	// Setting the level is only possible if we have a new game and no digit entered so far (so the entry_id equals 0)
@@ -1942,6 +1965,7 @@ class mot_sudoku_main
 					'puzzle_line'		=> $puzzle_line,
 					'gainable_points'	=> $empty_cells[0] * $this->config['mot_sudoku_cell_points'],
 					'negative_points'	=> -1 * ($sql_arr['level'] * $this->level_array[$sudoku_type] * $this->config['mot_sudoku_level_cost']),
+					'logged_in'			=> true,
 				];
 
 				return new \Symfony\Component\HttpFoundation\JsonResponse($result);

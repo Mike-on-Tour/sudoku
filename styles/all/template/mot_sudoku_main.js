@@ -1,6 +1,6 @@
 /**
 *
-* @package MoT Sudoku v0.6.2
+* @package MoT Sudoku v0.9.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -115,11 +115,12 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 		$.post(
 			motSudoku.ajaxNumberCall,
 			{
-				entry:	motSudoku.gameEntryId,
-				type:	type,
-				id:		motSudoku.puzzleId,
-				number:	number,
-				cell:	motSudoku.CellId.substr(21),
+				entry:		motSudoku.gameEntryId,
+				type:		type,
+				id:			motSudoku.puzzleId,
+				number:		number,
+				cell:		motSudoku.CellId.substr(21),
+				user_id:	motSudoku.userId,
 			},
 			function(result) {
 				// First we check if the player is still logged in and if he is not we reload the page and thus enforce a new login
@@ -454,12 +455,18 @@ $("#mot_sudoku_select_level_button_c, #mot_sudoku_select_level_button_s, #mot_su
 		$.post(
 			motSudoku.ajaxSelectLevel,
 			{
-				entry:	motSudoku.gameEntryId,
-				id:		motSudoku.puzzleId,
-				type:	$(this).attr('id').substr(31, 1),
-				level:	motSudoku.newLevel,
+				entry:		motSudoku.gameEntryId,
+				id:			motSudoku.puzzleId,
+				type:		$(this).attr('id').substr(31, 1),
+				level:		motSudoku.newLevel,
+				user_id:	motSudoku.userId,
 			},
 			function(result) {
+				// First we check if the player is still logged in and if he is not we reload the page and thus enforce a new login
+				if (!result['logged_in']) {
+					location.reload();
+				}
+
 				// Set the new entry_id
 				motSudoku.gameEntryId = result['entry_id'];
 				// Enter the additional digits into the displayed grid according to the game type

@@ -4,6 +4,21 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.9.0] - 2024-04-29
+
+### Added
+
+### Changed
+-	Handling of checking whether the players session has terminated in the `controller/mot_sudoku_main.php` files `mot_sudoku_ajax_number()` and `mot_sudoku_ajax_level()` functions,
+	the `styles/all/template/mot_sudoku_main.js` file is affected, too
+
+### Fixed
+-	Using unsigned integers for storing points in MOT_SUDOKU_STATS_TABLE, MOT_SUDOKU_FAME_TABLE, MOT_SUDOKU_FAME_MONTH_TABLE and MOT_SUDOKU_FAME_YEAR_TABLE
+
+### Removed
+-	Unused column `solved` from the MOT_SUDOKU_GAMES_TABLE
+  
+  
 ## [0.8.0] - 2024-04-04
 
 ### Added
