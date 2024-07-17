@@ -1,3 +1,11 @@
+{#
+*
+* @package MoT Sudoku v0.10.0
+* @copyright (c) 2023 - 2024 Mike-on-Tour
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+*
+#}
+
 {% include 'overall_header.html' %}
 {% include '@mot_sudoku/mot_sudoku_modal.html' %}
 {% INCLUDECSS '@mot_sudoku/mot_sudoku_main.css' %}
@@ -15,6 +23,7 @@
 		motSudoku.ajaxGameReset = "{{ MOT_SUDOKU_AJAX_RESET|e('js') }}";
 		motSudoku.ajaxBuyDigit = "{{ MOT_SUDOKU_AJAX_BUY|e('js') }}";
 		motSudoku.ajaxEnableHelper = "{{ MOT_SUDOKU_AJAX_HELPER|e('js') }}";
+		motSudoku.ajaxGameQuit = "{{ MOT_SUDOKU_AJAX_QUIT|e('js') }}";
 		motSudoku.ajaxModalPos = "{{ MOT_SUDOKU_AJAX_MODAL|e('js') }}";
 		motSudoku.ajaxSelectLevel = "{{ MOT_SUDOKU_AJAX_LEVEL|e('js') }}";
 
@@ -27,11 +36,17 @@
 		motSudoku.startNew = "{{ lang('MOT_SUDOKU_BACK_TO_START')|e('js') }}";
 		motSudoku.digitNoBuy = {{ MOT_SUDOKU_DIGIT_NO_BUY }};
 
+		motSudoku.notesTitle = "{{ lang('MOT_SUDOKU_NOTES_TITLE')|e('js') }}";
+		motSudoku.notesQuit = "{{ lang('MOT_SUDOKU_NOTES_QUIT')|e('js') }}";
+
+		motSudoku.confirmQuitMsg = "{{ _self.confirm()|e('js') }}";
+
 		motSudoku.errorErr = "{{ lang('MOT_SUDOKU_ERROR_TITLE')|e('js') }}";
 		motSudoku.errorReset = "{{ lang('MOT_SUDOKU_ERROR_RESET')|e('js') }}";
 		motSudoku.errorBuyDigit = "{{ lang('MOT_SUDOKU_ERROR_BUY_NOW')|e('js') }}";
 		motSudoku.errorBuyLastDigit = "{{ lang('MOT_SUDOKU_BUY_LAST_DIGIT')|e('js') }}";
 		motSudoku.errorHelper = "{{ lang('MOT_SUDOKU_ERROR_HELPER')|e('js') }}";
+		motSudoku.errorQuit = "{{ lang('MOT_SUDOKU_ERROR_QUIT')|e('js') }}";
 		motSudoku.errorLevel = "{{ lang('MOT_SUDOKU_ERROR_LEVEL')|e('js') }}";
 		motSudoku.errorSolution = "{{ lang('MOT_SUDOKU_INCORRECT_END')|e('js') }}";
 
@@ -112,3 +127,12 @@
 
 {% include 'overall_footer.html' %}
 {% INCLUDEJS '@mot_sudoku/mot_sudoku_main.js' %}
+
+{% macro confirm() -%}
+	<h3 class="alert_title">{{ lang('MOT_SUDOKU_QUIT_MSG_TITlE') }}</h3>
+	<p class="alert_text">{{ lang('MOT_SUDOKU_QUIT_MSG_TEXT') }}</p>
+	<p style="text-align: center;">
+		<input class="button" type="button" name="confirm" value="{{ lang('YES') }}">&nbsp;
+		<input class="button" type="button" name="cancel" value="{{ lang('NO') }}">
+	</p>
+{%- endmacro %}

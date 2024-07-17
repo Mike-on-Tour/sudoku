@@ -1,6 +1,6 @@
 # phpBB Sudoku Game Extension
 
-![Version: 0.9.0](https://img.shields.io/badge/Version-0.9.0-green)  
+![Version: 0.10.0](https://img.shields.io/badge/Version-0.10.0-green)  
   
 ![phpBB 3.3.x Compatible](https://img.shields.io/badge/phpBB-3.3.x%20Compatible-009BDF)  
 

@@ -4,6 +4,22 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.10.0] - 2024-07-16
+
+### Added
+-	A new function to abort a game, affected files are `config/routing.yml`, `controller/mot_sudoku_main.php`, `styles/all/template/mot_sudoku_main.js`,
+	`styles/prosilver/template/mot_sudoku_main.html`, `styles/prosilver/template/mot_sudoku_options_box.html` and `language/xx/mot_sudoku_common.php`
+-	A loading indicator to the timed notification popups after completing or aborting a puzzle in `styles/all/template/mot_sudoku_main.js`
+
+### Changed
+-	Code improvement in `controller/mot_sudoku_main.php`, thanks to DrDeath
+
+### Fixed
+-	Wrong determination of minimum PHP version in `ext.php`
+
+### Removed
+  
+  
 ## [0.9.0] - 2024-04-29
 
 ### Added

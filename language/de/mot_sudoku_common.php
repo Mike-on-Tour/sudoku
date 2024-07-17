@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.6.0
+* @package MoT Sudoku v0.10.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -82,6 +82,8 @@ $lang = array_merge($lang, [
 	'MOT_SUDOKU_MASK_HELPER'		=> 'Helfer ausblenden',
 	'MOT_SUDOKU_MASK_TITLE'			=> 'Blendet die Hilfe in den Zellen aus',
 	'MOT_SUDOKU_HELPER_NOTE'		=> 'Die Helfer-Anzeige gilt nur für den aktuellen Spielstand, nach Veränderungen (z.B. Eingabe einer Ziffer) muss der Helfer aktualisiert werden.',
+	'MOT_SUDOKU_GAME_QUIT'			=> 'Spiel aufgeben',
+	'MOT_SUDOKU_GAME_QUIT_TITLE'	=> 'Wenn du nicht weiterkommst, kannst du hier aufgeben. Das Rätsel wird dann aus deinen gespeicherten Spielen gelöscht und du kannst ein neues Spiel beginnen.',
 	'MOT_SUDOKU_MODAL_ABOVE'		=> 'Zifferneingabe oberhalb Spielfeld',
 	'MOT_SUDOKU_MODAL_OVER'			=> 'Zifferneingabe über Mauszeiger',
 
@@ -141,11 +143,18 @@ $lang = array_merge($lang, [
 		2	=> 'Es gibt derzeit %1$d aktive Sudoku-Spieler: ',
 	],
 
+	// Notes
+	'MOT_SUDOKU_NOTES_TITLE'		=> 'Hinweis',
+	'MOT_SUDOKU_NOTES_QUIT'			=> 'Das aufgegebene Spiel wurde aus der Tabelle der gespeicherten Spiele gelöscht, du wirst gleich zu einem neuen Spiel weitergeleitet.',
+	'MOT_SUDOKU_QUIT_MSG_TITlE'		=> 'Bestätigen',
+	'MOT_SUDOKU_QUIT_MSG_TEXT'		=> 'Willst du dieses Spiel wirklich aufgeben?',
+
 	// Errors
 	'MOT_SUDOKU_ERROR_TITLE'		=> 'Fehler!',
 	'MOT_SUDOKU_ERROR_RESET'		=> 'Du willst nicht wirklich ein Spiel zurücksetzen, in dem du noch keine Eintragung gemacht hast, oder?',
 	'MOT_SUDOKU_ERROR_BUY_NOW'		=> 'Willst du wirklich schon eine Ziffer kaufen, bevor du es selbst versucht hast?',
 	'MOT_SUDOKU_BUY_LAST_DIGIT'		=> 'Du willst nicht wirklich die letzte fehlende Ziffer kaufen, oder?',
 	'MOT_SUDOKU_ERROR_HELPER'		=> 'Willst du wirklich schon den Helfer benutzen, bevor du es selbst versucht hast?',
+	'MOT_SUDOKU_ERROR_QUIT'			=> 'Willst du wirklich schon aufgeben, bevor du die erste Ziffer eingegeben hast?',
 	'MOT_SUDOKU_ERROR_LEVEL'		=> 'Du musst erst einen neuen Level auswählen!',
 ]);

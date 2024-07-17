@@ -1,6 +1,6 @@
 /**
 *
-* @package MoT Sudoku v0.9.0
+* @package MoT Sudoku v0.10.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -153,6 +153,7 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 									motSudoku.puzzleInProgress = false;
 									// Show the end of game message
 									phpbb.alert(motSudoku.congratulation, motSudoku.puzzleSolved + result['points'] + motSudoku.startNew);
+									phpbb.loadingIndicator();
 									setTimeout(function() {
 										$("#mot_sudoku_classic").trigger( "submit" );
 									}, 5000);
@@ -176,6 +177,7 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 									motSudoku.puzzleInProgress = false;
 									// Show the end of game message
 									phpbb.alert(motSudoku.congratulation, motSudoku.puzzleSolved + result['points'] + motSudoku.startNew);
+									phpbb.loadingIndicator();
 									setTimeout(function() {
 										$("#mot_sudoku_samurai").trigger( "submit" );
 									}, 5000);
@@ -199,6 +201,7 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 									motSudoku.puzzleInProgress = false;
 									// Show the end of game message
 									phpbb.alert(motSudoku.congratulation, motSudoku.puzzleSolved + result['points'] + motSudoku.startNew);
+									phpbb.loadingIndicator();
 									setTimeout(function() {
 										$("#mot_sudoku_ninja").trigger( "submit" );
 									}, 5000);
@@ -408,6 +411,62 @@ $("#mask_helper_button_c, #mask_helper_button_s, #mask_helper_button_n").on("cli
 			motSudoku.ninjaHelperMask();
 			break;
 		}
+	}
+});
+
+/*
+* Quit the game in case the player is stuck
+*
+*/
+$("#game_quit_button_c, #game_quit_button_s, #game_quit_button_n").on("click", function() {
+	if (motSudoku.puzzleInProgress) {
+		let type = $(this).attr('id').substr(17, 1);
+
+		phpbb.confirm(motSudoku.confirmQuitMsg, function(quit) {
+			if (quit) {
+				// Ajax call
+				$.post(
+					motSudoku.ajaxGameQuit,
+					{
+						entry:		motSudoku.gameEntryId,
+						user_id:	motSudoku.userId,
+					},
+					function(result) {
+						// First we check if the player is still logged in and if he is not we reload the page and thus enforce a new login
+						if (!result['logged_in']) {
+							location.reload();
+						} else if (result['success']) {
+							// Game has been deleted from the SUDOKU_GAMES_TABLE, inform the player
+							phpbb.alert(motSudoku.notesTitle, motSudoku.notesQuit);
+							phpbb.loadingIndicator();
+
+							// and now load a new game
+							switch (type){
+								case 'c':
+									setTimeout(function() {
+										$("#mot_sudoku_classic").trigger( "submit" );
+									}, 5000);
+									break;
+
+								case 's':
+									setTimeout(function() {
+										$("#mot_sudoku_samurai").trigger( "submit" );
+									}, 5000);
+									break;
+
+								case 'n':
+									setTimeout(function() {
+										$("#mot_sudoku_ninja").trigger( "submit" );
+									}, 5000);
+									break;
+							}
+						} else {
+							phpbb.alert(motSudoku.errorErr, motSudoku.errorQuit);
+						}
+					}
+				);
+			}
+		});
 	}
 });
 

@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.9.1
+* @package MoT Sudoku v0.10.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -927,6 +927,7 @@ class mot_sudoku_main
 				'MOT_SUDOKU_AJAX_RESET'			=> $this->helper->route('mot_sudoku_ajax_reset'),
 				'MOT_SUDOKU_AJAX_BUY'			=> $this->helper->route('mot_sudoku_ajax_buy'),
 				'MOT_SUDOKU_AJAX_HELPER'		=> $this->helper->route('mot_sudoku_ajax_helper'),
+				'MOT_SUDOKU_AJAX_QUIT'			=> $this->helper->route('mot_sudoku_ajax_quit'),
 				'MOT_SUDOKU_AJAX_MODAL'			=> $this->helper->route('mot_sudoku_ajax_modal'),
 				'MOT_SUDOKU_AJAX_LEVEL'			=> $this->helper->route('mot_sudoku_ajax_level'),
 				'MOT_SUDOKU_COPYRIGHT'			=> $this->ext_data['extra']['display-name'] . ' ' . $this->ext_data['version'] . ' &copy; Mike-on-Tour (<a href="' . $this->ext_data['homepage'] . '">' . $this->ext_data['homepage'] . '</a>)',
@@ -1778,6 +1779,54 @@ class mot_sudoku_main
 					'type'				=> $sql_arr['game_type'],
 					'negative_points'	=> -1 * (($sql_arr['reset'] * $this->config['mot_sudoku_reset_cost']) + ($sql_arr['buy_digit'] * $this->config['mot_sudoku_number_cost']) + ($sql_arr['helper'] * $helper_cost) + ($sql_arr['level'] * $this->level_array[$sql_arr['game_type']] * $this->config['mot_sudoku_level_cost'])),
 				];
+			}
+
+			return new \Symfony\Component\HttpFoundation\JsonResponse($result);
+		}
+	}
+
+	/**
+	* Handle quitting the game
+	*
+	*/
+	public function mot_sudoku_ajax_quit()
+	{
+		if ($this->request->is_ajax())
+		{
+			$sudoku_entry = $this->request->variable('entry', 0);
+			$user_id = $this->request->variable('user_id', 0);
+
+			// First we check whether the user is logged in
+			if ((int) $user_id != $this->user->data['user_id'])
+			{
+				// Now we can send back the needed data
+				$result = [
+					'logged_in'		=> false,
+				];
+
+				return new \Symfony\Component\HttpFoundation\JsonResponse($result);
+			}
+			else
+			{
+				// Since the player wants to quit this game we delete it from the SUDOKU_GAMES_TABLE
+				$sql = 'DELETE FROM ' . $this->sudoku_games_table . '
+						WHERE entry_id = ' . (int) $sudoku_entry;
+				$this->db->sql_query($sql);
+
+				$result = [
+					'logged_in'		=> true
+				];
+			}
+
+			// Check whether the player already started this game
+			if (!$sudoku_entry)
+			{
+				// Some practical joker tries to quit a game not yet started so refuse the action
+					$result['success'] = false;
+			}
+			else
+			{
+					$result['success'] = true;
 			}
 
 			return new \Symfony\Component\HttpFoundation\JsonResponse($result);

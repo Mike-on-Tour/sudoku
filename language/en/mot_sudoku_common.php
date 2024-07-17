@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.8.0
+* @package MoT Sudoku v0.10.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -82,6 +82,8 @@ $lang = array_merge($lang, [
 	'MOT_SUDOKU_MASK_HELPER'		=> 'Remove helper',
 	'MOT_SUDOKU_MASK_TITLE'			=> 'Removes the helper digits from the cells',
 	'MOT_SUDOKU_HELPER_NOTE'		=> 'The digits displayed by the helper are only valid for the current state, the helper must be updated after each change, e.g. placing a digit.',
+	'MOT_SUDOKU_GAME_QUIT'			=> 'Abort game',
+	'MOT_SUDOKU_GAME_QUIT_TITLE'	=> 'If you are stuck with this puzzle you can abort here. This puzzle will be deleted from your stored puzzles and you can start a new one.',
 	'MOT_SUDOKU_MODAL_ABOVE'		=> 'Digit input above puzzle',
 	'MOT_SUDOKU_MODAL_OVER'			=> 'Digit input at mouse pointer',
 
@@ -142,11 +144,18 @@ $lang = array_merge($lang, [
 		2	=> 'Currently there are %1$d members playing Sudoku: ',
 	],
 
+	// Notes
+	'MOT_SUDOKU_NOTES_TITLE'		=> 'Note',
+	'MOT_SUDOKU_NOTES_QUIT'			=> 'The puzzle you have aborted has been deleted from the table holding your saved puzzles, you will be forwarded to a new puzzle in a few seconds.',
+	'MOT_SUDOKU_QUIT_MSG_TITlE'		=> 'Confirmation',
+	'MOT_SUDOKU_QUIT_MSG_TEXT'		=> 'Do you really want to abort this puzzle?',
+
 	// Errors
 	'MOT_SUDOKU_ERROR_TITLE'		=> 'Error!',
-	'MOT_SUDOKU_ERROR_RESET'		=> 'Do you really want to reset this game before trying for yourself?',
+	'MOT_SUDOKU_ERROR_RESET'		=> 'Do you really want to reset this puzzle before trying for yourself?',
 	'MOT_SUDOKU_ERROR_BUY_NOW'		=> 'Do you really want to buy a digit before trying for yourself?',
 	'MOT_SUDOKU_BUY_LAST_DIGIT'		=> 'Do you really want to buy the last missing digit?',
 	'MOT_SUDOKU_ERROR_HELPER'		=> 'Do you really want to use the helper before trying for yourself?',
+	'MOT_SUDOKU_ERROR_QUIT'			=> 'Do you really want to abort this puzzle before trying for yourself?',
 	'MOT_SUDOKU_ERROR_LEVEL'		=> 'Please select a new level first!',
 ]);

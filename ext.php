@@ -1,8 +1,8 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.1.0
-* @copyright (c) 2023 Mike-on-Tour
+* @package MoT Sudoku v0.10.0
+* @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -63,6 +63,6 @@ class ext extends \phpbb\extension\base
 
 	protected function php_requirement()
 	{
-		return phpbb_version_compare(PHP_VERSION, $this->php_min_ver, '>') && phpbb_version_compare(PHP_VERSION, $this->php_below_ver, '<');
+		return phpbb_version_compare(PHP_VERSION, $this->php_min_ver, '>=') && phpbb_version_compare(PHP_VERSION, $this->php_below_ver, '<');
 	}
 }

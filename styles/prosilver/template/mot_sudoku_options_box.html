@@ -1,3 +1,11 @@
+{#
+*
+* @package MoT Sudoku v0.10.0
+* @copyright (c) 2023 - 2024 Mike-on-Tour
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+*
+#}
+
 {% set switch_type = TOGGLECTRL_TYPE ?? 'toggle' %}
 
 <h3>{{ lang('MOT_SUDOKU_OPTIONS_TITLE') }}</h3>
@@ -38,6 +46,14 @@
 		</div>
 	{% endif %}
 </div>
+
+<div class="centered-text-div">
+	<button class="button options-button" id="game_quit_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ lang('MOT_SUDOKU_GAME_QUIT_TITLE') }}">{{ lang('MOT_SUDOKU_GAME_QUIT') }}</button>
+
+{#	<button class="button options-button" id="game_store_button_{{ MOT_SUDOKU_GAME_TYPE }}" title="{{ MOT_SUDOKU_BUY_NUMBER_TITLE }}">{{ lang('MOT_SUDOKU_BUY_NUMBER') }}</button>#}
+</div>
+
+<hr>
 
 <div class="centered-text-div">
 	<form>
