@@ -4,6 +4,25 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.11.0] - 2024-11-25
+
+### Added
+-	Implemented the necessary functionality to add points to the UP system including updating the congratulation message after successfully solving a puzzle
+-	A cron task to do the periodic calculation of rewards
+-	A new function to the `includes/mot_sudoku_functions.php` file to calculate rewards (called from the cron task)
+
+### Changed
+-	Code improvement in `controller/mot_sudoku_main.php` file's `mot_sudoku_ajax_quit()` function
+-	Code improvement within the ACP HTML files including the `controller/mot_sudoku_acp.php` and `adm/style/mot_sudoku_acp.js` files regarding the use of dropdown selections
+-	Reading UP and bonus variables from the CONFIG_TABLE everytime instead of only if UP is activated and requested in order to prevent "forgetting" these values
+-	Maximum PHP version to 8.4.x
+
+### Fixed
+-	Some typos in the language packs
+
+### Removed
+  
+  
 ## [0.10.0] - 2024-07-16
 
 ### Added

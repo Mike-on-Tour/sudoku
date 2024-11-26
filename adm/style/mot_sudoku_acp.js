@@ -1,7 +1,7 @@
 /**
 *
-* @package MoT Sudoku v0.6.0
-* @copyright (c) 2023 Mike-on-Tour
+* @package MoT Sudoku v0.11.0
+* @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license EULA
 *
 */
@@ -94,5 +94,28 @@ $("input[name='mot_sudoku_reward_enable']").click(function() {
 if ($("input[name='mot_sudoku_reward_enable']:checked").val() == 1) {
 	$("#mot_sudoku_show_reward_settings").show();
 }
+
+/*
+* Check the 'mot_sudoku_reward_time' setting for the value 1 (weekly) and hide or show the 'mot_sudoku_weekday_select' selection
+*/
+$("#mot_sudoku_reward_time").on('change', function() {
+	if ($(this).val() == 1) {
+		$("#mot_sudoku_weekday_select").show();
+	} else {
+		$("#mot_sudoku_weekday_select").hide();
+	}
+});
+
+// Show the day selection at start if period is set to weekly
+if ($("#mot_sudoku_reward_time").val() == 1) {
+	$("#mot_sudoku_weekday_select").show();
+}
+
+/*
+* Submit the form if another entry was selected from the Sudoku type dropdown select
+*/
+$("#acp_mot_sudoku_select_type").on('change', function() {
+	this.form.submit();
+});
 
 })(jQuery); // Avoid conflicts with other libraries

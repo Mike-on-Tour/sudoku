@@ -1,5 +1,14 @@
+{#
+*
+* @package MoT Sudoku v0.11.0
+* @copyright (c) 2023 - 2024 Mike-on-Tour
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+*
+#}
+
 {% include 'overall_header.html' %}
 {% INCLUDECSS '@mot_sudoku/mot_sudoku_acp.css' %}
+{% INCLUDEJS '@mot_sudoku/mot_sudoku_acp.js' %}
 
 <h1>{{ lang('ACP_MOT_SUDOKU') ~ ' - ' ~ lang('ACP_MOT_SUDOKU_GAMEPACKS') }}</h1>
 
@@ -10,11 +19,7 @@
 <form id="acp_mot_sudoku_gamepacks" method="post" enctype="application/x-www-form-urlencoded" action="{{ U_ACTION }}">
 	<fieldset class="quick">
 		{{ lang('ACP_MOT_SUDOKU_SELECT_TYPE') ~ lang('COLON') }}
-		<select id="acp_mot_sudoku_select_type" name="acp_mot_sudoku_select_type" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">
-			{% for type_selection in type_selections %}
-				<option value="{{ type_selection.VALUE }}" {% if ACP_MOT_SUDOKU_SELECT_TYPE == type_selection.VALUE %} selected {% endif %}>{{ type_selection.NAME }}</option>
-			{% endfor %}
-		</select>
+		{{ _self.select('acp_mot_sudoku_select_type', ACP_MOT_SUDOKU_SELECT_TYPE, ACP_MOT_SUDOKU_SELECT_TYPE_ARR) }}
 
 		<input class="button2" type="submit" value="{{ lang('GO') }}">
 	</fieldset>
@@ -95,3 +100,11 @@
 <p class="centered_text">{{ ACP_MOT_SUDOKU_VERSION_STRING }}</p>
 
 {% include 'overall_footer.html' %}
+
+{% macro select(name, value, options) -%}
+	<select id="{{ name }}" name="{{ name }}"}>
+		{% for opt_lang_var, opt_value in options %}
+			<option value="{{ opt_value }}"{{ opt_value == value ? ' selected' }}>{{ lang(opt_lang_var) }}</option>
+		{% endfor %}
+	</select>
+{%- endmacro %}

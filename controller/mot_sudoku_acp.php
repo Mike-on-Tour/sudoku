@@ -1,7 +1,7 @@
 <?php
 /*
 *
-* @package MoT Sudoku v0.7.2
+* @package MoT Sudoku v0.11.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -93,6 +93,8 @@ class mot_sudoku_acp
 		$form_key = 'acp_mot_sudoku_settings';
 		add_form_key($form_key);
 
+		$sudoku_points = 1000;	// The number of points we use to calculate in UP Points
+
 		$action = $this->request->variable('action', '');
 		switch ($action)
 		{
@@ -123,16 +125,15 @@ class mot_sudoku_acp
 				$this->config->set('mot_sudoku_helper_ninja_cost', $this->request->variable('mot_sudoku_helper_ninja_cost', 0));
 				// The following settings handle Ultimate Points and bonuses
 				$this->config->set('mot_sudoku_points_enable', $this->request->variable('mot_sudoku_points_enable', 0));
-				$this->config->set('mot_sudoku_points_ratio', $this->request->variable('mot_sudoku_points_ratio', 1));
+				$this->config->set('mot_sudoku_points_ratio', $this->request->variable('mot_sudoku_points_ratio', 1.00) / $sudoku_points);
 				$this->config->set('mot_sudoku_reward_enable', $this->request->variable('mot_sudoku_reward_enable', 0));
-				$this->config->set('mot_sudoku_reward_gc', $this->request->variable('mot_sudoku_reward_gc', 3600));
-				$this->config->set('mot_sudoku_rank1_price', $this->request->variable('mot_sudoku_rank1_price', 1000));
-				$this->config->set('mot_sudoku_rank2_price', $this->request->variable('mot_sudoku_rank2_price', 500));
-				$this->config->set('mot_sudoku_rank3_price', $this->request->variable('mot_sudoku_rank3_price', 200));
-				$this->config->set('mot_sudoku_high_average', $this->request->variable('mot_sudoku_high_average', 1500));
-				$this->config->set('mot_sudoku_most_games', $this->request->variable('mot_sudoku_most_games', 700));
+				$this->config->set('mot_sudoku_reward_time', $this->request->variable('mot_sudoku_reward_time', 0));
+				$this->config->set('mot_sudoku_week_start', $this->request->variable('mot_sudoku_week_start', 0));
+				$this->config->set('mot_sudoku_classic_price', $this->request->variable('mot_sudoku_classic_price', 1000));
 				$this->config->set('mot_sudoku_samurai_price', $this->request->variable('mot_sudoku_samurai_price', 3500));
 				$this->config->set('mot_sudoku_ninja_price', $this->request->variable('mot_sudoku_ninja_price', 5000));
+				$this->config->set('mot_sudoku_high_average', $this->request->variable('mot_sudoku_high_average', 1500));
+				$this->config->set('mot_sudoku_most_games', $this->request->variable('mot_sudoku_most_games', 700));
 				$this->config->set('mot_sudoku_pm_enable', $this->request->variable('mot_sudoku_pm_enable', 0));
 				$this->config->set('mot_sudoku_admin_id', $this->request->variable('mot_sudoku_admin_id', 0));
 
@@ -177,66 +178,24 @@ class mot_sudoku_acp
 
 		$up_enabled = $this->phpbb_extension_manager->is_enabled('dmzx/ultimatepoints');
 
-		if ($up_enabled && $this->config['mot_sudoku_points_enable'])
+		//Build a list of users within admin and mod groups
+		$sql_ary = [
+			'SELECT'    => 'u.user_id, u.username',
+			'FROM'      => [USERS_TABLE  => 'u', USER_GROUP_TABLE  => 'ug', GROUPS_TABLE  => 'g',],
+			'WHERE'     => "u.user_id = ug.user_id
+					AND g.group_id = ug.group_id
+					AND (UPPER(g.group_name) LIKE 'ADMINISTRATORS' OR UPPER(g.group_name) LIKE '%MODERATOR%')",
+			'GROUP_BY'  => 'u.username, u.user_id',
+		];
+		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
+		$result = $this->db->sql_query($sql);
+		$admins = $this->db->sql_fetchrowset($result);
+		$this->db->sql_freeresult($result);
+
+		$admin_list = [];
+		foreach ($admins as $row)
 		{
-			// Correctly handle this for different layers
-			switch ($this->db->get_sql_layer())
-			{
-				case 'postgres':
-					//Build a list of users within admin and mod groups
-					$sql_ary = [
-						'SELECT'    => 'u.user_id, u.username, ug.group_id',
-						'FROM'      => [USERS_TABLE  => 'u', USER_GROUP_TABLE  => 'ug', GROUPS_TABLE  => 'g',],
-						'WHERE'     => "u.user_id = ug.user_id
-								AND g.group_id = ug.group_id
-								AND (UPPER(g.group_name) LIKE 'ADMINISTRATORS' OR UPPER(g.group_name) LIKE '%MODERATOR%')",
-						'GROUP_BY'  => 'u.username, u.user_id, ug.group_id',
-					];
-					break;
-
-				default:
-					//Build a list of users within admin and mod groups
-					$sql_ary = [
-						'SELECT'    => 'u.user_id, u.username, ug.group_id',
-						'FROM'      => [USERS_TABLE  => 'u', USER_GROUP_TABLE  => 'ug', GROUPS_TABLE  => 'g',],
-						'WHERE'     => "u.user_id = ug.user_id
-								AND g.group_id = ug.group_id
-								AND (UPPER(g.group_name) LIKE 'ADMINISTRATORS' OR UPPER(g.group_name) LIKE '%MODERATOR%')",
-						'GROUP_BY'  => 'u.username',
-					];
-					break;
-			}
-
-			$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-			$result = $this->db->sql_query($sql);
-			$admins = $this->db->sql_fetchrowset($result);
-			$this->db->sql_freeresult($result);
-
-			$admin_list = '';
-			foreach ($admins as $row)
-			{
-				$selected  = ( $row['user_id'] == $this->config['mot_sudoku_admin_id'] ) ? ' selected' : '';
-				$admin_list .= '<option value = "' . $row['user_id'] . '"' .  $selected  . '>' . $row['username'] . '</option>';
-			}
-
-			$this->template->assign_vars([
-				'ACP_MOT_SUDOKU_POINTS_ENABLE'				=> $this->config['mot_sudoku_points_enable'],
-				'ACP_MOT_SUDOKU_POINTS_RATIO'				=> $this->config['mot_sudoku_points_ratio'],
-				'ACP_MOT_SUDOKU_UP_POINTS_NAME'				=> $this->config['points_name'] ?? $this->language->lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME'),
-				'ACP_MOT_SUDOKU_REWARD_ENABLE'				=> $this->config['mot_sudoku_reward_enable'],
-				'ACP_MOT_SUDOKU_REWARD_GC'					=> $this->config['mot_sudoku_reward_gc'],
-				'ACP_MOT_SUDOKU_REWARD_LAST_GC'				=> $this->config['mot_sudoku_reward_last_gc'] ? $this->user->format_date($this->config['mot_sudoku_reward_last_gc']) : '-',
-				'ACP_MOT_SUDOKU_REWARD_NEXT_GC'				=> $this->config['mot_sudoku_reward_last_gc'] ? $this->user->format_date($this->config['mot_sudoku_reward_last_gc'] + $this->config['mot_sudoku_reward_gc']) : '-',
-				'ACP_MOT_SUDOKU_RANK1_PRICE'				=> $this->config['mot_sudoku_rank1_price'],
-				'ACP_MOT_SUDOKU_RANK2_PRICE'				=> $this->config['mot_sudoku_rank2_price'],
-				'ACP_MOT_SUDOKU_RANK3_PRICE'				=> $this->config['mot_sudoku_rank3_price'],
-				'ACP_MOT_SUDOKU_HIGH_AVERAGE'				=> $this->config['mot_sudoku_high_average'],
-				'ACP_MOT_SUDOKU_MOST_GAMES'					=> $this->config['mot_sudoku_most_games'],
-				'ACP_MOT_SUDOKU_SAMURAI_PRICE'				=> $this->config['mot_sudoku_samurai_price'],
-				'ACP_MOT_SUDOKU_NINJA_PRICE'				=> $this->config['mot_sudoku_ninja_price'],
-				'ACP_MOT_SUDOKU_PM_ENABLE'					=> $this->config['mot_sudoku_pm_enable'],
-				'ACP_MOT_SUDOKU_ADMIN_LIST'					=> $admin_list,
-			]);
+			$admin_list = array_merge($admin_list, [$row['username'] => $row['user_id']]);
 		}
 
 		$this->template->assign_vars([
@@ -264,6 +223,38 @@ class mot_sudoku_acp
 			'ACP_MOT_SUDOKU_UP_ENABLED'					=> $up_enabled,
 			'U_ACTION'									=> $this->u_action . '&amp;action=submit',
 			'U_ACTION_RESET_GAME'						=> $this->u_action . '&amp;action=reset_game',
+
+			'ACP_MOT_SUDOKU_POINTS_ENABLE'				=> $this->config['mot_sudoku_points_enable'],
+			'ACP_MOT_SUDOKU_POINTS'						=> $sudoku_points,
+			'ACP_MOT_SUDOKU_POINTS_RATIO'				=> $sudoku_points * $this->config['mot_sudoku_points_ratio'],
+			'ACP_MOT_SUDOKU_UP_POINTS_NAME'				=> $this->config['points_name'] ?? $this->language->lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME'),
+			'ACP_MOT_SUDOKU_REWARD_ENABLE'				=> $this->config['mot_sudoku_reward_enable'],
+			'ACP_MOT_SUDOKU_REWARD_TIME'				=> $this->config['mot_sudoku_reward_time'],
+			'ACP_MOT_SUDOKU_PERIOD_SELECT'				=> [
+				'ACP_MOT_SUDOKU_DAILY'				=> 0,
+				'ACP_MOT_SUDOKU_WEEKLY'				=> 1,
+				'ACP_MOT_SUDOKU_MONTHLY'			=> 2,
+				'ACP_MOT_SUDOKU_YEARLY'				=> 3,
+			],
+			'ACP_MOT_SUDOKU_WEEK_START'					=> $this->config['mot_sudoku_week_start'],
+			'ACP_MOT_SUDOKU_WEEK_START_SELECT'			=> [
+				'ACP_MOT_SUDOKU_SUNDAY'				=> 0,
+				'ACP_MOT_SUDOKU_MONDAY'				=> 1,
+				'ACP_MOT_SUDOKU_TUESDAY'			=> 2,
+				'ACP_MOT_SUDOKU_WEDNESDAY'			=> 3,
+				'ACP_MOT_SUDOKU_THURSDAY'			=> 4,
+				'ACP_MOT_SUDOKU_FRIDAY'				=> 5,
+				'ACP_MOT_SUDOKU_SATURDAY'			=> 6,
+			],
+			'ACP_MOT_SUDOKU_REWARD_LAST_GC'				=> $this->config['mot_sudoku_reward_last_gc'] ? $this->user->format_date($this->config['mot_sudoku_reward_last_gc']) : '-',
+			'ACP_MOT_SUDOKU_CLASSIC_PRICE'				=> $this->config['mot_sudoku_classic_price'],
+			'ACP_MOT_SUDOKU_SAMURAI_PRICE'				=> $this->config['mot_sudoku_samurai_price'],
+			'ACP_MOT_SUDOKU_NINJA_PRICE'				=> $this->config['mot_sudoku_ninja_price'],
+			'ACP_MOT_SUDOKU_HIGH_AVERAGE'				=> $this->config['mot_sudoku_high_average'],
+			'ACP_MOT_SUDOKU_MOST_GAMES'					=> $this->config['mot_sudoku_most_games'],
+			'ACP_MOT_SUDOKU_PM_ENABLE'					=> $this->config['mot_sudoku_pm_enable'],
+			'ACP_MOT_SUDOKU_ADMIN_ID'					=> $this->config['mot_sudoku_admin_id'],
+			'ACP_MOT_SUDOKU_ADMIN_LIST'					=> $admin_list,
 
 			'ACP_MOT_SUDOKU_VERSION_STRING'				=> $this->language->lang('ACP_MOT_SUDOKU_VERSION', $this->mot_sudoku_version, date('Y')),
 		]);
@@ -520,20 +511,14 @@ class mot_sudoku_acp
 		$this->db->sql_freeresult($result);
 
 		// Set the first select element
-		$this->template->assign_block_vars('type_selections', [
-			'VALUE'		=> 'all',
-			'NAME'		=> $this->language->lang('ACP_MOT_SUDOKU_ALL'),
-		]);
+		$type_select_arr = [$this->language->lang('ACP_MOT_SUDOKU_ALL') => 'all'];
 		$mixed = false;
 		// Get the single type items
 		foreach ($types as $arr)
 		{
 			if (in_array($arr['game_type'], ['c', 's', 'n']))
 			{
-				$this->template->assign_block_vars('type_selections', [
-					'VALUE'		=> $arr['game_type'],
-					'NAME'		=> $game_types[$arr['game_type']],
-				]);
+				$type_select_arr = array_merge($type_select_arr, [$game_types[$arr['game_type']] => $arr['game_type']]);
 			}
 			else
 			{
@@ -541,12 +526,9 @@ class mot_sudoku_acp
 			}
 		}
 		// Check whether we have at least one mixed pack and if we do, add the respective variables
-		if (!empty($mixed))
+		if ($mixed)
 		{
-				$this->template->assign_block_vars('type_selections', [
-					'VALUE'		=> 'mix',
-					'NAME'		=> $this->language->lang('ACP_MOT_SUDOKU_MIXED_PACK'),
-				]);
+			$type_select_arr = array_merge($type_select_arr, [$this->language->lang('ACP_MOT_SUDOKU_MIXED_PACK') => 'mix']);
 		}
 
 		// Prepare the 'WHERE' condition depending on the selected gamepack type
@@ -621,6 +603,7 @@ class mot_sudoku_acp
 			'U_ACTION'								=> $this->u_action,
 			'U_ACP_MS_SELECT_ACTION'				=> $this->u_action . '&amp;action=select_type',
 			'U_ACTION_IMPORT_GAME_PACK'				=> $this->u_action . '&amp;action=import_gamepack',
+			'ACP_MOT_SUDOKU_SELECT_TYPE_ARR'		=> $type_select_arr,
 			'ACP_MOT_SUDOKU_SELECT_TYPE'			=> $selected_type,
 			'ACP_MOT_SUDOKU_FILE_UPLOAD'			=> ini_get('file_uploads'),
 			'ACP_MOT_SUDOKU_MAX_FILE_UPLOAD'		=> ini_get('max_file_uploads'),

@@ -1,3 +1,11 @@
+{#
+*
+* @package MoT Sudoku v0.11.0
+* @copyright (c) 2023 - 2024 Mike-on-Tour
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+*
+#}
+
 {% include 'overall_header.html' %}
 {% INCLUDECSS '@mot_sudoku/mot_sudoku_acp.css' %}
 {% INCLUDEJS '@mot_sudoku/mot_sudoku_acp.js' %}
@@ -87,7 +95,7 @@
 			<dt><label for="mot_sudoku_cell_points">{{ lang('ACP_MOT_SUDOKU_CELL_POINTS') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_CELL_POINTS_EXPL') }}</p></dt>
 			<dd>
 				<input type="number" min="5" max="50" id="mot_sudoku_cell_points" name="mot_sudoku_cell_points" value="{{ ACP_MOT_SUDOKU_CELL_POINTS }}">
-				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+				{{ lang ('ACP_MOT_SUDOKU') ~ '-' ~ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
 			</dd>
 		</dl>
 
@@ -95,7 +103,7 @@
 			<dt><label for="mot_sudoku_cell_cost">{{ lang('ACP_MOT_SUDOKU_CELL_COST') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_CELL_COST_EXPL') }}</p></dt>
 			<dd>
 				<input type="number" min="10" max="75" id="mot_sudoku_cell_cost" name="mot_sudoku_cell_cost" value="{{ ACP_MOT_SUDOKU_CELL_COST }}">
-				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+				{{ lang ('ACP_MOT_SUDOKU') ~ '-' ~ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
 			</dd>
 		</dl>
 
@@ -103,7 +111,7 @@
 			<dt><label for="mot_sudoku_number_cost">{{ lang('ACP_MOT_SUDOKU_NUMBER_COST') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_NUMBER_COST_EXPL') }}</p></dt>
 			<dd>
 				<input type="number" min="20" max="80" id="mot_sudoku_number_cost" name="mot_sudoku_number_cost" value="{{ ACP_MOT_SUDOKU_NUMBER_COST }}">
-				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+				{{ lang ('ACP_MOT_SUDOKU') ~ '-' ~ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
 			</dd>
 		</dl>
 
@@ -111,7 +119,7 @@
 			<dt><label for="mot_sudoku_reset_cost">{{ lang('ACP_MOT_SUDOKU_RESET_COST') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_RESET_COST_EXPL') }}</p></dt>
 			<dd>
 				<input type="number" min="200" max="500" id="mot_sudoku_reset_cost" name="mot_sudoku_reset_cost" value="{{ ACP_MOT_SUDOKU_RESET_COST }}">
-				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+				{{ lang ('ACP_MOT_SUDOKU') ~ '-' ~ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
 			</dd>
 		</dl>
 
@@ -119,7 +127,7 @@
 			<dt><label for="mot_sudoku_level_cost">{{ lang('ACP_MOT_SUDOKU_LEVEL_COST') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_LEVEL_COST_EXPL') }}</p></dt>
 			<dd>
 				<input type="number" min="0" max="50" id="mot_sudoku_level_cost" name="mot_sudoku_level_cost" value="{{ ACP_MOT_SUDOKU_LEVEL_COST }}">
-				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+				{{ lang ('ACP_MOT_SUDOKU') ~ '-' ~ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
 			</dd>
 		</dl>
 	</fieldset>
@@ -135,7 +143,7 @@
 			<dt><label for="mot_sudoku_helper_cost">{{ lang('ACP_MOT_SUDOKU_HELPER_COST') ~ lang('COLON') }}</label></dt>
 			<dd>
 				<input type="number" min="0" max="100" id="mot_sudoku_helper_cost" name="mot_sudoku_helper_cost" value="{{ ACP_MOT_SUDOKU_HELPER_COST }}">
-				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+				{{ lang ('ACP_MOT_SUDOKU') ~ '-' ~ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
 			</dd>
 		</dl>
 
@@ -149,7 +157,7 @@
 			<dt><label for="mot_sudoku_helper_samurai_cost">{{ lang('ACP_MOT_SUDOKU_HELPER_SAMURAI_COST') ~ lang('COLON') }}</label></dt>
 			<dd>
 				<input type="number" min="100" max="1500" id="mot_sudoku_helper_samurai_cost" name="mot_sudoku_helper_samurai_cost" value="{{ ACP_MOT_SUDOKU_HELPER_SAMURAI_COST }}">
-				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+				{{ lang ('ACP_MOT_SUDOKU') ~ '-' ~ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
 			</dd>
 		</dl>
 
@@ -163,7 +171,7 @@
 			<dt><label for="mot_sudoku_helper_ninja_cost">{{ lang('ACP_MOT_SUDOKU_HELPER_NINJA_COST') ~ lang('COLON') }}</label></dt>
 			<dd>
 				<input type="number" min="500" max="2500" id="mot_sudoku_helper_ninja_cost" name="mot_sudoku_helper_ninja_cost" value="{{ ACP_MOT_SUDOKU_HELPER_NINJA_COST }}">
-				{{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+				{{ lang ('ACP_MOT_SUDOKU') ~ '-' ~ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
 			</dd>
 		</dl>
 	</fieldset>
@@ -178,10 +186,10 @@
 			<div id="mot_sudoku_show_point_ratio" hidden="true">
 				<hr>
 				<dl>
-					<dt><label for="mot_sudoku_points_ratio">{{ lang('ACP_MOT_SUDOKU_POINTS_RATIO') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_POINTS_RATIO_EXPL') }}</p></dt>
+					<dt><label for="mot_sudoku_points_ratio">{{ lang('ACP_MOT_SUDOKU_POINTS_RATIO') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_POINTS_RATIO_EXPL', ACP_MOT_SUDOKU_POINTS) }}</p></dt>
 					<dd>
-						100 {{ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }} =
-						<input type="number" min="1" max="250" id="mot_sudoku_points_ratio" name="mot_sudoku_points_ratio" value="{{ ACP_MOT_SUDOKU_POINTS_RATIO }}">
+						{{ ACP_MOT_SUDOKU_POINTS ~ ' ' ~ lang ('ACP_MOT_SUDOKU') ~ '-' ~ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }} =
+						<input type="number" min="1" max="1000" id="mot_sudoku_points_ratio" name="mot_sudoku_points_ratio" value="{{ ACP_MOT_SUDOKU_POINTS_RATIO }}">
 						{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
 					</dd>
 				</dl>
@@ -200,56 +208,66 @@
 					<hr>
 
 					<dl>
-						<dt><label for="mot_sudoku_cron_time">{{ lang('ACP_MOT_SUDOKU_REWARD_GC') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_REWARD_GC_EXPL') }}</p></dt>
+						<dt><label for="mot_sudoku_reward_time">{{ lang('ACP_MOT_SUDOKU_REWARD_TIME') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_REWARD_TIME_EXPL') }}</p></dt>
 						<dd>
-							<input type="number" min="3600" max="86400" id="mot_sudoku_reward_gc" name="mot_sudoku_reward_gc" value="{{ ACP_MOT_SUDOKU_REWARD_GC }}">&nbsp;{{ lang('SECONDS') }}
+							{{ _self.select('mot_sudoku_reward_time', ACP_MOT_SUDOKU_REWARD_TIME, ACP_MOT_SUDOKU_PERIOD_SELECT) }}
 						</dd>
 					</dl>
+
+					<div id="mot_sudoku_weekday_select" hidden="true">
+						<dl>
+							<dt><label for="mot_sudoku_week_start">{{ lang('ACP_MOT_SUDOKU_WEEK_START') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_WEEK_START_EXPL') }}</p></dt>
+							<dd>
+								{{ _self.select('mot_sudoku_week_start', ACP_MOT_SUDOKU_WEEK_START, ACP_MOT_SUDOKU_WEEK_START_SELECT) }}
+							</dd>
+						</dl>
+					</div>
 
 					<dl>
 						<dt><label>{{ lang('ACP_MOT_SUDOKU_REWARD_LAST_GC') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_REWARD_LAST_GC_EXPL') }}</p></dt>
 						<dd>{{ ACP_MOT_SUDOKU_REWARD_LAST_GC }}</dd>
 					</dl>
 
+					<hr>
+
 					<dl>
-						<dt><label>{{ lang('ACP_MOT_SUDOKU_REWARD_NEXT_GC') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_REWARD_NEXT_GC_EXPL') }}</p></dt>
-						<dd>{{ ACP_MOT_SUDOKU_REWARD_NEXT_GC }}</dd>
+						<dt>
+							<label for="mot_sudoku_classic_price">{{ lang('ACP_MOT_SUDOKU_CLASSIC_PRICE') ~ lang('COLON') }}</label>
+							<p>{{ lang('ACP_MOT_SUDOKU_CLASSIC_PRICE_EXPL') }}</p>
+						</dt>
+						<dd>
+							<input type="number" min="500" max="2000" id="mot_sudoku_classic_price" name="mot_sudoku_classic_price" value="{{ ACP_MOT_SUDOKU_CLASSIC_PRICE }}">
+							{{ lang ('ACP_MOT_SUDOKU') ~ '-' ~ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
+						</dd>
 					</dl>
 
 					<hr>
 
 					<dl>
 						<dt>
-							<label for="mot_sudoku_rank1_price">{{ lang('ACP_MOT_SUDOKU_RANK1') ~ lang('COLON') }}</label>
-							<p>{{ lang('ACP_MOT_SUDOKU_RANK1_EXPL') }}</p>
+							<label for="mot_sudoku_samurai_price">{{ lang('ACP_MOT_SUDOKU_SAMURAI_PRICE') ~ lang('COLON') }}</label>
+							<p>{{ lang('ACP_MOT_SUDOKU_SAMURAI_PRICE_EXPL') }}</p>
 						</dt>
 						<dd>
-							<input type="number" min="500" max="2000" id="mot_sudoku_rank1_price" name="mot_sudoku_rank1_price" value="{{ ACP_MOT_SUDOKU_RANK1_PRICE }}">
-							{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
+							<input type="number" min="1500" max="5000" id="mot_sudoku_samurai_price" name="mot_sudoku_samurai_price" value="{{ ACP_MOT_SUDOKU_SAMURAI_PRICE }}">
+							{{ lang ('ACP_MOT_SUDOKU') ~ '-' ~ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
 						</dd>
 					</dl>
 
-					<dl>
-						<dt>
-							<label for="mot_sudoku_rank2_price">{{ lang('ACP_MOT_SUDOKU_RANK2') ~ lang('COLON') }}</label>
-							<p>{{ lang('ACP_MOT_SUDOKU_RANK2_EXPL') }}</p>
-						</dt>
-						<dd>
-							<input type="number" min="200" max="1500" id="mot_sudoku_rank2_price" name="mot_sudoku_rank2_price" value="{{ ACP_MOT_SUDOKU_RANK2_PRICE }}">
-							{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
-						</dd>
-					</dl>
+					<hr>
 
 					<dl>
 						<dt>
-							<label for="mot_sudoku_rank3_price">{{ lang('ACP_MOT_SUDOKU_RANK3') ~ lang('COLON') }}</label>
-							<p>{{ lang('ACP_MOT_SUDOKU_RANK3_EXPL') }}</p>
+							<label for="mot_sudoku_ninja_price">{{ lang('ACP_MOT_SUDOKU_NINJA_PRICE') ~ lang('COLON') }}</label>
+							<p>{{ lang('ACP_MOT_SUDOKU_NINJA_PRICE_EXPL') }}</p>
 						</dt>
 						<dd>
-							<input type="number" min="50" max="1000" id="mot_sudoku_rank3_price" name="mot_sudoku_rank3_price" value="{{ ACP_MOT_SUDOKU_RANK3_PRICE }}">
-							{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
+							<input type="number" min="3500" max="10000" id="mot_sudoku_ninja_price" name="mot_sudoku_ninja_price" value="{{ ACP_MOT_SUDOKU_NINJA_PRICE }}">
+							{{ lang ('ACP_MOT_SUDOKU') ~ '-' ~ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
 						</dd>
 					</dl>
+
+					<hr>
 
 					<dl>
 						<dt>
@@ -257,8 +275,8 @@
 							<p>{{ lang('ACP_MOT_SUDOKU_HIGH_AVERAGE_EXPL') }}</p>
 						</dt>
 						<dd>
-							<input type="number" min="100" max="3000" id="mot_sudoku_high_average" name="mot_sudoku_high_average" value="{{ ACP_MOT_SUDOKU_HIGH_AVERAGE }}">
-							{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
+							<input type="number" min="1" max="3000" id="mot_sudoku_high_average" name="mot_sudoku_high_average" value="{{ ACP_MOT_SUDOKU_HIGH_AVERAGE }}">
+							{{ lang ('ACP_MOT_SUDOKU') ~ '-' ~ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
 						</dd>
 					</dl>
 
@@ -268,32 +286,12 @@
 							<p>{{ lang('ACP_MOT_SUDOKU_MOST_GAMES_EXPL') }}</p>
 						</dt>
 						<dd>
-							<input type="number" min="50" max="1500" id="mot_sudoku_most_games" name="mot_sudoku_most_games" value="{{ ACP_MOT_SUDOKU_MOST_GAMES }}">
-							{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
+							<input type="number" min="1" max="3000" id="mot_sudoku_most_games" name="mot_sudoku_most_games" value="{{ ACP_MOT_SUDOKU_MOST_GAMES }}">
+							{{ lang ('ACP_MOT_SUDOKU') ~ '-' ~ lang('ACP_MOT_SUDOKU_HELPER_POINTS_NAME') }}
 						</dd>
 					</dl>
 
-					<dl>
-						<dt>
-							<label for="mot_sudoku_samurai_price">{{ lang('ACP_MOT_SUDOKU_SAMURAI_PRICE') ~ lang('COLON') }}</label>
-							<p>{{ lang('ACP_MOT_SUDOKU_SAMURAI_PRICE_EXPL') }}</p>
-						</dt>
-						<dd>
-							<input type="number" min="1500" max="5000" id="mot_sudoku_samurai_price" name="mot_sudoku_samurai_price" value="{{ ACP_MOT_SUDOKU_SAMURAI_PRICE }}">
-							{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
-						</dd>
-					</dl>
-
-					<dl>
-						<dt>
-							<label for="mot_sudoku_ninja_price">{{ lang('ACP_MOT_SUDOKU_NINJA_PRICE') ~ lang('COLON') }}</label>
-							<p>{{ lang('ACP_MOT_SUDOKU_NINJA_PRICE_EXPL') }}</p>
-						</dt>
-						<dd>
-							<input type="number" min="3500" max="10000" id="mot_sudoku_ninja_price" name="mot_sudoku_ninja_price" value="{{ ACP_MOT_SUDOKU_NINJA_PRICE }}">
-							{{ ACP_MOT_SUDOKU_UP_POINTS_NAME }}
-						</dd>
-					</dl>
+					<hr>
 
 					<dl>
 						<dt>
@@ -305,10 +303,12 @@
 
 					<dl>
 						<dt>
-							<label for="">{{ lang('ACP_MOT_SUDOKU_ADMIN_LIST') ~ lang('COLON') }}</label>
+							<label for="mot_sudoku_admin_id">{{ lang('ACP_MOT_SUDOKU_ADMIN_LIST') ~ lang('COLON') }}</label>
 							<p>{{ lang('ACP_MOT_SUDOKU_ADMIN_LIST_EXPL') }}</p>
 						</dt>
-						<dd><select id="mot_sudoku_admin_id" name="mot_sudoku_admin_id">{{ ACP_MOT_SUDOKU_ADMIN_LIST }}</select></dd>
+						<dd>
+							{{ _self.select('mot_sudoku_admin_id', ACP_MOT_SUDOKU_ADMIN_ID, ACP_MOT_SUDOKU_ADMIN_LIST) }}
+						</dd>
 					</dl>
 				</div>
 			</fieldset>
@@ -367,4 +367,12 @@
 		<label><input type="radio" class="radio" name="{{ name }}" value="1"{{ checked ? ' checked' }}> {{ lang('YES') }}</label>
 		<label><input type="radio" class="radio" name="{{ name }}" value="0"{{ !checked ? ' checked' }}> {{ lang('NO') }}</label>
 	{%- endif %}
+{%- endmacro %}
+
+{% macro select(name, value, options) -%}
+	<select id="{{ name }}" name="{{ name }}">
+		{% for opt_lang_var, opt_value in options %}
+			<option value="{{ opt_value }}"{{ opt_value == value ? ' selected' }}>{{ lang(opt_lang_var) }}</option>
+		{% endfor %}
+	</select>
 {%- endmacro %}

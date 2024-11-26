@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.10.0
+* @package MoT Sudoku v0.11s.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -37,6 +37,7 @@ $lang = array_merge($lang, [
 	'MOT_SUDOKU_CONGRATULATIONS'	=> 'Congratulations',
 	'MOT_SUDOKU_PUZZLE_SOLVED'		=> '<strong>You solved this puzzle!</strong><br>
 										Points you gained in this game: ',
+	'MOT_SUDOKU_UP_POINTS'			=> '<br><br>UP points you gained: ',
 	'MOT_SUDOKU_BACK_TO_START'		=> '<br><br>A new game will start automatically in a few seconds.',
 	'MOT_SUDOKU_INCORRECT_END'		=> 'Unfortunately your solution was not entirely correct. Incorrect digits were deleted and the points for their deletion deducted from your
 										points.<br>
@@ -158,4 +159,95 @@ $lang = array_merge($lang, [
 	'MOT_SUDOKU_ERROR_HELPER'		=> 'Do you really want to use the helper before trying for yourself?',
 	'MOT_SUDOKU_ERROR_QUIT'			=> 'Do you really want to abort this puzzle before trying for yourself?',
 	'MOT_SUDOKU_ERROR_LEVEL'		=> 'Please select a new level first!',
+
+	// PM texts
+	'MOT_SUDOKU_WINNER_SUBJECT'		=> 'Reward for the best %1$s player!',
+	'MOT_SUDOKU_WINNER_MESSAGE_0'	=> 'Hello %1$s,
+you are yesterdays best %2$s player gaining %3$d points!
+You were credited %4$s UP points for this achievement.
+
+Congratulations
+%5$s',
+	'MOT_SUDOKU_WINNER_MESSAGE_1'	=> 'Hello %1$s,
+you are last weeks best %2$s player gaining %3$d points!
+You were credited %4$s UP points for this achievement.
+
+Congratulations
+%5$s',
+	'MOT_SUDOKU_WINNER_MESSAGE_2'	=> 'Hello %1$s,
+you are last months best %2$s player gaining %3$d points!
+You were credited %4$s UP points for this achievement.
+
+Congratulations
+%5$s',
+	'MOT_SUDOKU_WINNER_MESSAGE_3'	=> 'Hello %1$s,
+you are last years best %2$s player gaining %3$d points!
+You were credited %4$s UP points for this achievement.
+
+Congratulations
+%5$s',
+
+	'MOT_SUDOKU_GAMES_SUBJECT'		=> 'Reward for the most solved puzzles in %1$s!',
+	'MOT_SUDOKU_GAMES_MESSAGE_0'	=> 'Hello %1$s,
+you solved the most %2$s puzzles (%3$d) yesterday!
+You were credited %4$s UP points for this achievement.
+
+Congratulations
+%5$s',
+	'MOT_SUDOKU_GAMES_MESSAGE_1'	=> 'Hello %1$s,
+you solved the most %2$s puzzles (%3$d) last week!
+You were credited %4$s UP points for this achievement.
+
+Congratulations
+%5$s',
+	'MOT_SUDOKU_GAMES_MESSAGE_2'	=> 'Hello %1$s,
+you solved the most %2$s puzzles (%3$d) last month!
+You were credited %4$s UP points for this achievement.
+
+Congratulations
+%5$s',
+	'MOT_SUDOKU_GAMES_MESSAGE_3'	=> 'Hello %1$s,
+you solved the most %2$s puzzles (%3$d) last year!
+You were credited %4$s UP points for this achievement.
+
+Congratulations
+%5$s',
+
+	'MOT_SUDOKU_AVERAGE_SUBJECT'	=> 'Reward for the best average in %1$s!',
+	'MOT_SUDOKU_AVERAGE_MESSAGE_0'	=> 'Hello %1$s,
+you gained the highest average (%3$d) yesterday playing %2$s!
+You were credited %4$s UP points for this achievement.
+
+Congratulations
+%5$s',
+	'MOT_SUDOKU_AVERAGE_MESSAGE_1'	=> 'Hello %1$s,
+you gained the highest average (%3$d) last week playing %2$s!
+You were credited %4$s UP points for this achievement.
+
+Congratulations
+%5$s',
+	'MOT_SUDOKU_AVERAGE_MESSAGE_2'	=> 'Hello %1$s,
+you gained the highest average (%3$d) last month playing %2$s!
+You were credited %4$s UP points for this achievement.
+
+Congratulations
+%5$s',
+	'MOT_SUDOKU_AVERAGE_MESSAGE_3'	=> 'Hello %1$s,
+you gained the highest average (%3$d) last year playing %2$s!
+You were credited %4$s UP points for this achievement.
+
+Congratulations
+%5$s',
+
+	'MOT_SUDOKU_ADMIN_SUBJECT_0'	=> 'Notification about daily Sudoku rewards',
+	'MOT_SUDOKU_ADMIN_SUBJECT_1'	=> 'Notification about weekly Sudoku rewards',
+	'MOT_SUDOKU_ADMIN_SUBJECT_2'	=> 'Notification about monthly Sudoku rewards',
+	'MOT_SUDOKU_ADMIN_SUBJECT_3'	=> 'Notification about yearly Sudoku rewards',
+	'MOT_SUDOKU_ADMIN_MESSAGE'		=> 'The rewards playing %1$s are going to
+- the best player: %2$s gaining %3$d points (%4$s UP points)
+- the most solved puzzles: %5$s solving %6$d puzzles (%7$s UP points)
+- the highest average: %8$s gaining %9$d Points (%10$s UP points)
+
+',
+
 ]);

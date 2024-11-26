@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.6.2
+* @package MoT Sudoku v0.11.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -105,7 +105,7 @@ class mot_sudoku_listener implements EventSubscriberInterface
 	 */
 	public function add_page_header_link()
 	{
-		// Check first for a new month or year and update FAME_MONTH_TABLE  and FAME_YEAR_TABLE if applicable
+		// Check first for a new month or year and update FAME_MONTH_TABLE  and FAME_YEAR_TABLE
 		$this->mot_sudoku_functions->check_month_year();
 
 		$this->template->assign_vars([

@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.10.0
+* @package MoT Sudoku v0.11.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -23,7 +23,7 @@ $lang = array_merge($lang, [
 	'MOT_SUDOKU_TITLE'				=> 'Sudoku',
 
 	// Tabs
-	'MOT_SUDOKU_TAB_CLASSIC'		=> 'Klassisches Sudoku',
+	'MOT_SUDOKU_TAB_CLASSIC'		=> 'Klassik-Sudoku',
 	'MOT_SUDOKU_TAB_SAMURAI'		=> 'Samurai-Sudoku',
 	'MOT_SUDOKU_TAB_NINJA'			=> 'Ninja-Sudoku',
 	'MOT_SUDOKU_TAB_RANK'			=> 'Rangliste',
@@ -37,6 +37,7 @@ $lang = array_merge($lang, [
 	'MOT_SUDOKU_CONGRATULATIONS'	=> 'Gratulation',
 	'MOT_SUDOKU_PUZZLE_SOLVED'		=> '<strong>Sie haben das Rätsel korrekt gelöst!</strong><br>
 										Ihre erreichte Punktzahl in diesem Spiel beträgt: ',
+	'MOT_SUDOKU_UP_POINTS'			=> '<br><br>Ihre erreichten UP-Punkte betragen: ',
 	'MOT_SUDOKU_BACK_TO_START'		=> '<br><br>Sie werden gleich zu einem neuen Spiel weitergeleitet.',
 	'MOT_SUDOKU_INCORRECT_END'		=> 'Ihree Lösung war leider nicht ganz korrekt. Die falsch eingetragenen Ziffern wurden entfernt und die Minuspunkte dafür von Ihrer Punktzahl
 										abgezogen.<br>
@@ -157,4 +158,95 @@ $lang = array_merge($lang, [
 	'MOT_SUDOKU_ERROR_HELPER'		=> 'Wollen Sie wirklich schon den Helfer benutzen, bevor Sie es selbst versucht haben?',
 	'MOT_SUDOKU_ERROR_QUIT'			=> 'Wollen Sie wirklich schon aufgeben, bevor Sie die erste Ziffer eingegeben haben?',
 	'MOT_SUDOKU_ERROR_LEVEL'		=> 'Sie müssen erst einen neuen Level auswählen!',
+
+	// PM texts
+	'MOT_SUDOKU_WINNER_SUBJECT'		=> 'Bonuspunkte für den besten Spieler im %1$s!',
+	'MOT_SUDOKU_WINNER_MESSAGE_0'	=> 'Hallo %1$s,
+Sie sind der beste %2$s-Spieler des gestrigen Tages mit %3$d Punkten!
+Ihrem UP-Konto wurden dafür %4$s Punkte gutgeschrieben.
+
+Herzlichen Glückwunsch
+%5$s',
+	'MOT_SUDOKU_WINNER_MESSAGE_1'	=> 'Hallo %1$s,
+Sie sind der beste %2$s-Spieler der vergangenen Woche mit %3$d Punkten!
+Ihrem UP-Konto wurden dafür %4$s Punkte gutgeschrieben.
+
+Herzlichen Glückwunsch
+%5$s',
+	'MOT_SUDOKU_WINNER_MESSAGE_2'	=> 'Hallo %1$s,
+Sie sind der beste %2$s-Spieler des vergangenen Monats mit %3$d Punkten!
+Ihrem UP-Konto wurden dafür %4$s Punkte gutgeschrieben.
+
+Herzlichen Glückwunsch
+%5$s',
+	'MOT_SUDOKU_WINNER_MESSAGE_3'	=> 'Hallo %1$s,
+Sie sind der beste %2$s-Spieler des vergangenen Jahres mit %3$d Punkten!
+Ihrem UP-Konto wurden dafür %4$s Punkte gutgeschrieben.
+
+Herzlichen Glückwunsch
+%5$s',
+
+	'MOT_SUDOKU_GAMES_SUBJECT'		=> 'Bonuspunkte für die meisten Spiele im %1$s!',
+	'MOT_SUDOKU_GAMES_MESSAGE_0'	=> 'Hallo %1$s,
+Sie haben gestern die meisten %2$s-Spiele (%3$d) gelöst!
+Ihrem UP-Konto wurden dafür %4$s Punkte gutgeschrieben.
+
+Herzlichen Glückwunsch
+%5$s',
+	'MOT_SUDOKU_GAMES_MESSAGE_1'	=> 'Hallo %1$s,
+Sie haben in der vergangenen Woche die meisten %2$s-Spiele (%3$d) gelöst!
+Ihrem UP-Konto wurden dafür %4$s Punkte gutgeschrieben.
+
+Herzlichen Glückwunsch
+%5$s',
+	'MOT_SUDOKU_GAMES_MESSAGE_2'	=> 'Hallo %1$s,
+Sie haben im vergangenen Monat die meisten %2$s-Spiele (%3$d) gelöst!
+Ihrem UP-Konto wurden dafür %4$s Punkte gutgeschrieben.
+
+Herzlichen Glückwunsch
+%5$s',
+	'MOT_SUDOKU_GAMES_MESSAGE_3'	=> 'Hallo %1$s,
+Sie haben im vergangenen Jahr die meisten %2$s-Spiele (%3$d) gelöst!
+Ihrem UP-Konto wurden dafür %4$s Punkte gutgeschrieben.
+
+Herzlichen Glückwunsch
+%5$s',
+
+	'MOT_SUDOKU_AVERAGE_SUBJECT'	=> 'Bonuspunkte für die höchsten Durchschnitt im %1$s!',
+	'MOT_SUDOKU_AVERAGE_MESSAGE_0'	=> 'Hallo %1$s,
+Sie haben gestern den höchsten Punkte-Durchschnitt (%3$d) im %2$s geschafft!
+Ihrem UP-Konto wurden dafür %4$s Punkte gutgeschrieben.
+
+Herzlichen Glückwunsch
+%5$s',
+	'MOT_SUDOKU_AVERAGE_MESSAGE_1'	=> 'Hallo %1$s,
+Sie haben in der vergangenen Woche den höchsten Punkte-Durchschnitt (%3$d) im %2$s geschafft!
+Ihrem UP-Konto wurden dafür %4$s Punkte gutgeschrieben.
+
+Herzlichen Glückwunsch
+%5$s',
+	'MOT_SUDOKU_AVERAGE_MESSAGE_2'	=> 'Hallo %1$s,
+Sie haben im vergangenen Monat den höchsten Punkte-Durchschnitt (%3$d) im %2$s geschafft!
+Ihrem UP-Konto wurden dafür %4$s Punkte gutgeschrieben.
+
+Herzlichen Glückwunsch
+%5$s',
+	'MOT_SUDOKU_AVERAGE_MESSAGE_3'	=> 'Hallo %1$s,
+Sie haben im vergangenen Jahr den höchsten Punkte-Durchschnitt (%3$d) im %2$s geschafft!
+Ihrem UP-Konto wurden dafür %4$s Punkte gutgeschrieben.
+
+Herzlichen Glückwunsch
+%5$s',
+
+	'MOT_SUDOKU_ADMIN_SUBJECT_0'	=> 'Benachrichtigung über tägliche Bonusberechnung für Sudoku',
+	'MOT_SUDOKU_ADMIN_SUBJECT_1'	=> 'Benachrichtigung über wöchentliche Bonusberechnung für Sudoku',
+	'MOT_SUDOKU_ADMIN_SUBJECT_2'	=> 'Benachrichtigung über monatliche Bonusberechnung für Sudoku',
+	'MOT_SUDOKU_ADMIN_SUBJECT_3'	=> 'Benachrichtigung über jährliche Bonusberechnung für Sudoku',
+	'MOT_SUDOKU_ADMIN_MESSAGE'		=> 'Beim %1$s erhielt den Bonus für
+- den besten Spieler: %2$s mit %3$d Punkten (%4$s UP-Punkte)
+- die meisten Spiele: %5$s mit %6$d Spielen (%7$s UP-Punkte)
+- den höchsten Punkte-Durchschnitt: %8$s mit %9$d Punkten (%10$s UP-Punkte)
+
+',
+
 ]);

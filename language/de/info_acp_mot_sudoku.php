@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.7.0
+* @package MoT Sudoku v0.11.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -80,41 +80,47 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_HELPER_NINJA_COST'		=> 'Punkte, die für das Aktivieren des Ninja Helfers abgezogen werden',
 
 	'ACP_MOT_SUDOKU_UP_SETTINGS'			=> 'Einstellungen Punkte-System',
-	'ACP_MOT_SUDOKU_POINTS_ENABLE'			=> 'Aktivere das Punkte-System',
+	'ACP_MOT_SUDOKU_POINTS_ENABLE'			=> 'Punkte-System aktivieren',
 	'ACP_MOT_SUDOKU_POINTS_ENABLE_EXPL'		=> 'Wenn ein Punkte-System (z.B. ´Ultimate Points´) auf deinem Board installiert ist, werden die Punkte vom Sudoku dem Spielekonto
 												hinzugefügt bzw. von dort auch abgezogen.<br>
 												Nach Aktivierung werden dafür weitere Einstellmöglichkeiten angezeigt.',
 	'ACP_MOT_SUDOKU_POINTS_RATIO' 			=> 'Verhältnis Punkte Sudoku zu Punkte-System',
-	'ACP_MOT_SUDOKU_POINTS_RATIO_EXPL' 		=> 'Lege fest, wieviele Punkte dem Benutzerkonto pro 100 Sudoku Punkte gutgeschrieben werden sollen.',
+	'ACP_MOT_SUDOKU_POINTS_RATIO_EXPL' 		=> 'Legt fest, wieviele Punkte dem Benutzerkonto des Punkte-Systems pro %1$d Sudoku-Punkte gutgeschrieben werden sollen.',
 
 	'ACP_MOT_SUDOKU_REWARD_SETTINGS'		=> 'Einstellungen für Bonussystem',
 	'ACP_MOT_SUDOKU_REWARD_ON'				=> 'Sudoku Bonussystem aktivieren',
-	'ACP_MOT_SUDOKU_REWARD_ON_EXPL'			=> 'Periodische Kalkulation der Spielergebnisse und die Bonuszahlungen.',
-	'ACP_MOT_SUDOKU_REWARD_GC'				=> 'Zeitintervall zwischen zwei Bonusberechnungen (in Sekunden)',
-	'ACP_MOT_SUDOKU_REWARD_GC_EXPL'			=> 'Der Abstand zwischen zwei Cronjobs zum Ermitteln der Gewinner für die Bonuszahlung in Sekunden.',
-	'ACP_MOT_SUDOKU_REWARD_LAST_GC'			=> 'Zeitpunkt der letzten Berechnung',
-	'ACP_MOT_SUDOKU_REWARD_LAST_GC_EXPL'	=> 'Zeitpunkt der letzten Berechnung der Bonuszahlungen.',
-	'ACP_MOT_SUDOKU_REWARD_NEXT_GC'			=> 'Zeitpunkt der nächsten Berechnung',
-	'ACP_MOT_SUDOKU_REWARD_NEXT_GC_EXPL'	=> 'Voraussichtlicher Zeitpunkt der nächsten Bonuskalkulation und Auszahlung<br>
-												(voraussichtlich, weil das Forum zu diesem Zeitpunkt aktiv genutzt werden muss, ist niemand eingeloggt, erfolgt die
-												Berechnung sobald jemand das Forum aufruft).',
-	'ACP_MOT_SUDOKU_RANK1'					=> 'Bonus für 1. Platz',
-	'ACP_MOT_SUDOKU_RANK1_EXPL'				=> 'Bonus für den erstplatzierten Spieler in der laufenden Periode.',
-	'ACP_MOT_SUDOKU_RANK2'					=> 'Bonus für 2. Platz',
-	'ACP_MOT_SUDOKU_RANK2_EXPL'				=> 'Bonus für den zweitplatzierten Spieler in der laufenden Periode.',
-	'ACP_MOT_SUDOKU_RANK3'					=> 'Bonus für 3. Platz',
-	'ACP_MOT_SUDOKU_RANK3_EXPL'				=> 'Bonus für den drittplatzierten Spieler in der laufenden Periode.',
-	'ACP_MOT_SUDOKU_HIGH_AVERAGE'			=> 'Bonus für besten Durchschnitt',
-	'ACP_MOT_SUDOKU_HIGH_AVERAGE_EXPL'		=> 'Bonus für den Spieler mit dem höchsten Durchnitt in der laufenden Periode.',
-	'ACP_MOT_SUDOKU_MOST_GAMES'				=> 'Bonus für die meisten Spiele',
-	'ACP_MOT_SUDOKU_MOST_GAMES_EXPL'		=> 'Bonus für den Spieler mit der höchsten Anzahl an Spielen in der laufenden Periode.',
+	'ACP_MOT_SUDOKU_REWARD_ON_EXPL'			=> 'Periodische Kalkulation der Bonuszahlungen aktivieren.',
+	'ACP_MOT_SUDOKU_REWARD_TIME'			=> 'Zeitintervall zwischen zwei Bonusberechnungen',
+	'ACP_MOT_SUDOKU_REWARD_TIME_EXPL'		=> 'Der Abstand zwischen zwei Berechnungen zum Ermitteln der Gewinner für die Bonuszahlung.',
+	'ACP_MOT_SUDOKU_DAILY'					=> 'Täglich',
+	'ACP_MOT_SUDOKU_WEEKLY'					=> 'Wöchentlich',
+	'ACP_MOT_SUDOKU_MONTHLY'				=> 'Monatlich',
+	'ACP_MOT_SUDOKU_YEARLY'					=> 'Jährlich',
+	'ACP_MOT_SUDOKU_WEEK_START'				=> 'Auswahl Wochentag für wöchentliche Berechnung',
+	'ACP_MOT_SUDOKU_WEEK_START_EXPL'		=> 'Wähle hier bei wöchentlicher Berechnung der Bonuszahlung den Wochentag aus, an dem die Berechnung erfolgen soll.',
+	'ACP_MOT_SUDOKU_SUNDAY'					=> 'Sonntag',
+	'ACP_MOT_SUDOKU_MONDAY'					=> 'Montag',
+	'ACP_MOT_SUDOKU_TUESDAY'				=> 'Dienstag',
+	'ACP_MOT_SUDOKU_WEDNESDAY'				=> 'Mittwoch',
+	'ACP_MOT_SUDOKU_THURSDAY'				=> 'Donnerstag',
+	'ACP_MOT_SUDOKU_FRIDAY'					=> 'Freitag',
+	'ACP_MOT_SUDOKU_SATURDAY'				=> 'Samstag',
+	'ACP_MOT_SUDOKU_REWARD_LAST_GC'			=> 'Zeitpunkt der letzten Laufes des Cron-Tasks',
+	'ACP_MOT_SUDOKU_REWARD_LAST_GC_EXPL'	=> 'Zeitpunkt des letzten Laufes des Cron-Tasks zur Berechnung der Bonuszahlungen. Diese Angabe bezieht sich nur auf die Ausführung
+												des Cron-Tasks und sagt nichts über den Zeitpunkt der letzten Berechnung bzw. Gutschrift aus.',
+	'ACP_MOT_SUDOKU_CLASSIC_PRICE'			=> 'Bonus für besten Klassik Spieler',
+	'ACP_MOT_SUDOKU_CLASSIC_PRICE_EXPL'		=> 'Bonus für den besten Klassik Spieler in der laufenden Periode.',
 	'ACP_MOT_SUDOKU_SAMURAI_PRICE'			=> 'Bonus für den besten Samurai Spieler',
 	'ACP_MOT_SUDOKU_SAMURAI_PRICE_EXPL'		=> 'Bonus für den besten Samurai Spieler in der laufenden Periode.',
 	'ACP_MOT_SUDOKU_NINJA_PRICE'			=> 'Bonus für den besten Ninja Spieler',
 	'ACP_MOT_SUDOKU_NINJA_PRICE_EXPL'		=> 'Bonus für den besten Ninja Spieler in der laufenden Periode.',
+	'ACP_MOT_SUDOKU_HIGH_AVERAGE'			=> 'Bonus für besten Durchschnitt',
+	'ACP_MOT_SUDOKU_HIGH_AVERAGE_EXPL'		=> 'Bonus für den Spieler mit dem höchsten Durchschnitt in der laufenden Periode. Dieser Preis wird für alle Rätseltypen vergeben.',
+	'ACP_MOT_SUDOKU_MOST_GAMES'				=> 'Bonus für die meisten Spiele',
+	'ACP_MOT_SUDOKU_MOST_GAMES_EXPL'		=> 'Bonus für den Spieler mit der höchsten Anzahl an Spielen in der laufenden Periode. Dieser Preis wird für alle Rätseltypen vergeben.',
 	'ACP_MOT_SUDOKU_PM_ENABLE'				=> 'Persönliche Nachricht aktivieren',
 	'ACP_MOT_SUDOKU_PM_ENABLE_EXPL'			=> 'Die Gewinner werden per PN über ihren Gewinn informiert.',
-	'ACP_MOT_SUDOKU_ADMIN_LIST'				=> 'Administrator für das Sudoko Bonussystem',
+	'ACP_MOT_SUDOKU_ADMIN_LIST'				=> 'Administrator für das Sudoku Bonussystem',
 	'ACP_MOT_SUDOKU_ADMIN_LIST_EXPL'		=> 'Ein Board Administrator oder Moderator, der die regelmäßigen Reports erhält und dessen Name als Absender in der PN für die Gewinner erscheint',
 
 	'ACP_MOT_SUDOKU_RESET_GAME'				=> 'Alle Spieledaten löschen',

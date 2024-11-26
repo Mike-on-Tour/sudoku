@@ -43,6 +43,7 @@ services:
             - '%mot.sudoku.tables.mot_sudoku_ninja%'
             - '%mot.sudoku.tables.mot_sudoku_samurai%'
             - '%mot.sudoku.tables.mot_sudoku_stats%'
+            - '@mot.sudoku.functions'
 
     mot.sudoku.listener:
         class: mot\sudoku\event\mot_sudoku_listener
@@ -68,6 +69,20 @@ services:
         arguments:
             - '@config'
             - '@dbal.conn'
+            - '@language'
+            - '%core.root_path%'
+            - '%core.php_ext%'
             - '%mot.sudoku.tables.mot_sudoku_fame%'
             - '%mot.sudoku.tables.mot_sudoku_fame_month%'
             - '%mot.sudoku.tables.mot_sudoku_fame_year%'
+
+    mot.sudoku.cron.task.mot_sudoku_reward:
+        class: mot\sudoku\cron\task\mot_sudoku_reward
+        arguments:
+            - '@config'
+            - '@ext.manager'
+            - '@mot.sudoku.functions'
+        calls:
+            - [set_name, [cron.task.mot_sudoku_reward]]
+        tags:
+            - { name: cron.task }

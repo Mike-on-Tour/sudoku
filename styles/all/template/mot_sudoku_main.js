@@ -1,6 +1,6 @@
 /**
 *
-* @package MoT Sudoku v0.10.0
+* @package MoT Sudoku v0.11.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -101,6 +101,7 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 		let textColorPlayer = $("#" + motSudoku.CellId).css('--textColorPlayer');
 		let textAlignCenter = $("#" + motSudoku.CellId).css('--textAlignCenter');
 		let verticalAlignMiddle = $("#" + motSudoku.CellId).css('--verticalAlignMiddle');
+		let congratMsg = '';
 
 		// Get this buttons ID
 		let thisElementId = $(this).attr('id');
@@ -152,7 +153,11 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 									// Puzzle is solved, first we set the puzzleInProgress to false
 									motSudoku.puzzleInProgress = false;
 									// Show the end of game message
-									phpbb.alert(motSudoku.congratulation, motSudoku.puzzleSolved + result['points'] + motSudoku.startNew);
+									congratMsg = result['up_points'] > 0 ?
+										motSudoku.puzzleSolved + result['points'] + motSudoku.upPoints + result['up_points'] + motSudoku.startNew :
+										motSudoku.puzzleSolved + result['points'] + motSudoku.startNew;
+
+									phpbb.alert(motSudoku.congratulation, congratMsg);
 									phpbb.loadingIndicator();
 									setTimeout(function() {
 										$("#mot_sudoku_classic").trigger( "submit" );
@@ -176,7 +181,11 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 									// Puzzle is solved, first we set the puzzleInProgress to false
 									motSudoku.puzzleInProgress = false;
 									// Show the end of game message
-									phpbb.alert(motSudoku.congratulation, motSudoku.puzzleSolved + result['points'] + motSudoku.startNew);
+									congratMsg = result['up_points'] > 0 ?
+										motSudoku.puzzleSolved + result['points'] + motSudoku.upPoints + result['up_points'] + motSudoku.startNew :
+										motSudoku.puzzleSolved + result['points'] + motSudoku.startNew;
+
+									phpbb.alert(motSudoku.congratulation, congratMsg);
 									phpbb.loadingIndicator();
 									setTimeout(function() {
 										$("#mot_sudoku_samurai").trigger( "submit" );
@@ -200,7 +209,11 @@ $("#mot_sudoku_modal_1, #mot_sudoku_modal_2, #mot_sudoku_modal_3, #mot_sudoku_mo
 									// Puzzle is solved, first we set the puzzleInProgress to false
 									motSudoku.puzzleInProgress = false;
 									// Show the end of game message
-									phpbb.alert(motSudoku.congratulation, motSudoku.puzzleSolved + result['points'] + motSudoku.startNew);
+									congratMsg = result['up_points'] > 0 ?
+										motSudoku.puzzleSolved + result['points'] + motSudoku.upPoints + result['up_points'] + motSudoku.startNew :
+										motSudoku.puzzleSolved + result['points'] + motSudoku.startNew;
+
+									phpbb.alert(motSudoku.congratulation, congratMsg);
 									phpbb.loadingIndicator();
 									setTimeout(function() {
 										$("#mot_sudoku_ninja").trigger( "submit" );
@@ -435,7 +448,10 @@ $("#game_quit_button_c, #game_quit_button_s, #game_quit_button_n").on("click", f
 						// First we check if the player is still logged in and if he is not we reload the page and thus enforce a new login
 						if (!result['logged_in']) {
 							location.reload();
-						} else if (result['success']) {
+						}
+
+						// Now check whether we have got a successful response
+						if (result['success']) {
 							// Game has been deleted from the SUDOKU_GAMES_TABLE, inform the player
 							phpbb.alert(motSudoku.notesTitle, motSudoku.notesQuit);
 							phpbb.loadingIndicator();
@@ -467,6 +483,7 @@ $("#game_quit_button_c, #game_quit_button_s, #game_quit_button_n").on("click", f
 				);
 			}
 		});
+
 	}
 });
 

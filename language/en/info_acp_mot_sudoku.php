@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.7.0
+* @package MoT Sudoku v0.11.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -84,33 +84,39 @@ $lang = array_merge($lang, [
 												this points account of a Sudoku player.<br>
 												After enabling this setting more settings related to it will be displayed.',
 	'ACP_MOT_SUDOKU_POINTS_RATIO' 			=> 'Ratio Sudoku points to points system points',
-	'ACP_MOT_SUDOKU_POINTS_RATIO_EXPL' 		=> 'Define the amount of points system points to be credited per 100 Sudoku points.',
+	'ACP_MOT_SUDOKU_POINTS_RATIO_EXPL' 		=> 'Defines the amount of points system points to be credited per %1$d Sudoku points.',
 
 	'ACP_MOT_SUDOKU_REWARD_SETTINGS'		=> 'Rewards settings',
 	'ACP_MOT_SUDOKU_REWARD_ON'				=> 'Enable Sudoku rewards',
-	'ACP_MOT_SUDOKU_REWARD_ON_EXPL'			=> 'Periodic calculation of the game score and reward payments',
-	'ACP_MOT_SUDOKU_REWARD_GC'				=> 'Time interval between two reward calculations (in seconds)',
-	'ACP_MOT_SUDOKU_REWARD_GC_EXPL' 		=> 'The period between two cron jobs calculating the reward points in seconds.',
+	'ACP_MOT_SUDOKU_REWARD_ON_EXPL'			=> 'Enable the periodic calculation of the reward payments',
+	'ACP_MOT_SUDOKU_REWARD_TIME' 			=> 'Time period between two reward calculation runs',
+	'ACP_MOT_SUDOKU_REWARD_TIME_EXPL'	 	=> 'The time period between two runs to calculate the winners`s rewards.',
+	'ACP_MOT_SUDOKU_DAILY'					=> 'Daily',
+	'ACP_MOT_SUDOKU_WEEKLY'					=> 'Weekly',
+	'ACP_MOT_SUDOKU_MONTHLY'				=> 'Monthly',
+	'ACP_MOT_SUDOKU_YEARLY'					=> 'Yearly',
+	'ACP_MOT_SUDOKU_WEEK_START'				=> 'Select the day of the week for weekly calculation of rewards',
+	'ACP_MOT_SUDOKU_WEEK_START_EXPL'		=> 'For the weekly calculation of the rewards please choose here the day of the week for the calculation.',
+	'ACP_MOT_SUDOKU_SUNDAY'					=> 'Sunday',
+	'ACP_MOT_SUDOKU_MONDAY'					=> 'Monday',
+	'ACP_MOT_SUDOKU_TUESDAY'				=> 'Tuesday',
+	'ACP_MOT_SUDOKU_WEDNESDAY'				=> 'Wednesday',
+	'ACP_MOT_SUDOKU_THURSDAY'				=> 'Thursday',
+	'ACP_MOT_SUDOKU_FRIDAY'					=> 'Fryday',
+	'ACP_MOT_SUDOKU_SATURDAY'				=> 'Saturday',
 	'ACP_MOT_SUDOKU_REWARD_LAST_GC' 		=> 'Time of the last cron job run',
-	'ACP_MOT_SUDOKU_REWARD_LAST_GC_EXPL' 	=> 'The time of the last cron job run to calculate the winners`s rewards.',
-	'ACP_MOT_SUDOKU_REWARD_NEXT_GC' 		=> 'Time of next cron job run',
-	'ACP_MOT_SUDOKU_REWARD_NEXT_GC_EXPL' 	=> 'The estimated time of the next cron job run<br>
-												(Estimated because the board has to be actively used at that time, if nobody uses it the cron job will run as soon as somebody
-												logs in to it).',
-	'ACP_MOT_SUDOKU_RANK1'					=> '1. rank bonus points',
-	'ACP_MOT_SUDOKU_RANK1_EXPL' 			=> 'Bonus points for the top scorer of the current period.',
-	'ACP_MOT_SUDOKU_RANK2'					=> '2. rank bonus points',
-	'ACP_MOT_SUDOKU_RANK2_EXPL' 			=> 'Bonus points for the second rank of the current period.',
-	'ACP_MOT_SUDOKU_RANK3'					=> '3. rank bonus points',
-	'ACP_MOT_SUDOKU_RANK3_EXPL' 			=> 'Bonus points for the third rank of the current period.',
-	'ACP_MOT_SUDOKU_HIGH_AVERAGE'			=> 'Bonus for highest average',
-	'ACP_MOT_SUDOKU_HIGH_AVERAGE_EXPL' 		=> 'Bonus points for the top average of the current period.',
-	'ACP_MOT_SUDOKU_MOST_GAMES'				=> 'Bonus points for the most games',
-	'ACP_MOT_SUDOKU_MOST_GAMES_EXPL' 		=> 'Bonus points for the player who played the most games in the current period.',
+	'ACP_MOT_SUDOKU_REWARD_LAST_GC_EXPL' 	=> 'The time of the last cron job run to calculate the rewards. This just indicates the time of the last cron job run and does not
+												state anything about the last calculation of the rewards.',
+	'ACP_MOT_SUDOKU_CLASSIC_PRICE'			=> 'Best Classic player bonus',
+	'ACP_MOT_SUDOKU_CLASSIC_PRICE_EXPL'		=> 'Bonus points for the top Classic player of the current period.',
 	'ACP_MOT_SUDOKU_SAMURAI_PRICE'			=> 'Best Samurai player bonus',
 	'ACP_MOT_SUDOKU_SAMURAI_PRICE_EXPL'		=> 'Bonus points for the top Samurai player of the current period.',
 	'ACP_MOT_SUDOKU_NINJA_PRICE'			=> 'Best Ninja player bonus',
 	'ACP_MOT_SUDOKU_NINJA_PRICE_EXPL'		=> 'Bonus points for the top Ninja player of the current period.',
+	'ACP_MOT_SUDOKU_HIGH_AVERAGE'			=> 'Bonus for highest average',
+	'ACP_MOT_SUDOKU_HIGH_AVERAGE_EXPL' 		=> 'Bonus points for the top average of the current period. This bonus will be awarded for all puzzle types.',
+	'ACP_MOT_SUDOKU_MOST_GAMES'				=> 'Bonus points for the most games',
+	'ACP_MOT_SUDOKU_MOST_GAMES_EXPL' 		=> 'Bonus points for the player who played the most games in the current period. This bonus will be awarded for all puzzle types.',
 	'ACP_MOT_SUDOKU_PM_ENABLE'				=> 'Enable PMs',
 	'ACP_MOT_SUDOKU_PM_ENABLE_EXPL'			=> 'If enabled bonus winners will be notified by PM.',
 	'ACP_MOT_SUDOKU_ADMIN_LIST' 			=> 'Sudoku reward system administrator',

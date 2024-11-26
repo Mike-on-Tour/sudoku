@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.10.0
+* @package MoT Sudoku v0.11.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -68,11 +68,14 @@ class mot_sudoku_main
 	/** @var string mot.sudoku.tables.mot_sudoku_stats */
 	protected $mot_sudoku_stats_table;
 
+	/** @var \mot\sudoku\includes\mot_sudoku_functions */
+	protected $mot_sudoku_functions;
+
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper,
 								\phpbb\language\language $language, \phpbb\pagination $pagination, \phpbb\extension\manager $phpbb_extension_manager,
 								\phpbb\request\request_interface $request, \phpbb\template\template $template, \phpbb\user $user, $root_path, $mot_sudoku_classic_table,
 								$mot_sudoku_fame_table, $mot_sudoku_fame_month_table, $mot_sudoku_fame_year_table, $mot_sudoku_games_table, $mot_sudoku_ninja_table,
-								$mot_sudoku_samurai_table, $mot_sudoku_stats_table)
+								$mot_sudoku_samurai_table, $mot_sudoku_stats_table, $mot_sudoku_functions)
 	{
 		$this->auth = $auth;
 		$this->config = $config;
@@ -94,6 +97,7 @@ class mot_sudoku_main
 		$this->ninja_sudoku_table = $mot_sudoku_ninja_table;
 		$this->samurai_sudoku_table = $mot_sudoku_samurai_table;
 		$this->sudoku_stats_table = $mot_sudoku_stats_table;
+$this->mot_sudoku_functions = $mot_sudoku_functions;
 
 		$this->md_manager = $this->phpbb_extension_manager->create_extension_metadata_manager('mot/sudoku');
 		$this->ext_data = $this->md_manager->get_metadata();
@@ -1178,6 +1182,7 @@ class mot_sudoku_main
 			$filled = false;
 			$solved = true;
 			$wrong_digits = [];
+			$up_points = 0;
 
 			switch ($sudoku_type)
 			{
@@ -1258,7 +1263,7 @@ class mot_sudoku_main
 							$this->db->sql_query($sql);
 
 							// Add the points gained to the fame table
-							$this->save_to_fame($sql_arr['user_id'], $sudoku_type, $sql_arr['points']);
+							$up_points = $this->save_to_fame($sql_arr['user_id'], $sudoku_type, $sql_arr['points']);
 
 							// Since this game is finished we delete it from the SUDOKU_GAMES_TABLE
 							$sql = 'DELETE FROM ' . $this->sudoku_games_table . '
@@ -1358,7 +1363,7 @@ class mot_sudoku_main
 							$this->db->sql_query($sql);
 
 							// Add the points gained to the fame table
-							$this->save_to_fame($sql_arr['user_id'], $sudoku_type, $sql_arr['points']);
+							$up_points = $this->save_to_fame($sql_arr['user_id'], $sudoku_type, $sql_arr['points']);
 
 							// Since this game is finished we delete it from the SUDOKU_GAMES_TABLE
 							$sql = 'DELETE FROM ' . $this->sudoku_games_table . '
@@ -1458,7 +1463,7 @@ class mot_sudoku_main
 							$this->db->sql_query($sql);
 
 							// Add the points gained to the fame table
-							$this->save_to_fame($sql_arr['user_id'], $sudoku_type, $sql_arr['points']);
+							$up_points = $this->save_to_fame($sql_arr['user_id'], $sudoku_type, $sql_arr['points']);
 
 							// Since this game is finished we delete it from the SUDOKU_GAMES_TABLE
 							$sql = 'DELETE FROM ' . $this->sudoku_games_table . '
@@ -1488,6 +1493,7 @@ class mot_sudoku_main
 				'solved'		=> $solved,
 				'wrong_digits'	=> $wrong_digits,
 				'digit_no_buy'	=> $digit_no_buy,
+				'up_points'		=> $up_points,
 			];
 
 			return new \Symfony\Component\HttpFoundation\JsonResponse($result);
@@ -1796,37 +1802,27 @@ class mot_sudoku_main
 			$sudoku_entry = $this->request->variable('entry', 0);
 			$user_id = $this->request->variable('user_id', 0);
 
+			$result = [
+				'logged_in'	=> false,
+				'success'	=> false,
+			];
 			// First we check whether the user is logged in
-			if ((int) $user_id != $this->user->data['user_id'])
+			if ((int) $user_id == $this->user->data['user_id'])
 			{
-				// Now we can send back the needed data
-				$result = [
-					'logged_in'		=> false,
-				];
+				// Flag the user as logged in
+				$result['logged_in'] = true;
 
-				return new \Symfony\Component\HttpFoundation\JsonResponse($result);
-			}
-			else
-			{
-				// Since the player wants to quit this game we delete it from the SUDOKU_GAMES_TABLE
-				$sql = 'DELETE FROM ' . $this->sudoku_games_table . '
-						WHERE entry_id = ' . (int) $sudoku_entry;
-				$this->db->sql_query($sql);
+				// Check whether the player already started this game
+				if ($sudoku_entry)
+				{
+					// Yes, player has started this game already and wants to abort so we delete it from the SUDOKU_GAMES_TABLE
+					$sql = 'DELETE FROM ' . $this->sudoku_games_table . '
+							WHERE entry_id = ' . (int) $sudoku_entry;
+					$this->db->sql_query($sql);
 
-				$result = [
-					'logged_in'		=> true
-				];
-			}
-
-			// Check whether the player already started this game
-			if (!$sudoku_entry)
-			{
-				// Some practical joker tries to quit a game not yet started so refuse the action
-					$result['success'] = false;
-			}
-			else
-			{
+					// Flag the delete operation as successful
 					$result['success'] = true;
+				}
 			}
 
 			return new \Symfony\Component\HttpFoundation\JsonResponse($result);
@@ -2141,18 +2137,25 @@ class mot_sudoku_main
 	*		string		$game_type		Sudoku puzzle type
 	*		integer 	$points		points to add
 	*
+	* @return	boolean/float			either false = no UP points credited or float = amount of UP points credited
 	*/
 	private function save_to_fame($user_id, $game_type, $points)
 	{
+		global $phpbb_container;
+
 		// Get local date variables and user id first
 		$date_arr = getdate();
+		$julian_day = gregoriantojd($date_arr['mon'], $date_arr['mday'], $date_arr['year']);
+
+		$return = 0;	// Set it to false initially, if points system is activated and UP enabled this will hold the UP points gathered
 
 		// Check whether there already is an entry with the users data for the current month
 		$sql_arr = [
-			'year'		=> $date_arr['year'],
-			'month'		=> $date_arr['mon'],
-			'user_id'	=> $user_id,
-			'game_type'	=> $game_type,
+			'year'			=> $date_arr['year'],
+			'month'			=> $date_arr['mon'],
+			'julian_day'	=> $julian_day,
+			'user_id'		=> $user_id,
+			'game_type'		=> $game_type,
 		];
 		$sql = 'SELECT * FROM ' . $this->sudoku_fame_table . '
 				WHERE ' . $this->db->sql_build_array('SELECT', $sql_arr);
@@ -2175,6 +2178,7 @@ class mot_sudoku_main
 			$sql_arr = [
 				'year'				=> $date_arr['year'],
 				'month'				=> $date_arr['mon'],
+				'julian_day'		=> $julian_day,
 				'user_id'			=> $user_id,
 				'game_type'			=> $game_type,
 				'games_played'		=> 1,
@@ -2183,5 +2187,16 @@ class mot_sudoku_main
 			$sql = 'INSERT INTO ' . $this->sudoku_fame_table . ' ' . $this->db->sql_build_array('INSERT', $sql_arr);
 		}
 		$this->db->sql_query($sql);
+
+		// Check if points system is activated and UP enabled and if yes calculate awarded points into UP points and add to the users account
+		if ($this->config['mot_sudoku_points_enable'] && $this->phpbb_extension_manager->is_enabled('dmzx/ultimatepoints'))
+		{
+			$this->functions_points = $phpbb_container->get('dmzx.ultimatepoints.core.functions.points');
+			$factor_points = round($this->config['mot_sudoku_points_ratio'] * $points, 2);
+			$this->functions_points->add_points($user_id, $factor_points);
+			$return = $factor_points;
+		}
+
+		return $return;
 	}
 }
