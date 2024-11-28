@@ -124,7 +124,8 @@ $lang = array_merge($lang, [
 
 	'ACP_MOT_SUDOKU_RESET_GAME'				=> 'Delete all game data',
 	'ACP_MOT_SUDOKU_RESET_GAME_EXPL'		=> '<font color=red>After clicking the `Delete` button <strong>ALL</strong> statistics, results and intermediate results will be
-												deleted and reset to their original state.</font>',
+												deleted and reset to their original state.</font><br>
+												The data for the Hall of Fame will be kept.',
 	'ACP_MOT_SUDOKU_RESET_GAME_CONFIRM_MSG'	=> 'Do you really want to delete the data of all Sudoku players?',
 	'ACP_MOT_SUDOKU_RESET_SUCCESS'			=> 'All game data of Sudoku successfully deleted',
 	'ACP_MOT_SUDOKU_LOG_RESET_GAME'			=> '<strong>Deleted Sudoku game data</strong>',

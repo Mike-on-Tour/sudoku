@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.11.0
+* @package MoT Sudoku v0.11.1
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -231,18 +231,6 @@ $this->mot_sudoku_functions = $mot_sudoku_functions;
 			$this->fame_action = $this->helper->route('mot_sudoku_main', ['tab' => 'fame']);
 
 			$this->difficulty = ['', $this->language->lang('MOT_SUDOKU_EASY'), $this->language->lang('MOT_SUDOKU_MEDIUM'), $this->language->lang('MOT_SUDOKU_HARD')];
-
-			$type_array = [
-				'classic'	=> $this->language->lang('MOT_SUDOKU_TAB_CLASSIC'),
-				'samurai'	=> $this->language->lang('MOT_SUDOKU_TAB_SAMURAI'),
-				'ninja'		=> $this->language->lang('MOT_SUDOKU_TAB_NINJA'),
-			];
-
-			$short_type_array = [
-				'classic'	=> 'c',
-				'samurai'	=> 's',
-				'ninja'		=> 'n',
-			];
 
 			$tab = $this->request->variable('tab', 'classic');
 			$tab = (($tab == 'rank' && !$this->config['mot_sudoku_enable_rank']) || ($tab == 'fame' && !$this->config['mot_sudoku_enable_fame'])) ? 'classic' : $tab;
@@ -619,7 +607,7 @@ $this->mot_sudoku_functions = $mot_sudoku_functions;
 					$start = $this->request->is_set('start') ? $this->request->variable('start', 0) : 0;
 					$limit = $this->config['posts_per_page'];	// max lines per page
 
-					$selected_type = $this->request->is_set('mot_sudoku_select_type') ? $this->request->variable('mot_sudoku_select_type', '') : 'classic';
+					$selected_type = $this->request->is_set('mot_sudoku_rank_select_type') ? $this->request->variable('mot_sudoku_rank_select_type', '') : 'classic';
 
 					// Get total numbers of players in score table
 					$count_query = "SELECT COUNT(user_id) AS user_count FROM " . $this->sudoku_stats_table . "
@@ -638,9 +626,9 @@ $this->mot_sudoku_functions = $mot_sudoku_functions;
 						],
 						'WHERE'		=> 'u.user_id = s.user_id
 										AND ' . (string) $selected_type . '_played > 0',
+						'ORDER_BY'	=> 's.' . $selected_type . '_points DESC'
 					];
 					$sql = $this->db->sql_build_query('SELECT', $sql_arr);
-					$sql .= ' ORDER BY s.' . $selected_type . '_points DESC';
 					$result = $this->db->sql_query_limit( $sql, $limit, $start );
 					$user_ranking = $this->db->sql_fetchrowset($result);
 					$this->db->sql_freeresult($result);
@@ -666,37 +654,26 @@ $this->mot_sudoku_functions = $mot_sudoku_functions;
 					$start = $this->pagination->validate_start($start, $limit, $count_rankings);
 					$this->pagination->generate_template_pagination($base_url, 'pagination', 'start', $count_rankings, $limit, $start);
 
-					// Create type selection
-					$type_selection = '';
-					$selected_name = '';
-					foreach ($type_array as $key => $value)
-					{
-						$selected = '';
-						if ($selected_type == $key)
-						{
-							$selected =  ' selected';
-							$selected_name = $value;
-						}
-						$type_selection .= '<option value="' . $key . '"' . $selected . '>' . $value . '</option>';
-					}
-
 					$this->template->assign_vars([
-						'MOT_SUDOKU_TYPE_SELECTION'		=> $type_selection,
-						'MOT_SUDOKU_SELECTED_TYPE'		=> $selected_name,
+						'MOT_SUDOKU_SELECT_TYPE_ARR'	=> [
+							$this->language->lang('MOT_SUDOKU_TAB_CLASSIC')		=> 'classic',
+							$this->language->lang('MOT_SUDOKU_TAB_SAMURAI')		=> 'samurai',
+							$this->language->lang('MOT_SUDOKU_TAB_NINJA')		=> 'ninja',
+						],
+						'MOT_SUDOKU_SELECTED_TYPE'		=> $selected_type,
 					]);
 					break;
 
 				case 'fame':
 					// Get local date variables first
 					$date_arr = getdate();
-					$number_of_rows = $this->config['mot_sudoku_fame_limit'];
 					$months_arr = ['', 'JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
-
-					$selected_type = $this->request->is_set('mot_sudoku_select_type') ? $this->request->variable('mot_sudoku_select_type', '') : 'classic';
+					$number_of_rows = $this->config['mot_sudoku_fame_limit'];
+					$selected_type = $this->request->is_set('mot_sudoku_fame_select_type') ? $this->request->variable('mot_sudoku_fame_select_type', '') : 'c';
 
 					// Get best players of current month
 					$sql_arr = [
-						'SELECT'	=> 'f.*, u.username, u.user_colour',
+						'SELECT'	=> 'SUM(f.games_played) AS games_played, SUM(f.total_points) AS total_points, u.username, u.user_colour',
 						'FROM'		=> [$this->sudoku_fame_table	=> 'f'],
 						'LEFT_JOIN'	=> [
 							[
@@ -706,15 +683,16 @@ $this->mot_sudoku_functions = $mot_sudoku_functions;
 						],
 						'WHERE'		=> 'f.year = ' . (int) $date_arr['year'] . '
 										AND f.month = ' . (int) $date_arr['mon'] . "
-										AND game_type = '" . (string) $short_type_array[$selected_type] . "'",
-						'ORDER_BY'	=> 'f.total_points DESC',
+										AND game_type = '" . (string) $selected_type . "'",
+						'GROUP_BY'	=> 'f.user_id',
+						'ORDER_BY'	=> 'total_points DESC',
 					];
 					$sql = $this->db->sql_build_query('SELECT', $sql_arr);
+					$sql .= ' LIMIT ' . $number_of_rows;
 					$result = $this->db->sql_query($sql);
 					$players = $this->db->sql_fetchrowset($result);
 					$this->db->sql_freeresult($result);
 
-					$i = 0;
 					foreach ($players as $row)
 					{
 						$this->template->assign_block_vars('current_months', [
@@ -722,18 +700,13 @@ $this->mot_sudoku_functions = $mot_sudoku_functions;
 							'USER_COLOUR'	=> $row['user_colour'],
 							'TOTAL_GAMES'	=> $row['games_played'],
 							'TOTAL_POINTS'	=> $row['total_points'],
-							'MEAN_POINTS'	=> number_format($row['total_points'] / $row['games_played'], 0, ',', '')
+							'MEAN_POINTS'	=> number_format($row['total_points'] / $row['games_played'], 0, ',', ''),
 						]);
-						$i++;
-						if ($i == $number_of_rows)
-						{
-							break;
-						}
 					}
 
 					// Get best players of current year
 					$sql_arr = [
-						'SELECT'	=> 'f.*, u.username, u.user_colour',
+						'SELECT'	=> 'SUM(f.games_played) AS games_played, SUM(f.total_points) AS total_points, u.username, u.user_colour',
 						'FROM'		=> [$this->sudoku_fame_table	=> 'f'],
 						'LEFT_JOIN'	=> [
 							[
@@ -742,53 +715,25 @@ $this->mot_sudoku_functions = $mot_sudoku_functions;
 							],
 						],
 						'WHERE'		=> 'f.year = ' . (int) $date_arr['year'] . "
-						AND game_type = '" . (string) $short_type_array[$selected_type] . "'",
+										AND game_type = '" . (string) $selected_type . "'",
+						'GROUP_BY'	=> 'f.user_id',
+						'ORDER_BY'	=> 'total_points DESC',
 					];
 					$sql = $this->db->sql_build_query('SELECT', $sql_arr);
+					$sql .= ' LIMIT ' . $number_of_rows;
 					$result = $this->db->sql_query($sql);
 					$players = $this->db->sql_fetchrowset($result);
 					$this->db->sql_freeresult($result);
 
-					$year_arr = [];
 					foreach ($players as $row)
-					{
-						if (array_key_exists($row['user_id'], $year_arr))
-						{
-							$year_arr[$row['user_id']]['points'] += $row['total_points'];
-							$year_arr[$row['user_id']]['games'] += $row['games_played'];
-						}
-						else
-						{
-							$year_arr[$row['user_id']] = [
-								'username'		=> $row['username'],
-								'user_colour'	=> $row['user_colour'],
-								'games'			=> $row['games_played'],
-								'points'		=> $row['total_points'],
-							];
-						}
-					}
-					usort($year_arr,
-						function ($item1, $item2)
-						{
-							return $item2['points'] <=> $item1['points'];
-						}
-					);
-
-					$i = 0;
-					foreach ($year_arr as $row)
 					{
 						$this->template->assign_block_vars('current_years', [
 							'USERNAME'		=> $row['username'],
 							'USER_COLOUR'	=> $row['user_colour'],
-							'TOTAL_GAMES'	=> $row['games'],
-							'TOTAL_POINTS'	=> $row['points'],
-							'MEAN_POINTS'	=> number_format($row['points'] / $row['games'], 0, ',', '')
+							'TOTAL_GAMES'	=> $row['games_played'],
+							'TOTAL_POINTS'	=> $row['total_points'],
+							'MEAN_POINTS'	=> number_format($row['total_points'] / $row['games_played'], 0, ',', '')
 						]);
-						$i++;
-						if ($i == $number_of_rows)
-						{
-							break;
-						}
 					}
 
 					// Get the best payers of the last months
@@ -801,7 +746,7 @@ $this->mot_sudoku_functions = $mot_sudoku_functions;
 								'ON'	=> 'u.user_id = f.user_id',
 							],
 						],
-						'WHERE'		=> "game_type = '" . (string) $short_type_array[$selected_type] . "'",
+						'WHERE'		=> "game_type = '" . (string) $selected_type . "'",
 						'ORDER_BY'	=> 'f.month_id DESC',
 					];
 					$sql = $this->db->sql_build_query('SELECT', $sql_arr);
@@ -833,7 +778,7 @@ $this->mot_sudoku_functions = $mot_sudoku_functions;
 								'ON'	=> 'u.user_id = f.user_id',
 							],
 						],
-						'WHERE'		=> "game_type = '" . (string) $short_type_array[$selected_type] . "'",
+						'WHERE'		=> "game_type = '" . (string) $selected_type . "'",
 						'ORDER_BY'	=> 'f.year DESC',
 					];
 					$sql = $this->db->sql_build_query('SELECT', $sql_arr);
@@ -854,23 +799,13 @@ $this->mot_sudoku_functions = $mot_sudoku_functions;
 						]);
 					}
 
-					// Create type selection
-					$type_selection = '';
-					$selected_name = '';
-					foreach ($type_array as $key => $value)
-					{
-						$selected = '';
-						if ($selected_type == $key)
-						{
-							$selected =  ' selected';
-							$selected_name = $value;
-						}
-						$type_selection .= '<option value="' . $key . '"' . $selected . '>' . $value . '</option>';
-					}
-
 					$this->template->assign_vars([
-						'MOT_SUDOKU_TYPE_SELECTION'		=> $type_selection,
-						'MOT_SUDOKU_SELECTED_TYPE'		=> $selected_name,
+						'MOT_SUDOKU_SELECT_TYPE_ARR'	=> [
+							$this->language->lang('MOT_SUDOKU_TAB_CLASSIC')		=> 'c',
+							$this->language->lang('MOT_SUDOKU_TAB_SAMURAI')		=> 's',
+							$this->language->lang('MOT_SUDOKU_TAB_NINJA')		=> 'n',
+						],
+						'MOT_SUDOKU_SELECTED_TYPE'		=> $selected_type,
 						'MOT_SUDOKU_NUMBER_MONTHS'		=> count($months),
 						'MOT_SUDOKU_NUMBER_YEARS'		=> count($years),
 					]);

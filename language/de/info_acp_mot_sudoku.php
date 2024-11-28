@@ -125,7 +125,8 @@ $lang = array_merge($lang, [
 
 	'ACP_MOT_SUDOKU_RESET_GAME'				=> 'Alle Spieledaten löschen',
 	'ACP_MOT_SUDOKU_RESET_GAME_EXPL'		=> '<font color=red>Nach Anklicken des `Löschen`-Buttons werden <strong>ALLE</strong> Statistiken, Ergebnisse und Zwischenergebnisse
-												gelöscht und auf den Anfangszustand zurückgesetzt.</font>',
+												gelöscht und auf den Anfangszustand zurückgesetzt.</font><br>
+												Die Daten der Ruhmeshalle bleiben erhalten.',
 	'ACP_MOT_SUDOKU_RESET_GAME_CONFIRM_MSG'	=> 'Willst du wirklich alle Spieledaten löschen?',
 	'ACP_MOT_SUDOKU_RESET_SUCCESS'			=> 'Es wurden sämtliche Daten gelöscht',
 	'ACP_MOT_SUDOKU_LOG_RESET_GAME'			=> '<strong>Sudoku Spieledaten gelöscht</strong>',

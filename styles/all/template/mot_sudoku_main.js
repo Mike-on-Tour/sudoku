@@ -1,6 +1,6 @@
 /**
 *
-* @package MoT Sudoku v0.11.0
+* @package MoT Sudoku v0.11.1
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -725,5 +725,16 @@ motSudoku.getGridDigits = function(puzzle, player) {
 	}
 	return digitsArray;
 }
+
+/*
+* Submit the form if another entry was selected from the Sudoku type dropdown selects
+*/
+$("#mot_sudoku_rank_select_type").on('change', function() {
+	this.form.submit();
+});
+
+$("#mot_sudoku_fame_select_type").on('change', function() {
+	this.form.submit();
+});
 
 })(jQuery); // Avoid conflicts with other libraries

@@ -4,6 +4,20 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.11.1] - 2024-11-28
+
+### Added
+
+### Changed
+-	Code improvement in `controller/mot_sudoku_main.php`
+-	Code improvement within the HTML files regarding the use of dropdown selections
+
+### Fixed
+-	The data sampling from the database within the Hall of Fame to avoid multiple entries for a player
+
+### Removed
+  
+  
 ## [0.11.0] - 2024-11-25
 
 ### Added

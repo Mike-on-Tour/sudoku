@@ -1,14 +1,20 @@
+{#
+*
+* @package MoT Sudoku v0.11.1
+* @copyright (c) 2023 - 2024 Mike-on-Tour
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+*
+#}
+
 <form id="mot_sudoku_type_select" method="post" action="{{ MOT_SUDOKU_FAME_TAB }}">
 	<h2>
 		{{ lang('MOT_SUDOKU_TAB_FAME') }}&nbsp;
 
-		<select id="mot_sudoku_select_type" name="mot_sudoku_select_type" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">
-			{{ MOT_SUDOKU_TYPE_SELECTION }}
-		</select>
+		{{ _self.select('mot_sudoku_fame_select_type', MOT_SUDOKU_SELECTED_TYPE, MOT_SUDOKU_SELECT_TYPE_ARR) }}
 	</h2>
 	{{ S_FORM_TOKEN }}
 </form>
-
+{{ MOT_SUDOKU_SELECT_TYPE }}
 <h3>{{ lang('MOT_SUDOKU_CURRENT_MONTH') }}</h3>
 
 <table class="table1 zebra-list">
@@ -122,3 +128,11 @@
 		</tbody>
 	</table>
 {% endif %}
+
+{% macro select(name, value, options) -%}
+	<select id="{{ name }}" name="{{ name }}">
+		{% for opt_lang_var, opt_value in options %}
+			<option value="{{ opt_value }}"{{ opt_value == value ? ' selected' }}>{{ lang(opt_lang_var) }}</option>
+		{% endfor %}
+	</select>
+{%- endmacro %}
