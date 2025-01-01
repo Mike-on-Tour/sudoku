@@ -1,8 +1,10 @@
 # phpBB Sudoku Game Extension
 
-![Version: 0.11.1](https://img.shields.io/badge/Version-0.11.1-green)  
+![Version: 0.11.3](https://img.shields.io/badge/Version-0.11.3-green)  
   
 ![phpBB 3.3.x Compatible](https://img.shields.io/badge/phpBB-3.3.x%20Compatible-009BDF)  
+  
+![PHP >= 7.4.0 Compatible](https://img.shields.io/badge/PHP->=%207.4.0-blueviolet) ![PHP < 8.5.0 Compatible](https://img.shields.io/badge/PHP-<%208.5.0-blueviolet)  
 
 [![Build Status](https://github.com/Mike-on-Tour/sudoku/workflows/Tests/badge.svg)](https://github.com/Mike-on-Tour/sudoku/actions)
 

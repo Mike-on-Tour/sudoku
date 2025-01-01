@@ -1,8 +1,8 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.11.0
-* @copyright (c) 2023 - 2024 Mike-on-Tour
+* @package MoT Sudoku v0.11.3
+* @copyright (c) 2023 - 2025 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -112,7 +112,10 @@ class mot_sudoku_functions
 				// Get best players of last year
 				$sql = 'SELECT user_id, SUM(games_played) AS games_played, SUM(total_points) AS total_points FROM ' . $this->sudoku_fame_table . '
 						WHERE year = ' . (int) $current_year . '
-						AND game_type = "' . (string) $type . '"';
+						AND game_type = "' . (string) $type . '"
+						GROUP BY user_id
+						ORDER BY total_points DESC
+						LIMIT 1';
 				$result = $this->db->sql_query($sql);
 				$player = $this->db->sql_fetchrow($result);
 				$this->db->sql_freeresult($result);
@@ -123,7 +126,7 @@ class mot_sudoku_functions
 					$player['year'] = $year;
 					$player['game_type'] = $type;
 
-					// Save this into the FAME_MONTH_TABLE
+					// Save this into the FAME_YEAR_TABLE
 					$sql = 'INSERT INTO ' . $this->sudoku_fame_year_table . ' ' . $this->db->sql_build_array('INSERT', $player);
 					$this->db->sql_query($sql);
 				}
@@ -177,6 +180,7 @@ class mot_sudoku_functions
 			$result = $this->db->sql_query($sql);
 			$admin = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
+			$admin['session_ip'] = $admin['session_ip'] ?? 0;	// Prevent fatal error if IP is null
 		}
 
 		switch ($this->config['mot_sudoku_reward_time'])
@@ -213,16 +217,16 @@ class mot_sudoku_functions
 							$this->get_points($players, $type, $this->config['mot_sudoku_reward_time'], $admin);
 						}
 					}
-				}
 
-				// Save the date of the last run into the CONFIG_TABLE
-				$this->config->set('mot_sudoku_last_reward', ($date_arr['year'] * 10000) + ($date_arr['mon'] * 100) + $date_arr['mday']);
+					// Save the date of the last run into the CONFIG_TABLE
+					$this->config->set('mot_sudoku_last_reward', ($date_arr['year'] * 10000) + ($date_arr['mon'] * 100) + $date_arr['mday']);
+				}
 				break;
 
 			// Weekly calculation
 			case 1:
 				// First check whether we need to do this calculation
-				if ((($date_arr['year'] * 10000) + ($date_arr['mon'] * 100) + $date_arr['mday'] > $this->config['mot_sudoku_last_reward']) && $date_arr['wday'] == $this->config['mot_sudoku_week_start'])
+				if ((($date_arr['year'] * 10000) + ($date_arr['mon'] * 100) + $date_arr['mday'] > $this->config['mot_sudoku_last_reward']) && ($date_arr['wday'] == (int) $this->config['mot_sudoku_week_start']))
 				{
 					$today = gregoriantojd($date_arr['mon'], $date_arr['mday'], $date_arr['year']);
 					$jd_arr = [];
@@ -259,10 +263,10 @@ class mot_sudoku_functions
 							$this->get_points($players, $type, $this->config['mot_sudoku_reward_time'], $admin);
 						}
 					}
-				}
 
-				// Save the date of the last run into the CONFIG_TABLE
-				$this->config->set('mot_sudoku_last_reward', ($date_arr['year'] * 10000) + ($date_arr['mon'] * 100) + $date_arr['mday']);
+					// Save the date of the last run into the CONFIG_TABLE
+					$this->config->set('mot_sudoku_last_reward', ($date_arr['year'] * 10000) + ($date_arr['mon'] * 100) + $date_arr['mday']);
+				}
 				break;
 
 			// Monthly calculation
@@ -303,16 +307,18 @@ class mot_sudoku_functions
 							$this->get_points($players, $type, $this->config['mot_sudoku_reward_time'], $admin);
 						}
 					}
-				}
 
-				// Save the date of the last run into the CONFIG_TABLE
-				$this->config->set('mot_sudoku_last_reward', ($date_arr['year'] * 10000) + ($date_arr['mon'] * 100) + $date_arr['mday']);
+					// Save the date of the last run into the CONFIG_TABLE
+					$this->config->set('mot_sudoku_last_reward', ($date_arr['year'] * 10000) + ($date_arr['mon'] * 100) + $date_arr['mday']);
+				}
 				break;
 
 			// Yearly calculation
 			case 3:
+				$last_calc = intdiv($this->config['mot_sudoku_last_reward'], 10000);	// Time of last calculation as yyyy
+
 				// First check whether we need to do this calculation
-				if ($date_arr['year'] > intdiv($this->config['mot_sudoku_last_reward'], 10000))	// Time of last calculation as yyyy
+				if ($date_arr['year'] > $last_calc)
 				{
 					foreach ($this->type_arr as $type)
 					{
@@ -327,7 +333,7 @@ class mot_sudoku_functions
 										'ON'	=> 'u.user_id = f.user_id',
 								],
 							],
-							'WHERE'		=> 'year = ' . (int) $date_arr['year'] . ' AND game_type = "' . (string) $type . '"',
+							'WHERE'		=> 'year = ' . (int) $last_calc . ' AND game_type = "' . (string) $type . '"',
 							'GROUP_BY'	=> 'f.user_id',
 						];
 						$sql = $this->db->sql_build_query('SELECT', $sql_arr);
@@ -341,12 +347,13 @@ class mot_sudoku_functions
 							$this->get_points($players, $type, $this->config['mot_sudoku_reward_time'], $admin);
 						}
 					}
-				}
 
-				// Save the date of the last run into the CONFIG_TABLE
-				$this->config->set('mot_sudoku_last_reward', ($date_arr['year'] * 10000) + ($date_arr['mon'] * 100) + $date_arr['mday']);
+					// Save the date of the last run into the CONFIG_TABLE
+					$this->config->set('mot_sudoku_last_reward', ($date_arr['year'] * 10000) + ($date_arr['mon'] * 100) + $date_arr['mday']);
+				}
 				break;
 		}
+
 		if ($this->config['mot_sudoku_pm_enable'] && count($this->admin_arr) > 1)
 		{
 			$subject = $this->language->lang('MOT_SUDOKU_ADMIN_SUBJECT_' . $this->admin_arr['period']);
@@ -503,6 +510,5 @@ class mot_sudoku_functions
 			'bbcode_uid'		=> $uid,
 		];
 		submit_pm('post', $subject, $pm_data, false);
-		return;
 	}
 }

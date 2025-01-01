@@ -13,6 +13,10 @@ fieldset legend {
 	background-color: inherit;
 }
 
+.mot-up-set {
+	background-color: lightyellow;
+}
+
 /* style settings for version and copyright notice */
 .centered_text {
 	text-align: center;

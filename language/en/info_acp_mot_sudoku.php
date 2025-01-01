@@ -79,16 +79,17 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_HELPER_NINJA_COST'		=> 'Deduction for Ninja helper',
 
 	'ACP_MOT_SUDOKU_UP_SETTINGS'			=> 'Points system settings',
-	'ACP_MOT_SUDOKU_POINTS_ENABLE'			=> 'Enable points system',
+	'ACP_MOT_SUDOKU_POINTS_ENABLE'			=> 'Activate points system',
 	'ACP_MOT_SUDOKU_POINTS_ENABLE_EXPL'		=> 'If a points system (e.g. ´Ultimate Points´) is active on your board, Sudoku game points will be added to or subtracted from
 												this points account of a Sudoku player.<br>
-												After enabling this setting more settings related to it will be displayed.',
+												After activating this setting more settings related to it will be displayed.',
 	'ACP_MOT_SUDOKU_POINTS_RATIO' 			=> 'Ratio Sudoku points to points system points',
 	'ACP_MOT_SUDOKU_POINTS_RATIO_EXPL' 		=> 'Defines the amount of points system points to be credited per %1$d Sudoku points.',
 
 	'ACP_MOT_SUDOKU_REWARD_SETTINGS'		=> 'Rewards settings',
-	'ACP_MOT_SUDOKU_REWARD_ON'				=> 'Enable Sudoku rewards',
-	'ACP_MOT_SUDOKU_REWARD_ON_EXPL'			=> 'Enable the periodic calculation of the reward payments',
+	'ACP_MOT_SUDOKU_REWARD_ON'				=> 'Activate Sudoku rewards',
+	'ACP_MOT_SUDOKU_REWARD_ON_EXPL'			=> 'Activate the periodic calculation of the reward payments.<br>
+												After activating this setting more settings related to it will be displayed.',
 	'ACP_MOT_SUDOKU_REWARD_TIME' 			=> 'Time period between two reward calculation runs',
 	'ACP_MOT_SUDOKU_REWARD_TIME_EXPL'	 	=> 'The time period between two runs to calculate the winners`s rewards.',
 	'ACP_MOT_SUDOKU_DAILY'					=> 'Daily',
@@ -117,8 +118,8 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_HIGH_AVERAGE_EXPL' 		=> 'Bonus points for the top average of the current period. This bonus will be awarded for all puzzle types.',
 	'ACP_MOT_SUDOKU_MOST_GAMES'				=> 'Bonus points for the most games',
 	'ACP_MOT_SUDOKU_MOST_GAMES_EXPL' 		=> 'Bonus points for the player who played the most games in the current period. This bonus will be awarded for all puzzle types.',
-	'ACP_MOT_SUDOKU_PM_ENABLE'				=> 'Enable PMs',
-	'ACP_MOT_SUDOKU_PM_ENABLE_EXPL'			=> 'If enabled bonus winners will be notified by PM.',
+	'ACP_MOT_SUDOKU_PM_ENABLE'				=> 'Activate PMs',
+	'ACP_MOT_SUDOKU_PM_ENABLE_EXPL'			=> 'If activated bonus winners will be notified by PM. Simultaneously the selected administrator will receive a PM with the winner`s name.',
 	'ACP_MOT_SUDOKU_ADMIN_LIST' 			=> 'Sudoku reward system administrator',
 	'ACP_MOT_SUDOKU_ADMIN_LIST_EXPL' 		=> 'A board administrator or moderator who will receive the report of periodic results and who will be the sender of PMs to the winners.',
 

@@ -89,7 +89,8 @@ $lang = array_merge($lang, [
 
 	'ACP_MOT_SUDOKU_REWARD_SETTINGS'		=> 'Einstellungen für Bonussystem',
 	'ACP_MOT_SUDOKU_REWARD_ON'				=> 'Sudoku Bonussystem aktivieren',
-	'ACP_MOT_SUDOKU_REWARD_ON_EXPL'			=> 'Periodische Kalkulation der Bonuszahlungen aktivieren.',
+	'ACP_MOT_SUDOKU_REWARD_ON_EXPL'			=> 'Periodische Kalkulation der Bonuszahlungen aktivieren.<br>
+												Nach Aktivierung werden dafür weitere Einstellmöglichkeiten angezeigt.',
 	'ACP_MOT_SUDOKU_REWARD_TIME'			=> 'Zeitintervall zwischen zwei Bonusberechnungen',
 	'ACP_MOT_SUDOKU_REWARD_TIME_EXPL'		=> 'Der Abstand zwischen zwei Berechnungen zum Ermitteln der Gewinner für die Bonuszahlung.',
 	'ACP_MOT_SUDOKU_DAILY'					=> 'Täglich',
@@ -119,9 +120,9 @@ $lang = array_merge($lang, [
 	'ACP_MOT_SUDOKU_MOST_GAMES'				=> 'Bonus für die meisten Spiele',
 	'ACP_MOT_SUDOKU_MOST_GAMES_EXPL'		=> 'Bonus für den Spieler mit der höchsten Anzahl an Spielen in der laufenden Periode. Dieser Preis wird für alle Rätseltypen vergeben.',
 	'ACP_MOT_SUDOKU_PM_ENABLE'				=> 'Persönliche Nachricht aktivieren',
-	'ACP_MOT_SUDOKU_PM_ENABLE_EXPL'			=> 'Die Gewinner werden per PN über ihren Gewinn informiert.',
+	'ACP_MOT_SUDOKU_PM_ENABLE_EXPL'			=> 'Die Gewinner werden per PN über ihren Gewinn informiert. Zeitgleich erhält der ausgewählte Administrator eine PN mit den Namen der Gewinner.',
 	'ACP_MOT_SUDOKU_ADMIN_LIST'				=> 'Administrator für das Sudoku Bonussystem',
-	'ACP_MOT_SUDOKU_ADMIN_LIST_EXPL'		=> 'Ein Board Administrator oder Moderator, der die regelmäßigen Reports erhält und dessen Name als Absender in der PN für die Gewinner erscheint',
+	'ACP_MOT_SUDOKU_ADMIN_LIST_EXPL'		=> 'Ein Board Administrator oder Moderator, der die regelmäßigen Reports erhält und dessen Name als Absender in der PN für die Gewinner erscheint.',
 
 	'ACP_MOT_SUDOKU_RESET_GAME'				=> 'Alle Spieledaten löschen',
 	'ACP_MOT_SUDOKU_RESET_GAME_EXPL'		=> '<font color=red>Nach Anklicken des `Löschen`-Buttons werden <strong>ALLE</strong> Statistiken, Ergebnisse und Zwischenergebnisse

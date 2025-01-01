@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.11s.0
+* @package MoT Sudoku v0.11.0
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *

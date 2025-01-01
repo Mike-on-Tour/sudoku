@@ -4,13 +4,41 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.11.3] - 2025-01-01
+
+### Added
+
+### Changed
+
+
+### Fixed
+-	A bug within the function to calculate the annual fame entry in `includes/mot_sudoku_functions.php` due to a faulty SQL statement which led to a fatal SQL error
+
+### Removed
+  
+  
+## [0.11.2] - 2024-12-18
+
+### Added
+
+### Changed
+-	Several code improvements
+-	The background for the UP and rewards settings now has another color (lightyellow) to distinguish it from the other settings
+
+
+### Fixed
+-	Some bug fixes within the function to calculate rewards
+
+### Removed
+  
+  
 ## [0.11.1] - 2024-11-28
 
 ### Added
 
 ### Changed
 -	Code improvement in `controller/mot_sudoku_main.php`
--	Code improvement within the HTML files regarding the use of dropdown selections
+-	Code improvement within the HTML files regarding the use of dropdown selections (many thanks to LukeWCS)
 
 ### Fixed
 -	The data sampling from the database within the Hall of Fame to avoid multiple entries for a player
