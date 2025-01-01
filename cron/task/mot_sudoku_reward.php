@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.11.0
+* @package MoT Sudoku v0.11.2
 * @copyright (c) 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -51,7 +51,7 @@ class mot_sudoku_reward extends \phpbb\cron\task\base
 	public function is_runnable()
 	{
 		// Run only if UP is active and rewards are enabled, must not run if UP is deactivated
-		return $this->phpbb_extension_manager->is_enabled('dmzx/ultimatepoints') && $this->config['mot_sudoku_reward_enable'];
+		return $this->phpbb_extension_manager->is_enabled('dmzx/ultimatepoints') && $this->config['mot_sudoku_points_enable'] && $this->config['mot_sudoku_reward_enable'];
 	}
 
 	/**

@@ -1,6 +1,6 @@
 {#
 *
-* @package MoT Sudoku v0.11.0
+* @package MoT Sudoku v0.11.2
 * @copyright (c) 2023 - 2024 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -177,7 +177,7 @@
 	</fieldset>
 
 	{% if ACP_MOT_SUDOKU_UP_ENABLED %}
-		<fieldset>
+		<fieldset class="mot-up-set">
 			<legend>{{ lang('ACP_MOT_SUDOKU_UP_SETTINGS') }}</legend>
 			<dl>
 				<dt><label for="mot_sudoku_points_enable">{{ lang('ACP_MOT_SUDOKU_POINTS_ENABLE') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_POINTS_ENABLE_EXPL') }}</p></dt>
@@ -197,7 +197,7 @@
 		</fieldset>
 
 		<div id="mot_sudoku_show_reward_enable" hidden="true">
-			<fieldset>
+			<fieldset class="mot-up-set">
 				<legend>{{ lang('ACP_MOT_SUDOKU_REWARD_SETTINGS') }}</legend>
 				<dl>
 					<dt><label for="mot_sudoku_reward_enable">{{ lang('ACP_MOT_SUDOKU_REWARD_ON') ~ lang('COLON') }}</label><p>{{ lang('ACP_MOT_SUDOKU_REWARD_ON_EXPL') }}</p></dt>
