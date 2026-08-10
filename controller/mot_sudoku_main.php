@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT Sudoku v0.13.0
+* @package MoT Sudoku v0.13.1
 * @copyright (c) 2023 - 2026 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -225,9 +225,9 @@ class mot_sudoku_main
 				{
 					$sql_arr = [
 						'user_id'		=> $this->user->data['user_id'],
-						'classic_ids'	=> '',
-						'samurai_ids'	=> '',
-						'ninja_ids'		=> '',
+						'classic_ids'	=> json_encode([]),
+						'samurai_ids'	=> json_encode([]),
+						'ninja_ids'		=> json_encode([]),
 					];
 					$sql = 'INSERT INTO ' . $this->sudoku_stats_table . ' ' . $this->db->sql_build_array('INSERT', $sql_arr);
 					$this->db->sql_query($sql);
@@ -362,7 +362,7 @@ class mot_sudoku_main
 						$modal_position = $user_stats['modal_position'];
 						$games_solved = $user_stats['classic_played'];
 						$total_points = $user_stats['classic_points'];
-						$classic_ids = json_decode($user_stats['classic_ids']);
+						$classic_ids = json_decode($user_stats['classic_ids']) ?? [];
 					}
 					else
 					{
@@ -478,7 +478,7 @@ class mot_sudoku_main
 						$modal_position = $user_stats['modal_position'];
 						$games_solved = $user_stats['samurai_played'];
 						$total_points = $user_stats['samurai_points'];
-						$samurai_ids = json_decode($user_stats['samurai_ids']);
+						$samurai_ids = json_decode($user_stats['samurai_ids']) ?? [];
 					}
 					else
 					{
@@ -597,7 +597,7 @@ class mot_sudoku_main
 						$modal_position = $user_stats['modal_position'];
 						$games_solved = $user_stats['ninja_played'];
 						$total_points = $user_stats['ninja_points'];
-						$ninja_ids = json_decode($user_stats['ninja_ids']);
+						$ninja_ids = json_decode($user_stats['ninja_ids']) ?? [];
 					}
 					else
 					{
