@@ -4,6 +4,19 @@ All changes to `Sudoku` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.13.1] - 2026-08-09
+
+### Added
+
+### Changed
+
+### Fixed
+-	A bug in `controller/mot_sudoku_main.php` which stored an empty string as a JSON encoded array into the MOT_SUDOKU_STATS table which led to a fatal error when a new user 
+	(without any resolved riddles) stored a game and started a new one due to merging NULL with the array of stored games ids
+
+### Removed
+  
+  
 ## [0.13.0] - 2026-05-28
 
 ### Added
